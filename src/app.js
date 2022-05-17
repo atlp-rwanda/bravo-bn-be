@@ -1,10 +1,11 @@
+import '@babel/polyfill';
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import morgan from 'morgan';
 import globalErrorHandler from './controllers/error';
 import AppError from './utils/appError';
-import '@babel/polyfill';
+import allRoutes from './routers/index';
 
 const app = express();
 
@@ -12,12 +13,8 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(express.static(`${__dirname}/public`));
 
-app.get("/", (req,res) => {
-    res.json({message: "Welcome to barefoot!"})
-});
-
+app.use(allRoutes);
 
 app.all('*', (req, res, next) => {
     next(
