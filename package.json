@@ -15,6 +15,24 @@
     "coverage": "nyc npm run test | coveralls",
     "prepare": "husky install"
   },
+  "nyc": {
+    "all": true,
+    "include": [
+      "src/**/*.js",
+      "test/*.test.js"
+    ],
+    "reporter": [
+      "html",
+      "text",
+      "text-lcov"
+    ],
+    "exclude": [
+      "node_modules/*",
+      "coverage/*"
+    ],
+    "sourceMap": false,
+    "instrument": false
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/atlp-rwanda/bravo-bn-be.git"
@@ -68,9 +86,5 @@
     "nodemon": "^2.0.16",
     "nyc": "^15.1.0",
     "sequelize-cli": "^5.5.1"
-  },
-  "nyc": {
-    "sourceMap": false,
-    "instrument": false
   }
 }
