@@ -173,8 +173,23 @@ paths: {
   }
 }
 },
+
 components: {
   schemas: {
+   userRole: {
+      type:"object",
+      properties:{
+        email: {
+          type: 'string',
+          description: 'user email',
+        },
+        role: {
+          type: 'string',
+          description: 'new role to set to user',
+        },
+      }
+    },
+
     "SignupAuthShema": {
       "type": "object",
       "properties": {
