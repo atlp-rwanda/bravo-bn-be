@@ -23,11 +23,18 @@ security: [
 ],
 tags: [
   {name: 'setup swagger', description: 'Testing swagger setup'},
+<<<<<<< HEAD
   {name: 'User', description: 'users endpoint'},
   {name: 'Admin', description: 'update user role'}
 ],
 paths: {
 '/api/v1/testSwagger': {
+=======
+  {name: 'Admin', description: 'update user role'}
+],
+paths: {
+'/api/testSwagger': {
+>>>>>>> 24c109d (chore(setup): set up an empty Express Boilerplate with dotenv)
   get: {
     tags: ['setup swagger'],
     description: 'testing swagger setup',
@@ -44,6 +51,10 @@ paths: {
     },
   },
 },
+<<<<<<< HEAD
+=======
+
+>>>>>>> 24c109d (chore(setup): set up an empty Express Boilerplate with dotenv)
 '/api/v1/user/roles': {
   put: {
     tags: ['Admin'],
@@ -74,6 +85,7 @@ paths: {
     }
   }
 },
+<<<<<<< HEAD
 '/api/v1/user/login': {
   post: {
     tags: ['User'],
@@ -107,6 +119,9 @@ paths: {
     },
   }, 
   },
+=======
+
+>>>>>>> 24c109d (chore(setup): set up an empty Express Boilerplate with dotenv)
 '/api/v1/user/auth/signup': {
   post: {
     tags: ['authentication'],
@@ -215,6 +230,7 @@ components: {
           "type": "string"
         }
       }
+<<<<<<< HEAD
     },
     userRole: {
       type:"object",
@@ -271,6 +287,44 @@ components: {
     },
   },
   securitySchemes: {
+=======
+    }
+
+   },
+    User: {
+      type: "Object",
+      properties: {
+        id: {
+          type: 'string',
+          description: 'The auto-generated id of the user',
+        },
+        fullname: {
+          type: 'string',
+          description: "User's fullname",
+        },
+        username: {
+          type: 'string',
+          description: "User's username",
+        },
+        password: {
+          type: 'string',
+          description: "User's password",
+        },
+        email: {
+          type: 'string',
+          description: "User's email",
+        },
+        role: {
+          type: 'string',
+          description: "User role",
+        },
+      },
+    }
+    
+   },
+
+securitySchemes: {
+>>>>>>> 24c109d (chore(setup): set up an empty Express Boilerplate with dotenv)
     Authorization: {
       type: "apiKey",
       name: "Authorization",
@@ -280,9 +334,16 @@ components: {
     }
   },
 }
+<<<<<<< HEAD
 }
 
 
 docrouter.use('/', serve, setup(options));
 
 export default docrouter;
+=======
+
+docrouter.use('/', serve, setup(options));
+
+export default docrouter;
+>>>>>>> 24c109d (chore(setup): set up an empty Express Boilerplate with dotenv)

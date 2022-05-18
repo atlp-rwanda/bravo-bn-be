@@ -179,4 +179,8 @@ export const logout = (req, res) => {
         httpOnly: true,
     });
     res.status(200).json({ status: 'success', data: null });
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 24c109d (chore(setup): set up an empty Express Boilerplate with dotenv)

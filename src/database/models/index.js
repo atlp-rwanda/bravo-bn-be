@@ -8,8 +8,13 @@ dotenv.config();
 
 const basename = _basename(__filename);
 const env = process.env.NODE_ENV;
+<<<<<<< HEAD
 const config = require('../config/config.js')[env];
 
+=======
+
+const config = require('../config/config.js')[env];
+>>>>>>> 24c109d (chore(setup): set up an empty Express Boilerplate with dotenv)
 const db = {};
 
 const sequelize = new Sequelize(config.database, config.username, config.password, config);
