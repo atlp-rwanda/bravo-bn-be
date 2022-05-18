@@ -21,6 +21,7 @@ app.all('*', (req, res, next) => {
     );
 });  
 
+<<<<<<< HEAD
 
 app.all('*', (req, res, next) => {
     next(
@@ -28,6 +29,8 @@ app.all('*', (req, res, next) => {
     );
 });  
 
+=======
+>>>>>>> 24c109d (chore(setup): set up an empty Express Boilerplate with dotenv)
 app.use(globalErrorHandler);
 
 export default app;

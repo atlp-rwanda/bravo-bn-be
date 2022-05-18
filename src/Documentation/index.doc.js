@@ -23,11 +23,18 @@ security: [
 ],
 tags: [
   {name: 'setup swagger', description: 'Testing swagger setup'},
+<<<<<<< HEAD
   {name: 'User', description: 'users endpoint'},
   {name: 'Admin', description: 'update user role'}
 ],
 paths: {
 '/api/v1/testSwagger': {
+=======
+  {name: 'Admin', description: 'update user role'}
+],
+paths: {
+'/api/testSwagger': {
+>>>>>>> 24c109d (chore(setup): set up an empty Express Boilerplate with dotenv)
   get: {
     tags: ['setup swagger'],
     description: 'testing swagger setup',
@@ -44,6 +51,41 @@ paths: {
     },
   },
 },
+<<<<<<< HEAD
+=======
+
+>>>>>>> 24c109d (chore(setup): set up an empty Express Boilerplate with dotenv)
+'/api/v1/user/roles': {
+  put: {
+    tags: ['Admin'],
+    description: 'Updating user roles',
+    security: [
+      {
+        Authorization: []
+      }
+    ],
+    parameters: [],
+    requestBody: {
+      content: {
+        'application/json': {
+          schema: {
+            $ref: '#/components/schemas/userRole',
+          },
+        },
+      },
+      required: true,
+    },
+    responses: {
+      200: {
+        description: 'success'
+      },
+      500: {
+        description: 'Internal server error'
+      }
+    }
+  }
+},
+<<<<<<< HEAD
 '/api/v1/user/login': {
   post: {
     tags: ['User'],
@@ -77,122 +119,11 @@ paths: {
     },
   }, 
   },
-'/api/v1/user/': {
-  get: {
-    tags: ['User'],
-    description: 'get all user data',
-    security: [],
-    parameters: [],
-    responses: {
-      200: {
-        description: 'successfully',
-      },
-      400: {
-        description: 'Invalid credation',
-      },
-      500: {
-          description: 'Internal Server Error'
-      }
-    }, 
-  }
-},
-'/api/v1/user/{id}': {
-  get: {
-    tags: ['User'],
-    description: 'get all user data',
-    parameters: [
-      {
-        name: 'id',
-        in: 'path',
-        description: 'user id',
-        required: true,
-        schema: {
-          type: 'string',
-        },
-      },
-    ],
-    responses: {
-      200: {
-        description: 'successfully',
-      },
-      400: {
-        description: 'Invalid credation',
-      },
-      500: {
-          description: 'Internal Server Error'
-      }
-    }, 
-  }
-},
-'/api/v1/user/update': {
-  patch: {
-    tags: ['User'],
-    description: 'update user data',
-    parameters: [],
-    requestBody: {
-      content: {
-        'application/json': {
-          schema: {
-            $ref: '#/components/schemas/User',
-          },
-          example: {
-            "firstName": "Samuel",
-            "lastName": "Doe",
-            "username": "johnDoe",
-            "email": "john@gmail.com",
-            "phoneNumber": "0780591269",
-            "image": "",
-            "gender": "male",
-            "preferredLanguage": "kinyarwanda",
-            "preferredCurrency": "RWF",
-            "department": "developers",
-            "lineManager": "Mugisha Eric",
-        },
-        },
-      },
-      required: true,
-    },
-    responses: {
-      200: {
-        description: 'successfully',
-      },
-      400: {
-        description: 'Invalid credation',
-      },
-      500: {
-          description: 'Internal Server Error'
-      }
-    }, 
-  }
-},
-'/api/v1/user/roles': {
-    put: {
-      tags: ['Admin'],
-      description: 'Updating user roles',
-      parameters: [],
-      requestBody: {
-        content: {
-          'application/json': {
-            schema: {
-              $ref: '#/components/schemas/userRole',
-            },
-          },
-        },
-        required: true,
-      },
-      responses: {
-        200: {
-          description: 'success'
-        },
-        500: {
-          description: 'Internal server error'
-        }
-      }
-    }
-  },
+=======
+
+>>>>>>> 24c109d (chore(setup): set up an empty Express Boilerplate with dotenv)
 '/api/v1/user/auth/signup': {
   post: {
-    security: [],
     tags: ['authentication'],
     description: 'user signup with JWT',
     "requestBody": {
@@ -223,6 +154,39 @@ paths: {
     },
   },
 },
+'/api/v1/user/login': {
+  post: {
+    tags: ['User'],
+    description: 'login user',
+    security: [],
+    parameters: [],
+    requestBody: {
+      content: {
+        'application/json': {
+          schema: {
+            $ref: '#/components/schemas/User',
+          },
+          example: {
+            email: 'john@gmail.com',
+            password: '123456',
+          },
+        }, 
+      },
+        required: true,
+      },
+      responses: {
+        200: {
+          description: 'successfully',
+        },
+        400: {
+          description: 'Invalid credation',
+        },
+        500: {
+            description: 'Internal Server Error'
+        }
+      }, 
+  }
+}
 },
 
 components: {
@@ -240,6 +204,7 @@ components: {
         },
       }
     },
+
     "SignupAuthShema": {
       "type": "object",
       "properties": {
@@ -265,18 +230,32 @@ components: {
           "type": "string"
         }
       }
+<<<<<<< HEAD
     },
-    "User": {
+    userRole: {
+      type:"object",
+      properties:{
+        email: {
+          type: 'string',
+          description: 'user email',
+        },
+        role: {
+          type: 'string',
+          description: 'new role to set to user',
+        },
+      }
+    },
+    User: {
       type: 'object',
 
       properties: {
         firstName: {
           type: 'string',
-          description: 'new role to set to user',
+          description: "User's fullname",
         },
         lastName: {
           type: 'string',
-          description: "User's fullname",
+          description: "User's username",
         },
         email:{
           type: 'string',
@@ -308,16 +287,63 @@ components: {
     },
   },
   securitySchemes: {
-    bearerAuth: {
-      type: 'http',
-      scheme: 'bearer',
-      bearerFormat: 'JWT',
-    },
+=======
+    }
+
+   },
+    User: {
+      type: "Object",
+      properties: {
+        id: {
+          type: 'string',
+          description: 'The auto-generated id of the user',
+        },
+        fullname: {
+          type: 'string',
+          description: "User's fullname",
+        },
+        username: {
+          type: 'string',
+          description: "User's username",
+        },
+        password: {
+          type: 'string',
+          description: "User's password",
+        },
+        email: {
+          type: 'string',
+          description: "User's email",
+        },
+        role: {
+          type: 'string',
+          description: "User role",
+        },
+      },
+    }
+    
+   },
+
+securitySchemes: {
+>>>>>>> 24c109d (chore(setup): set up an empty Express Boilerplate with dotenv)
+    Authorization: {
+      type: "apiKey",
+      name: "Authorization",
+      description: "Value: Bearer ",
+      in: "header",
+      scheme: "bearer"
+    }
   },
 }
+<<<<<<< HEAD
 }
 
 
 docrouter.use('/', serve, setup(options));
 
 export default docrouter;
+=======
+
+docrouter.use('/', serve, setup(options));
+
+export default docrouter;
+>>>>>>> 24c109d (chore(setup): set up an empty Express Boilerplate with dotenv)

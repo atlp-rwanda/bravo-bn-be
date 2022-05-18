@@ -37,7 +37,9 @@
     "exclude": [
       "node_modules/*",
       "coverage/*"
-    ]
+    ],
+    "sourceMap": false,
+    "instrument": false
   },
   "repository": {
     "type": "git",
@@ -65,8 +67,6 @@
     "body-parser": "^1.20.0",
     "chai": "^4.3.6",
     "chai-http": "^4.3.0",
-    "cloudinary": "^1.30.0",
-    "cloudinary-multer": "^1.0.2",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "dotenv": "^16.0.1",
@@ -76,8 +76,6 @@
     "lint": "^0.7.0",
     "lint-fix": "^0.24.0",
     "lint-staged": "^13.0.0",
-    "multer": "^1.4.5-lts.1",
-    "multer-storage-cloudinary": "^4.0.0",
     "passport": "^0.4.1",
     "passport-facebook": "^3.0.0",
     "passport-google-oauth2": "^0.2.0",
