@@ -1,0 +1,7 @@
+{
+    "name": "barefoot-bn-be",
+    "description": "Team bravo barefoot nomad backend",
+    "repository": "https://github.com/atlp-rwanda/bravo-bn-be/tree/ch-deploy-baseApp-heroku%23182201713",
+    "logo": "https://www.herokucdn.com/deploy/button.svg",
+    "keywords": ["node", "express", "static", "bravo", "barefoot"]
+  }
