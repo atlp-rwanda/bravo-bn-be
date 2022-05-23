@@ -10,7 +10,7 @@ import allRoutes from './routers/index';
 const app = express();
 
 app.use(cors());
-app.use(morgan('dev'));
+app.use(morgan('dev')); 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
