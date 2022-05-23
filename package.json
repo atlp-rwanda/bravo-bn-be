@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "Make company global travel and accommodation easy and convenient for the strong workforce of savvy members of staff, by leveraging the modern web.",
   "main": "src/index.js",
+  "type": "module",
   "scripts": {
-    "start": "node ./src/index.js",
+    "make-model": "npx sequelize-cli model:generate --name",
+    "start": "nodemon ./src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,10 +20,19 @@
   },
   "homepage": "https://github.com/atlp-rwanda/bravo-bn-be#readme",
   "dependencies": {
+    "body-parser": "^1.20.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.1",
-    "express": "^4.18.1"
+    "express": "^4.18.1",
+    "pg": "^8.7.3",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.20.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.16"
+    "@babel/cli": "^7.17.10",
+    "@babel/core": "^7.18.0",
+    "@babel/preset-env": "^7.18.0",
+    "nodemon": "^2.0.16",
+    "sequelize-cli": "^6.4.1"
   }
 }
