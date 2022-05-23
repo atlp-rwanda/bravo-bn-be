@@ -6,9 +6,10 @@ import bcryptjs  from 'bcryptjs';
 import db from '../database/models/index.js';
 import {signupAuthSchema} from '../helpers/validation_schema';
 import {Op} from'sequelize';
+import { createNotification } from './notificationController';
 
 const User = db['users']
-const { compare } = bcryptjs;
+const { hash, compare } = bcryptjs;
 
 const { sign, verify } = jsonwebtoken;
 
@@ -72,11 +73,13 @@ export const signup = catchAsync(async (req, res, next) => {
     if (usernameExist)
         return next(new AppError('Username already taken!', 409));
 
+    req.body.password= await hash(req.body.password, 12);
+
      const createUser= await User.create(req.body, {
             individualHooks: true
         });
-
-    createSendToken(createUser, 201, res);
+        createSendToken(createUser, 201, res);
+        createNotification(createUser.id,"welcome to Barefoot nomad","Your safety is our high priority, so please verify your email")
 });
 
 export const googleLogin = catchAsync(async (req, res, next) => {

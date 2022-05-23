@@ -125,7 +125,6 @@ describe('User sign up', () => {
     });
   });
   describe('User login', () => {
-    const unProcessableEntity =422;
     const conflict =401;
     const success =200;
     it("Should login user", (done) => {

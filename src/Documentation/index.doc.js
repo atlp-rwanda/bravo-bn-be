@@ -190,6 +190,52 @@ paths: {
       }
     }
   },
+'/api/v1/user/notification': {
+    get: {
+      tags: ['Notification'],
+      description: 'Get all notifications',
+      parameters: [],
+      responses: {
+        200: {
+          description: 'success'
+        }
+      }
+    }
+  },
+'/api/v1/user/notification/read': {
+    put: {
+      tags: ['Notification'],
+      description: 'Read all notifications',
+      parameters: [],
+      responses: {
+        204: {
+          description: 'success'
+        }
+      }
+    }
+  },
+  '/api/v1/user/notification/{id}': {
+    delete: {
+      tags: ['Notification'],
+      description: 'Read notification',
+      parameters: [
+        {
+          name: 'id',
+          in: 'path',
+          description: 'notification id',
+          required: true,
+          schema: {
+            type: 'string',
+          },
+        },
+      ],
+      responses: {
+        204: {
+          description: 'success',
+        }
+      }, 
+    }
+  },
 '/api/v1/user/auth/signup': {
   post: {
     security: [],
