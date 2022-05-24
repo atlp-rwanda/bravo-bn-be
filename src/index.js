@@ -1,11 +1,11 @@
-const express = require('express');
-const dotenv = require('dotenv');
+import express from 'express';
+import dotenv from 'dotenv'
 
 dotenv.config();
 
 const app = express();
 
-app.get("/welcome", (req,res)=>{
+app.get("/welcome", (req,res) => {
     res.json({message: "Welcome to barefoot!"})
 });
 
