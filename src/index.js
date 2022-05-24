@@ -5,7 +5,7 @@ dotenv.config();
 
 const app = express();
 
-app.get("/welcome", (req,res) => {
+app.get("/", (req,res) => {
     res.json({message: "Welcome to barefoot!"})
 });
 
