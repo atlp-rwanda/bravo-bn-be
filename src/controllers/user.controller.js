@@ -1,15 +1,9 @@
-import users from "../models/users.js";
+import db from '../models/index.js';
+const users = db['users']
 
 export const getAllUsers = async (req, res) => {
  
 	try{
-		/* ======= Start:: List all users with count ========== */ 
-			// users.findAll().then(users => {
-			// 	return success(res,200,users,"Retrieved");
-			// })
-		/* ======= End:: List all users with count ============ */ 
-	
-		/* ======= Start:: List all users =================== */ 
 			users.findAndCountAll().then(users => {
 				
 				return res.status(200).json({
@@ -17,7 +11,7 @@ export const getAllUsers = async (req, res) => {
 					data:users,
 					message:"Retrieved"});
 			})
-		/* ========= End:: List all users ================== */ 
+		
 	}
 	catch(error) {
 		return res.status(500).json(error.message);
@@ -45,3 +39,4 @@ export const createUser = async (req, res) => {
 		return res.status(500).json(error.message);
 	}
 };
+

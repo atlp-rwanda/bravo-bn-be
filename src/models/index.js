@@ -1,51 +1,35 @@
-'use strict'
-const fs = require('fs');
-const path = require('path');
-const Sequelize = require('sequelize');
-const envConfigs = require('../config/config.js');
-const dotEnv = require('dotenv');
-dotEnv.config();
-const basename = path.basename(__filename);
-const env = process.env.ENVIRONMENT || 'development';
-const config = envConfigs[env];
+'use strict';
+
+import { readdirSync } from 'fs';
+import { basename as _basename, join } from 'path';
+import { Sequelize } from 'sequelize';
+
+const basename = _basename(__filename);
+const env = process.env.NODE_ENV;
+const config = require('../config/config.js')[env];
+
+
 const db = {};
 
-let sequelize;
+const sequelize = new Sequelize(config.database, config.username, config.password, config);
 
-if (config.url) {
-    sequelize = new Sequelize(config.url, config);
-} 
-else {
-    sequelize = new Sequelize(config.database, config.username, config.password, config);
-  }
 
-fs.readdirSync(__dirname)
-    .filter((file) => {
-        return (
-            file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js'
-        );
-    })
-    .forEach((file) => {
-        const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes)
-        db[model.name] = model;
-    });
+readdirSync(__dirname)
+  .filter((file) => {
+    const isTrue = (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
+    return isTrue;
+  })
+  .forEach((file) => {
+    const model = sequelize.import(join(__dirname, file));
+    db[model.name] = model;
+  });
+
 
 Object.keys(db).forEach((modelName) => {
-    if (db[modelName].associate) {
-        db[modelName].associate(db);
-    }
+  db[modelName].associate(db); 
 });
-
-sequelize
-    .authenticate()
-    .then(() => {
-        console.log('Connection has been established successfully.');
-    })
-    .catch((err) => {
-        console.error('Unable to connect to the database:', err.message);
-    });
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-module.exports = db;
+export default db;
