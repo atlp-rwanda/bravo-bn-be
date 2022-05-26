@@ -21,7 +21,28 @@ security: [
     bearerAuth: [],
   }
 ],
-
+tags: [
+  {name: 'setup swagger', description: 'Testing swagger setup'},
+],
+paths: {
+'/api/testSwagger': {
+  get: {
+    tags: ['setup swagger'],
+    description: 'testing swagger setup',
+    security: [],
+    parameters: [],
+   
+    responses: {
+      200: {
+        description: 'success status',
+      },
+      500: {
+          description: 'Internal Server Error'
+      }
+    },
+  },
+},
+},
 }
 
 docrouter.use('/', serve, setup(options));
