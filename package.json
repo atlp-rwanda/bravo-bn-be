@@ -9,8 +9,12 @@
     "lint": "eslint",
     "lint:fix": "npm run lint -- --fix",
     "prettier": "prettier",
-    "prettier:fix": "npm run prettier -- --write"
+    "prettier:fix": "npm run prettier -- --write",
+    "pre-commit": "node ./src/index.js"
   },
+  "pre-commit": [
+    "pre-commit"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/atlp-rwanda/bravo-bn-be.git"
@@ -24,6 +28,8 @@
   "dependencies": {
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
+    "husky": "^8.0.1",
+    "pre-commit": "^1.2.2",
     "prettierrc": "^0.0.0-5"
   },
   "devDependencies": {
