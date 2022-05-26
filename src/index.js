@@ -1,14 +1,10 @@
-import express from 'express';
-import dotenv from 'dotenv'
+import app from './app';
+import dotenv from 'dotenv';
 
-dotenv.config();
+dotenv.config(".env");
 
-const app = express();
+const port = process.env.PORT;
 
-app.get("/", (req,res) => {
-    res.json({message: "Welcome to barefoot!"})
-});
-
-app.listen(process.env.PORT || 3000, () => {
-    console.log(`listening on port ${process.env.PORT}`)
-})
+app.listen(port, () => {
+    console.log(`Listening on port ${port}`);
+  });
