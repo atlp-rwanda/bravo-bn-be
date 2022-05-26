@@ -1,16 +1,9 @@
 import express from 'express';
-import bodyParser from 'body-parser';
-import cors from 'cors';
-import usersRoutes from './user.routes';
-const app = express();
+import userRoutes from './user.routes';
 
-app.use(cors());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.json()); 
-app.use('/api/v1/users', usersRoutes);
+const router=express.Router();
 
-app.use('/',(req, res) => {
-    res.status(200).json({ success: true, message: "You successfully landed on our Endpoint" })
-  });
+router.use('/api/v1/users',userRoutes);
 
-export default app; 
+export default router;
+ 

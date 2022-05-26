@@ -1,4 +1,4 @@
-import db from '../models/index.js';
+import db from '../database/models/index.js'
 const users = db['users']
 
 export const getAllUsers = async (req, res) => {
