@@ -1,8 +1,8 @@
-import '@babel/register';
+require('@babel/register') ;
 
-import { resolve } from 'path';
+const { resolve } =require( 'path');
 
-export default {
+module.exports= {
   'config': resolve('src', 'config','config.js'),
   'migrations-path': resolve('src', 'migrations'),
   'models-path': resolve('src', 'models'),

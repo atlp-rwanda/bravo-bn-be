@@ -1,7 +1,5 @@
 
-import dotenv from 'dotenv';
-
-dotenv.config(".env");
+import 'dotenv/config';
 
 export default {
   development: {
@@ -29,56 +27,3 @@ export default {
   dialect: 'postgres',
   },
 }
-
-
-///////////////
-
-// import dotenv from 'dotenv';
-
-// dotenv.config(".env");
-
-// const {
-//   PGUSER,
-//   PGPASSWORD,
-//   DEV_PGDATABASE,
-//   PROD_PGDATABASE,
-//   TEST_PGDATABASE,
-//   PGHOST,
-//   PGPORT
-// } = process.env;
-
-
-// export default {
-//     development: {
-//       username: PGUSER,
-//       password: PGPASSWORD,
-//       database: DEV_PGDATABASE,
-//       host: PGHOST,
-//       port: PGPORT,
-//       dialect: 'postgres'
-//     },
-//     test: {
-//       username: PGUSER,
-//       password: PGPASSWORD,
-//       database: TEST_PGDATABASE,
-//       host: PGHOST,
-//       port: PGPORT,
-//       dialect: 'postgres',
-//       logging: false
-//     },
-//     production: {
-//       username: PGUSER,
-//       password: PGPASSWORD,
-//       database: PROD_PGDATABASE,
-//       host: PGHOST,
-//       port: PGPORT,
-//       dialect: 'postgres'
-//     },
-//     username: process.env.PGUSER,
-//     password: process.env.PGPASSWORD,
-//     database: process.env.DEV_PGDATABASE,
-//     host: process.env.PGHOST,
-//     port: process.env.PGPORT,
-//     dialect: 'postgres',
-//     logging: false
-//   };
