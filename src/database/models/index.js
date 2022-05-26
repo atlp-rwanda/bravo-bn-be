@@ -8,7 +8,6 @@ const basename = _basename(__filename);
 const env = process.env.NODE_ENV;
 const config = require('../config/config.js')[env];
 
-
 const db = {};
 
 const sequelize = new Sequelize(config.database, config.username, config.password, config);
@@ -33,4 +32,3 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 export default db;
-

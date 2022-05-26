@@ -1,30 +1,41 @@
+import dotenv from 'dotenv';
+dotenv.config();
+const {
+  DATABASE_USER,
+  DATABASE_PASSWORD,
+  DEV_DATABASE,
+  PRODUCTION_DATABASE,
+  TEST_DATABASE,
+  DATABASE_HOST,
+  DATABASE_PORT
+} = process.env;
 
-import 'dotenv/config';
 
-export default {
-  development: {
-    username:process.env.DATABASE_USER,
-    password:process.env.DATABASE_PASSWORD,
-    host:process.env.DATABASE_HOST,
-    port:process.env.DATABASE_PORT,
-    database: process.env.DEV_DATABASE,
-    dialect: 'postgres',
-  },
-  test: {
-      username:process.env.DATABASE_USER,
-      password:process.env.DATABASE_PASSWORD,
-      host:process.env.DATABASE_HOST,
-      port:process.env.DATABASE_PORT,
-      database: process.env.TEST_DATABASE,
-    dialect: 'postgres',
-  },
-  production: {
-    username:process.env.DATABASE_USER,
-    password:process.env.DATABASE_PASSWORD,
-    host:process.env.DATABASE_HOST,
-    port:process.env.DATABASE_PORT,
-    database: process.env.PRODUCTION_DATABASE,
-  dialect: 'postgres',
-  },
-}
-
+module.exports = {
+    development: {
+      username: DATABASE_USER,
+      password: DATABASE_PASSWORD,
+      database: DEV_DATABASE,
+      host: DATABASE_HOST,
+      port: DATABASE_PORT,
+      dialect: 'postgres'
+    },
+    test: {
+      username: DATABASE_USER,
+      password: DATABASE_PASSWORD,
+      database: TEST_DATABASE,
+      host: DATABASE_HOST,
+      port: DATABASE_PORT,
+      dialect: 'postgres',
+      logging: false
+    },
+    production: {
+      username: DATABASE_USER,
+      password: DATABASE_PASSWORD,
+      database: PRODUCTION_DATABASE,
+      host: DATABASE_HOST,
+      port: DATABASE_PORT,
+      dialect: 'postgres'
+    },
+  };
+  
