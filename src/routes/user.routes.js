@@ -1,9 +1,11 @@
 import express from 'express';
-import { createUser, getAllUsers } from "../services/user.service.js";
+import { createUser, getAllUsers, updateRole } from "../services/user.service.js";
 
 const router = express.Router();
 
     router.get('/', getAllUsers); 
     router.post('/create', createUser); 
+
+    router.put('/update/roles', updateRole);
 
 export default router
