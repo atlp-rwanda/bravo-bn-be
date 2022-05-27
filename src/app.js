@@ -9,8 +9,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json()); 
 app.use(router);
 
-app.use('/',(req, res) => {
-    res.status(200).json({ success: true, message: "You are using Barefoot nomad app." })
-  });
+
 
 export default app;

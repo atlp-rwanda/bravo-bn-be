@@ -4,29 +4,15 @@
   "description": "Make company global travel and accommodation easy and convenient for the strong workforce of savvy members of staff, by leveraging the modern web.",
   "main": "src/index.js",
   "scripts": {
-    "start": "NODE_ENV=production node --exec babel-node ./src/index.js",
-    "start:prod": "NODE_ENV=production nodemon --exec babel-node ./src/index.js",
-    "start:dev": "NODE_ENV=development nodemon --exec babel-node ./src/index.js",
+    "start": "cross-env NODE_ENV=production node --exec babel-node ./src/index.js",
+    "start:prod": "cross-env NODE_ENV=production nodemon --exec babel-node ./src/index.js",
+    "start:dev": "cross-env NODE_ENV=development nodemon --exec babel-node ./src/index.js",
     "migrate": "npx sequelize-cli db:migrate",
     "down": "npx sequelize-cli db:migrate:undo:all",
     "seed": "npx sequelize-cli db:seed:all",
     "undo-seed": "npx sequelize-cli db:seed:undo",
-    "test": "cross-env NODE_ENV=test mocha --require @babel/register --timeout 30000 --exit",
-    "coverage": "nyc --reporter=text --reporter=html  npm run test"
-  },
-  "nyc": {
-    "require": [
-      "babel-register"
-    ],
-    "all": true,
-    "check-coverage": true,
-    "exclude": [
-      "node_modules/*",
-      "src/database/models/index.js",
-      "coverage/*"
-    ],
-    "sourceMap": false,
-    "instrument": false
+    "test": "NODE_ENV=test nyc mocha --require @babel/register ./tests/**/*.js  --timeout 30000 --exit",
+    "db:connect": "babel-node ./src/database/models/ connect"
   },
   "repository": {
     "type": "git",
@@ -49,17 +35,16 @@
     "@babel/runtime": "^7.17.9",
     "babel-eslint": "^10.1.0",
     "babel-node": "^0.0.1-security",
-    "babel-register": "^6.26.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.0",
-    "chai": "^4.3.6",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "pg": "^8.7.3",
     "pg-hstore": "^2.3.4",
-    "sequelize": "^5.21.6"
+    "sequelize": "^5.21.6",
+    "swagger-ui-express": "^4.4.0"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.17.12",
@@ -76,5 +61,10 @@
     "nodemon": "^2.0.16",
     "nyc": "^15.1.0",
     "sequelize-cli": "^5.5.1"
+    
+  },
+  "nyc": {
+    "sourceMap": false,
+    "instrument": false
   }
 }

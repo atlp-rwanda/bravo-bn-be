@@ -1,25 +1,25 @@
 {
-  "presets": [
-    ["@babel/preset-env",
-    {
-        "targets": {
-          "node": "current"
-        }
-      }]
-  ],
-  "plugins": [
-    [
-      "add-module-exports"
-    ],
-    [
-      "@babel/plugin-transform-runtime",
+    "presets": [
+      ["@babel/preset-env",
       {
-        "regenerator": true
-      }
+          "targets": {
+            "node": "16"
+          }
+        }]
     ],
-    [
-      "@babel/plugin-proposal-class-properties"
-    ],
-    "istanbul"
-  ]
-}
+    "plugins": [
+      [
+        "add-module-exports"
+      ],
+      [
+        "@babel/plugin-transform-runtime",
+        {
+          "regenerator": true
+        }
+      ],
+      [
+        "@babel/plugin-proposal-class-properties"
+      ],
+      "istanbul"
+    ]
+  }
