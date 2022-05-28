@@ -7,18 +7,15 @@ export const getAllUsers = async (req, res) => {
 			users.findAndCountAll().then(users => {
 				
 				return res.status(200).json({
-					status:"success",
+					status:true,
 					data:users,
 					message:"Retrieved"});
-			})
-		
+			})		
 	}
 	catch(error) {
 		return res.status(500).json(error.message);
-	}
-	
+	}	
 };
-
 export const createUser = async (req, res) => {
     try {
 	
@@ -32,7 +29,7 @@ export const createUser = async (req, res) => {
 		const newUser = users.create(req.body);
 		const {fullname,username,email,role,password} = req.body;
 		return res.status(201).json({
-			status:"success",
+			status:true,
 			data:{fullname,username,email,role,password},
 			message:"New user have been created"});
 	} catch (error) {
