@@ -23,9 +23,10 @@ security: [
 ],
 tags: [
   {name: 'setup swagger', description: 'Testing swagger setup'},
+  {name: 'User', description: 'users endpoint'},
 ],
 paths: {
-'/api/testSwagger': {
+'/api/v1/testSwagger': {
   get: {
     tags: ['setup swagger'],
     description: 'testing swagger setup',
@@ -42,8 +43,83 @@ paths: {
     },
   },
 },
-},
+'/api/v1/users/login': {
+  post: {
+    tags: ['User'],
+    description: 'login user',
+    security: [],
+    parameters: [],
+    requestBody: {
+      content: {
+        'application/json': {
+          schema: {
+            $ref: '#/components/schemas/User',
+          },
+          example: {
+            email: 'john@gmail.com',
+            password: '123456',
+          },
+        },
+      },
+      required: true,
+    },
+    responses: {
+      200: {
+        description: 'successfully',
+      },
+      400: {
+        description: 'Invalid credation',
+      },
+      500: {
+          description: 'Internal Server Error'
+      }
+    }, 
+  }
 }
+},
+components: {
+  schemas: {
+    User: {
+      type: 'object',
+
+      properties: {
+        id: {
+          type: 'string',
+          description: 'The auto-generated id of the user',
+        },
+        fullname: {
+          type: 'string',
+          description: "User's fullname",
+        },
+        username: {
+          type: 'string',
+          description: "User's username",
+        },
+        password: {
+          type: 'string',
+          description: "User's password",
+        },
+        email: {
+          type: 'string',
+          description: "User's email",
+        },
+        role: {
+          type: 'string',
+          description: "User role",
+        },
+      },
+    },
+  },
+  securitySchemes: {
+    bearerAuth: {
+      type: 'http',
+      scheme: 'bearer',
+      bearerFormat: 'JWT',
+    },
+  },
+}
+}
+
 
 docrouter.use('/', serve, setup(options));
 

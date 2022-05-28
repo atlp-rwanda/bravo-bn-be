@@ -1,5 +1,6 @@
 import db from '../database/models/index.js'
 const users = db['users']
+import jwt from 'jsonwebtoken'
 
 export const getAllUsers = async (req, res) => {
  
@@ -37,3 +38,33 @@ export const createUser = async (req, res) => {
 	}
 };
 
+export const loginUser= async (req, res) => {
+	try{
+		const {email,password} = req.body;
+		if(!email || !password){
+			throw new Error('Please make sure you add email and password');
+		}
+		const user = await users.findOne({
+			where:{
+				email,
+				password
+			}
+		,attributes: {exclude: ['password','createdAt','updatedAt']}});
+		if(!user){
+			throw new Error('User not found');
+		}
+		return res.status(200).json({
+			status:true,
+			token:generateToken(user.id),
+			data:user,
+			message:"Login Successful"});
+	}
+	catch(error){
+		return res.status(500).json(error.message);
+	}
+}
+
+// generate token 
+const generateToken=(id)=>{
+    return jwt.sign({id},process.env.JWT_SECRET,{expiresIn:'30d'})
+}

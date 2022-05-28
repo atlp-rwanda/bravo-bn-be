@@ -5,8 +5,8 @@ import testSwaggerRouter from './testSwaggerRouter';
 const router=express.Router();
 
 router.use('/api/v1/users',userRoutes);
-router.use('/api/testSwagger', testSwaggerRouter);
-router.use('/api/docs' ,docsRouter)
+router.use('/api/v1/testSwagger', testSwaggerRouter);
+router.use('/api/v1/docs' ,docsRouter)
 router.use('/',(req, res) => {
     res.status(200).json({ success: true, message: "You are using Barefoot nomad app." })
   });
