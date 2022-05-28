@@ -1,19 +1,11 @@
-import express from 'express';
-const app = express();
-import docsRouter from './Documentation/index.doc';
-import testSwaggerRouter from './routers/testSwaggerRouter';
-import dotenv from 'dotenv'
-dotenv.config();
+import 'dotenv/config';
+import app from './app';
 
-const port = process.env.PORT || 3000;
-
-app.get("/", (req,res) => {
-    res.json({message: "Welcome to barefoot!"})
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`app is listening on port ${PORT}`);
 });
 
-app.use('/api/testSwagger', testSwaggerRouter);
-app.use('/api/docs',docsRouter)
 
-app.listen(process.env.PORT || 3000, () => {
-    console.log(`listening on port ${process.env.PORT}`)
-})
+
+
