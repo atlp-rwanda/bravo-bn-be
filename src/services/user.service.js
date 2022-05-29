@@ -37,3 +37,28 @@ export const createUser = async (req, res) => {
 	}
 };
 
+const updateUser = (user, userInfo) => users.update(userInfo, {
+    where: user,
+    returning: true
+  });
+
+export const updateRole = (req, res, next) => {
+    const email = req.body.email;
+    const role = req.body.role;
+
+    	users.findOne({ where: { email: email } }).then(user => {
+        console.log(user)
+        if(user === null){
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        if (user.role === 'super_admin') {
+           return res.json({message: "Super admin can not be updated"})
+        }
+        updateUser({ email: email }, { role: role })
+       
+        return res.json({result: "user role updated"})
+    })
+      .catch((error) => res.status(404).send({ error }));
+    
+}

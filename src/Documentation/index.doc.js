@@ -23,6 +23,7 @@ security: [
 ],
 tags: [
   {name: 'setup swagger', description: 'Testing swagger setup'},
+  {name: 'Admin', description: 'update user role'}
 ],
 paths: {
 '/api/testSwagger': {
@@ -42,6 +43,34 @@ paths: {
     },
   },
 },
+
+'/api/v1/users/roles': {
+  put: {
+    tags: ['Admin'],
+    description: 'Updating user roles',
+    security: [],
+    parameters: [],
+    requestBody: {
+      content: {
+        'application/json': {
+          schema: {
+            $ref: '#/components/schemas/userRole',
+          },
+        },
+      },
+      required: true,
+    },
+    responses: {
+      200: {
+        description: 'success'
+      },
+      500: {
+        description: 'Internal server error'
+      }
+    }
+  }
+},
+
 '/api/v1/user/auth/signup': {
   post: {
     tags: ['authentication'],
@@ -75,8 +104,23 @@ paths: {
   },
 },
 },
-"components": {
-  "schemas": {
+
+components: {
+  schemas: {
+   userRole: {
+      type:"object",
+      properties:{
+        email: {
+          type: 'string',
+          description: 'user email',
+        },
+        role: {
+          type: 'string',
+          description: 'new role to set to user',
+        },
+      }
+    },
+
     "SignupAuthShema": {
       "type": "object",
       "properties": {
@@ -103,9 +147,9 @@ paths: {
         }
       }
     }
-  }
-}
 
+   }
+}
 }
 
 docrouter.use('/', serve, setup(options));
