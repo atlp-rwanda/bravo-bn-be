@@ -1,6 +1,6 @@
 import express from 'express';
-import {facebookLogin, googleLogin, signup } from '../../controllers/authentication';
-import passport from '../../config/passport';
+import { facebookLogin, googleLogin, signup } from '../../controllers/authentication';
+import passport, { facebookCallBack } from '../../config/passport';
 const authRouter = express.Router();
 
 authRouter.post('/signup',signup);
