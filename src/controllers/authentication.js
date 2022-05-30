@@ -54,7 +54,7 @@ export const login = catchAsync(async (req, res, next) => {
     if (!hashedPassword)
         return next(new AppError('Wrong email or password!', 401));
 
-    createSendToken(currentUser, 201, res);
+    createSendToken(currentUser, 200, res);
 });
 
 export const signup = catchAsync(async (req, res, next) => {
