@@ -1,6 +1,5 @@
 import express from 'express';
 import { createUser, getAllUsers,loginUser } from "../services/user.service.js";
-
 const router = express.Router();
 
     router.get('/', getAllUsers); 

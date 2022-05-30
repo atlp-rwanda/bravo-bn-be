@@ -38,6 +38,7 @@ export const createUser = async (req, res) => {
 	}
 };
 
+
 export const loginUser= async (req, res) => {
 	try{
 		const {email,password} = req.body;
@@ -68,3 +69,4 @@ export const loginUser= async (req, res) => {
 const generateToken=(id)=>{
     return jwt.sign({id},process.env.JWT_SECRET,{expiresIn:'30d'})
 }
+
