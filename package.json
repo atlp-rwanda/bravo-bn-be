@@ -11,8 +11,26 @@
     "down": "npx sequelize-cli db:migrate:undo:all",
     "seed": "npx sequelize-cli db:seed:all",
     "undo-seed": "npx sequelize-cli db:seed:undo",
-    "test": "NODE_ENV=test nyc mocha --require @babel/register ./tests/**/*.js  --timeout 30000 --exit",
-    "db:connect": "babel-node ./src/database/models/ connect"
+    "test": "cross-env NODE_ENV=test npm run down && npm run migrate && npm run seed && mocha --require @babel/register --timeout 30000 --exit",
+    "coverage": "nyc npm run test | coveralls"
+  },
+  "nyc": {
+    "all": true,
+    "include": [
+      "src/**/*.js",
+      "test/*.test.js"
+    ],
+    "reporter": [
+      "html",
+      "text",
+      "text-lcov"
+    ],
+    "exclude": [
+      "node_modules/*",
+      "coverage/*"
+    ],
+    "sourceMap": false,
+    "instrument": false
   },
   "repository": {
     "type": "git",
@@ -35,12 +53,16 @@
     "@babel/runtime": "^7.17.9",
     "babel-eslint": "^10.1.0",
     "babel-node": "^0.0.1-security",
+    "babel-register": "^6.26.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.0",
+    "chai": "^4.3.6",
+    "chai-http": "^4.3.0",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
+    "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "pg": "^8.7.3",
     "pg-hstore": "^2.3.4",
@@ -52,6 +74,7 @@
     "@babel/plugin-transform-runtime": "^7.17.12",
     "babel-plugin-add-module-exports": "^1.0.4",
     "babel-plugin-istanbul": "^6.1.1",
+    "coveralls": "^3.1.1",
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
@@ -62,9 +85,5 @@
     "nodemon": "^2.0.16",
     "nyc": "^15.1.0",
     "sequelize-cli": "^5.5.1"
-  },
-  "nyc": {
-    "sourceMap": false,
-    "instrument": false
   }
 }
