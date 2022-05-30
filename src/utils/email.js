@@ -41,11 +41,11 @@ class Email {
   async send(template, subject, title) {
     // 1) Render HTML based on a ejs template
     const html = await ejs.renderFile(
-      path.join(__dirname, `./../views/email/${template}.ejs`),
+      path.join(__dirname,`./../views/email/${template}.ejs`),
       {
         firstName: this.firstName,
         url: this.url,
-      },
+      }
     );
     // 2) Define email options
     const mailOptions = {
@@ -61,15 +61,8 @@ class Email {
 
   async sendWelcome() {
     if (process.env.NODE_ENV !== 'test') {
-      await this.send('welcome', 'Welcome to Barefoot nomad');
+      await this.send('welcome', "Welcome to Barefoot nomad");
     }
-  }
-
-  async sendPasswordReset() {
-    await this.send(
-      'passwordreset',
-      'Your password reset token'
-    );
   }
 }
 
