@@ -31,6 +31,9 @@
     ],
     "sourceMap": false,
     "instrument": false
+    "coverage": "nyc npm run test | coveralls",
+    "prepare": "husky install"
+
   },
   "repository": {
     "type": "git",
@@ -66,8 +69,7 @@
     "jsonwebtoken": "^8.5.1",
     "pg": "^8.7.3",
     "pg-hstore": "^2.3.4",
-    "sequelize": "^5.21.6",
-    "swagger-ui-express": "^4.4.0"
+    "sequelize": "^5.21.6"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.17.12",
@@ -84,6 +86,11 @@
     "morgan": "^1.10.0",
     "nodemon": "^2.0.16",
     "nyc": "^15.1.0",
-    "sequelize-cli": "^5.5.1"
+    "sequelize-cli": "^5.5.1",
+    "husky": "^8.0.0"
+  },
+  "nyc": {
+    "sourceMap": false,
+    "instrument": false
   }
 }
