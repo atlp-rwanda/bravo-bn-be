@@ -3,12 +3,11 @@
 import { readdirSync } from 'fs';
 import { basename as _basename, join } from 'path';
 import { Sequelize } from 'sequelize';
-import dotenv from 'dotenv';
-dotenv.config();
 
 const basename = _basename(__filename);
 const env = process.env.NODE_ENV;
 const config = require('../config/config.js')[env];
+
 
 const db = {};
 
@@ -34,3 +33,4 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 export default db;
+
