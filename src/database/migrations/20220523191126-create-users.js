@@ -15,14 +15,10 @@ export default {
         type: Sequelize.STRING
       },
       email: {
-        type: Sequelize.STRING,
-        unique: true
+        type: Sequelize.STRING
       },
       password: {
         type: Sequelize.STRING
-      },
-      birthDate: {
-        type: Sequelize.DATE
       },
       username: {
         type: Sequelize.STRING
@@ -40,6 +36,30 @@ export default {
         type: Sequelize.DATE
       },
       passwordResetToken: {
+        type: Sequelize.STRING
+      },
+      socialMediaId:{
+        type: Sequelize.STRING
+      },
+      provider:{
+        type: Sequelize.STRING
+      },
+      isVerified:{
+        type: Sequelize.BOOLEAN
+      },
+      gender:{
+        type: Sequelize.STRING
+      },
+      preferredLanguage:{
+        type: Sequelize.STRING
+      },
+      preferredCurrency:{
+        type: Sequelize.STRING
+      },
+      department:{
+        type: Sequelize.STRING
+      },
+      lineManager:{
         type: Sequelize.STRING
       },
       role: {
