@@ -43,7 +43,7 @@ paths: {
     },
   },
 },
-'/api/v1/users/login': {
+'/api/v1/user/login': {
   post: {
     tags: ['User'],
     description: 'login user',
@@ -73,6 +73,91 @@ paths: {
       500: {
           description: 'Internal Server Error'
       }
+    },
+  }, 
+  },
+'/api/v1/user/': {
+  get: {
+    tags: ['User'],
+    description: 'get all user data',
+    security: [],
+    parameters: [],
+    responses: {
+      200: {
+        description: 'successfully',
+      },
+      400: {
+        description: 'Invalid credation',
+      },
+      500: {
+          description: 'Internal Server Error'
+      }
+    }, 
+  }
+},
+'/api/v1/user/{id}': {
+  get: {
+    tags: ['User'],
+    description: 'get all user data',
+    parameters: [
+      {
+        name: 'id',
+        in: 'path',
+        description: 'user id',
+        required: true,
+        schema: {
+          type: 'string',
+        },
+      },
+    ],
+    responses: {
+      200: {
+        description: 'successfully',
+      },
+      400: {
+        description: 'Invalid credation',
+      },
+      500: {
+          description: 'Internal Server Error'
+      }
+    }, 
+  }
+},
+'/api/v1/user/update/{id}': {
+  post: {
+    tags: ['User'],
+    description: 'update user data',
+    parameters: [
+      {
+        name: 'id',
+        in: 'path',
+        description: 'user id',
+        required: true,
+        schema: {
+          type: 'string',
+        },
+      },
+    ],
+    requestBody: {
+      content: {
+        'multipart/form-data': {
+          schema: {
+            $ref: '#/components/schemas/User',
+          },
+        },
+      },
+      required: true,
+    },
+    responses: {
+      200: {
+        description: 'successfully',
+      },
+      400: {
+        description: 'Invalid credation',
+      },
+      500: {
+          description: 'Internal Server Error'
+      }
     }, 
   }
 }
@@ -87,26 +172,46 @@ components: {
           type: 'string',
           description: 'The auto-generated id of the user',
         },
-        fullname: {
+        firstName: {
           type: 'string',
           description: "User's fullname",
         },
-        username: {
+        lastName: {
           type: 'string',
           description: "User's username",
         },
-        password: {
-          type: 'string',
-          description: "User's password",
-        },
-        email: {
+        email:{
           type: 'string',
           description: "User's email",
-        },
-        role: {
+        },phoneNumber:{
           type: 'string',
-          description: "User role",
-        },
+          description: "User's phone number",
+        },image:{
+          type: 'string',
+          description: "User's image url",
+          format: 'binary'
+        },provider:{
+          type: 'string',
+          description: "User's provider",
+        },gender:{
+          type:'string',
+          description:"User's gender"
+        },preferredLanguage:{
+          type:'string',
+          description:"User's preferred language"
+        },preferredCurrency:{
+          type:'string',
+          description:"User's preferred currency"
+        },department:{
+          type:'string',
+          description:"User's department"
+        },lineManager:{
+          type:'string',
+          description:"User's line manager"
+        },role:{
+          type:'string',
+          description:"User's role"
+        }
       },
     },
   },
@@ -124,3 +229,5 @@ components: {
 docrouter.use('/', serve, setup(options));
 
 export default docrouter;
+
+// firstName,lastName,email,phoneNumber,image,provider,gender,preferredLanguage,preferredCurrency,department,lineManager,role
