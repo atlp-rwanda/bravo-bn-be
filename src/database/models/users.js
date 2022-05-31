@@ -1,7 +1,11 @@
 'use strict';
-import { Model } from 'sequelize';
+const {
+  Model
+} = require('sequelize');
+const bcryptjs = require('bcryptjs');
+const { hash } = bcryptjs;
 export default (sequelize, DataTypes) => {
-  class users extends Model {
+  class user extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,15 +15,50 @@ export default (sequelize, DataTypes) => {
       // define association here
     }
   }
-  users.init({
-    fullname: DataTypes.STRING,
+  user.init({
+    firstName: DataTypes.STRING,
+    lastName: DataTypes.STRING,
     username: DataTypes.STRING,
     email: DataTypes.STRING,
-    role: DataTypes.STRING,
-    password: DataTypes.STRING
+    password: DataTypes.STRING,
+    phoneNumber: DataTypes.STRING,
+    image: DataTypes.STRING,
+    passwordChangedAt: DataTypes.DATE,
+    passwordResetExpires: DataTypes.DATE,
+    passwordResetToken: DataTypes.STRING,
+    socialMediaId: DataTypes.STRING,
+    provider: DataTypes.STRING,
+    isVerified: DataTypes.BOOLEAN,
+    gender: DataTypes.STRING,
+    preferredLanguage: DataTypes.STRING,
+    preferredCurrency:DataTypes.STRING,
+    department:DataTypes.STRING,
+    lineManager:DataTypes.STRING,
+    role: DataTypes.ENUM(
+        'manager', 
+        'super user', 
+        'requester', 
+        'super admin', 
+        'travel admin', 
+        'travel team member',
+        'accommodation supplier'
+        )
   }, {
     sequelize,
     modelName: 'users',
   });
-  return users;
+
+  user.beforeSave(async user => {
+    user.password = await hash(user.password, 12);
+
+  });
+
+  user.beforeBulkCreate(async (users, options) => {
+    for (const user of users) {
+      user.password = await hash(user.password, 12);
+    }
+
+  });
+
+  return user;
 };
