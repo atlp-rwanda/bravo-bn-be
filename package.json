@@ -11,8 +11,26 @@
     "down": "npx sequelize-cli db:migrate:undo:all",
     "seed": "npx sequelize-cli db:seed:all",
     "undo-seed": "npx sequelize-cli db:seed:undo",
-    "test": "cross-env NODE_ENV=test nyc mocha --require @babel/register ./tests/**/*.js  --timeout 30000 --exit",
-    "db:connect": "babel-node ./src/database/models/ connect"
+    "test": "cross-env NODE_ENV=test npm run down && npm run migrate && npm run seed && mocha --require @babel/register --timeout 30000 --exit",
+    "coverage": "nyc npm run test | coveralls"
+  },
+  "nyc": {
+    "all": true,
+    "include": [
+      "src/**/*.js",
+      "test/*.test.js"
+    ],
+    "reporter": [
+      "html",
+      "text",
+      "text-lcov"
+    ],
+    "exclude": [
+      "node_modules/*",
+      "coverage/*"
+    ],
+    "sourceMap": false,
+    "instrument": false
   },
   "repository": {
     "type": "git",
@@ -62,9 +80,6 @@
     "nodemon": "^2.0.16",
     "nyc": "^15.1.0",
     "sequelize-cli": "^5.5.1"
-  },
-  "nyc": {
-    "sourceMap": false,
-    "instrument": false
   }
+ 
 }
