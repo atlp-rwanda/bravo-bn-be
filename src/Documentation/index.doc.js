@@ -168,10 +168,6 @@ components: {
       type: 'object',
 
       properties: {
-        id: {
-          type: 'string',
-          description: 'The auto-generated id of the user',
-        },
         firstName: {
           type: 'string',
           description: "User's fullname",
@@ -190,9 +186,6 @@ components: {
           type: 'string',
           description: "User's image url",
           format: 'binary'
-        },provider:{
-          type: 'string',
-          description: "User's provider",
         },gender:{
           type:'string',
           description:"User's gender"
@@ -208,9 +201,6 @@ components: {
         },lineManager:{
           type:'string',
           description:"User's line manager"
-        },role:{
-          type:'string',
-          description:"User's role"
         }
       },
     },

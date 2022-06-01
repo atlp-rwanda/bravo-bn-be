@@ -2,7 +2,6 @@ import jsonwebtoken  from 'jsonwebtoken';
 import catchAsync  from '../utils/catchAsync';
 import AppError  from '../utils/appError';
 import db from '../database/models/index.js';
-import {signupAuthSchema} from '../helpers/validation_schema'
 
 const User = db['users']
 
@@ -51,9 +50,9 @@ if(!user){
 if(user.id!=req.params.id){
     return next(new AppError('You are not authorized to update this user', 401));
 }
-const {firstName,lastName,email,phoneNumber,image,provider,gender,preferredLanguage,preferredCurrency,department,lineManager,role} = req.body;
+const {firstName,lastName,email,phoneNumber,image,gender,preferredLanguage,preferredCurrency,department,lineManager} = req.body;
 const updatedUser=  await User.update({
-    firstName,lastName,email,phoneNumber,image,provider,gender,preferredLanguage,preferredCurrency,department,lineManager,role
+    firstName,lastName,email,phoneNumber,image,gender,preferredLanguage,preferredCurrency,department,lineManager
 },{
     where:{id:user.id}
 })
