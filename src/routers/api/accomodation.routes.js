@@ -1,6 +1,6 @@
 import express from 'express';
 import multer from "multer";
-import { createAccomodation, getAllAccomodation,deleteAccomodation, updateAccomodation,getSingleAccomodation} from "../services/accomodation.service.js";
+import { createAccomodation, getAllAccomodation,deleteAccomodation, updateAccomodation,getSingleAccomodation} from "../../services/accomodation.service.js";
 const router=express.Router();
 const storage=multer.diskStorage({});
 const fileFilter=(req,file,cb)=>{

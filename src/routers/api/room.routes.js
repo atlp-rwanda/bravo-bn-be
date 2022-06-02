@@ -5,7 +5,7 @@ import {
   getSingleRoom,
   updateRoom,
   deleteRoom,
-} from "../services/room.service";
+} from "../../services/room.service";
 
 const router = express.Router();
 
