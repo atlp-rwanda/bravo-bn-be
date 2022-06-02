@@ -11,8 +11,8 @@ export default (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
-      // define association here
+    static associate({Room}) {
+     this.hasMany(Room,{foreignKey:"accomodationId",as:"rooms"})
     }
   }
   accomodation.init({
@@ -22,7 +22,8 @@ export default (sequelize, DataTypes) => {
     image: DataTypes.STRING,
     availability: DataTypes.STRING,
     highlight: DataTypes.STRING,
-    amenities: DataTypes.STRING
+    amenities: DataTypes.STRING,
+    
   }, {
     sequelize,
     modelName: 'accomodation',

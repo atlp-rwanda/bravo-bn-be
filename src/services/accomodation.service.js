@@ -62,6 +62,37 @@ export const updateAccomodation = async(req, res) => {
   };
 }
 
+export const getSingleAccomodation = async (req, res) => {
+	try{
+		const id = req.params.id;
+
+
+		const accomodation =  await accomodations.findOne({
+			where:{id},
+			include:['rooms']
+		})
+
+	  if(!accomodation){
+		  return res.status(404).json({
+			  status:"fail",
+			  message:"No accomdation found with that ID"
+		  })
+	  }
+        
+	  res.status(200).json({
+		  status:"success",
+		  data:{
+			accomodation
+		  }
+	  })
+	  }catch(err)  {
+		res.status(500).json({
+			status:"error",
+			message:"error while getting Accomodation"
+		})  
+  }
+}
+
 export const deleteAccomodation = async (req, res) => {
 	try{
 		const id = req.params.id;

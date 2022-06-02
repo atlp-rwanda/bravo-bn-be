@@ -1,6 +1,6 @@
 import express from 'express';
 import multer from "multer";
-import { createAccomodation, getAllAccomodation,deleteAccomodation, updateAccomodation } from "../services/accomodation.service.js";
+import { createAccomodation, getAllAccomodation,deleteAccomodation, updateAccomodation,getSingleAccomodation} from "../services/accomodation.service.js";
 const router=express.Router();
 const storage=multer.diskStorage({});
 const fileFilter=(req,file,cb)=>{
@@ -17,5 +17,6 @@ router.get('/', getAllAccomodation);
 router.post('/create',uploads.single("image"),createAccomodation);
 router.put('/update/:id',uploads.single("image"),updateAccomodation);
 router.delete('/delete/:id',deleteAccomodation);
+router.get('/:id',getSingleAccomodation)
 
 export default router;
