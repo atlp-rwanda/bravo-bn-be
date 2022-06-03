@@ -1,47 +1,105 @@
-name: PostgreSQL service 
-on: push
+# name: PostgreSQL service 
+# on: push
+
+# jobs:
+  
+#   container-job:
+    
+#     runs-on: ubuntu-latest
+    
+#     container: node:10.18-jessie
+
+    
+#     services:
+      
+#       postgres:
+        
+#         image: postgres
+        
+#         env:
+#           POSTGRES_PASSWORD: postgres
+        
+#         options: >-
+#           --health-cmd pg_isready
+#           --health-interval 10s
+#           --health-timeout 5s
+#           --health-retries 5
+#         ports:
+#           - 5432:5432
+
+#     steps:
+      
+#       - name: Check out repository code
+#         uses: actions/checkout@v3
+
+      
+#       - name: Install dependencies
+#         run: npm install
+
+#       - name: Connect to PostgreSQL
+       
+#         run: npm test
+       
+#         env:
+          
+#           POSTGRES_HOST: postgres
+         
+#           POSTGRES_PORT: 5432
+
+name: CI
+
+on:
+
+  push:
+
+    branches: [ develop ]
+
+  pull_request:
+
+    branches: [ develop ]
+
+
+
 
 jobs:
-  
-  container-job:
-    
+
+  build:
+
+    name: Running tests
+
     runs-on: ubuntu-latest
-    
-    container: node:10.18-jessie
+
+
+
+
+    strategy:
+
+      matrix:
+
+        node-version: [16.x]
+
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     
-    services:
-      
-      postgres:
-        
-        image: postgres
-        
-        env:
-          POSTGRES_PASSWORD: postgres
-        
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
 
     steps:
-      
-      - name: Check out repository code
-        uses: actions/checkout@v3
 
-      
-      - name: Install dependencies
-        run: npm install
+    - uses: actions/checkout@v2
 
-      - name: Connect to PostgreSQL
-       
-        run: npm test
-       
-        env:
-          
-          POSTGRES_HOST: postgres
-         
-          POSTGRES_PORT: 5432
+    - name: Use Node.js ${{ matrix.node-version }}
+
+      uses: actions/setup-node@v2
+
+      with:
+
+        node-version: ${{ matrix.node-version }}
+
+        cache: 'npm'
+
+    - name: Install
+
+      run: npm install -f
+
+    - name: Test
+
+      run: npm test
