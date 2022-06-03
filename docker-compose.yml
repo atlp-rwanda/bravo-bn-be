@@ -18,12 +18,18 @@ services:
             - DATABASE_HOST=node_db
         depends_on: 
             - node_db
+    migration_down:
+        command: ["npm","run", "down" ]
+        build: 
+            context: .
+        depends_on: 
+            - node_db
     migration:
         command: ["npm","run", "migrate" ]
         build: 
             context: .
         depends_on: 
-            - node_db
+            - migration_down
     seed:
         command: ["npm","run", "seed" ]
         build: 
