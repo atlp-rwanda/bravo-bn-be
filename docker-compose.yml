@@ -6,7 +6,7 @@ services:
         build: 
             context: .
         ports: 
-            - "3000:3000"
+            - "${PORT}:${PORT}"
         environment: 
             - PORT=${PORT}
             - DATABASE_PORT=5432
@@ -40,7 +40,7 @@ services:
         container_name: node_db
         image: "postgres:12"
         ports: 
-            - "5432:5432"
+            - "5432"
         environment: 
             - POSTGRES_USER=${DATABASE_USER}
             - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
