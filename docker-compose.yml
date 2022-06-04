@@ -3,11 +3,10 @@ version: '3.9'
 services: 
     node_backend:
         container_name: barefoot-nomad
-        image: barefoot-nomad:0.0.1
         build: 
             context: .
         ports: 
-            - "3000:3000"
+            - "${PORT}:${PORT}"
         environment: 
             - PORT=${PORT}
             - DATABASE_PORT=5432
@@ -19,12 +18,18 @@ services:
             - DATABASE_HOST=node_db
         depends_on: 
             - node_db
+    migration_down:
+        command: ["npm","run", "down" ]
+        build: 
+            context: .
+        depends_on: 
+            - node_db
     migration:
         command: ["npm","run", "migrate" ]
         build: 
             context: .
         depends_on: 
-            - node_db
+            - migration_down
     seed:
         command: ["npm","run", "seed" ]
         build: 
@@ -35,7 +40,7 @@ services:
         container_name: node_db
         image: "postgres:12"
         ports: 
-            - "5432:5432"
+            - "5432"
         environment: 
             - POSTGRES_USER=${DATABASE_USER}
             - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
