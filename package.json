@@ -14,24 +14,6 @@
     "test": "cross-env NODE_ENV=test npm run down && npm run migrate && npm run seed && mocha --require @babel/register --timeout 30000 --exit",
     "coverage": "nyc npm run test | coveralls"
   },
-  "nyc": {
-    "all": true,
-    "include": [
-      "src/**/*.js",
-      "test/*.test.js"
-    ],
-    "reporter": [
-      "html",
-      "text",
-      "text-lcov"
-    ],
-    "exclude": [
-      "node_modules/*",
-      "coverage/*"
-    ],
-    "sourceMap": false,
-    "instrument": false
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/atlp-rwanda/bravo-bn-be.git"
@@ -79,11 +61,30 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.30.0",
+    "husky": "^8.0.0",
     "mocha": "^10.0.0",
     "mocha-lcov-reporter": "^1.3.0",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.16",
     "nyc": "^15.1.0",
     "sequelize-cli": "^5.5.1"
+  },
+  "nyc": {
+    "all": true,
+    "include": [
+      "src/**/*.js",
+      "test/*.test.js"
+    ],
+    "reporter": [
+      "html",
+      "text",
+      "text-lcov"
+    ],
+    "exclude": [
+      "node_modules/*",
+      "coverage/*"
+    ],
+    "sourceMap": false,
+    "instrument": false
   }
 }
