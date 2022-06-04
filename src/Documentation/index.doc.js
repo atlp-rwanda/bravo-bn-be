@@ -124,7 +124,7 @@ paths: {
   }
 },
 '/api/v1/user/update/{id}': {
-  post: {
+  patch: {
     tags: ['User'],
     description: 'update user data',
     parameters: [
