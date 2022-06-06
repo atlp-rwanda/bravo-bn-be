@@ -7,8 +7,8 @@ import AppError from './utils/appError';
 import morgan from 'morgan';
 const app = express();
 
-app.use(cors()); 
-app.use(morgan('dev')); 
+app.use(cors());
+app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json()); 
 

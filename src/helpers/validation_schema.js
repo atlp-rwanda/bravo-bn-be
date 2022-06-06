@@ -15,9 +15,11 @@ export const signupAuthSchema = Joi.object({
 
     birthDate: Joi.date(),
 
-    phoneNumber: Joi.number(),
+    phoneNumber: Joi.string().regex(/^[0-9]{10}$/).messages({'string.pattern.base': `Phone number must have 10 digits.`}).required(),
 
     role: Joi.string(),
+
+    gender: Joi.string(),
 
     password: Joi.string().min(5).pattern(new RegExp('^[a-zA-Z]{3,30}$'))
         .max(8).required(),
@@ -27,3 +29,4 @@ export const signupAuthSchema = Joi.object({
     email: Joi.string().lowercase()
         .email().required()
 })
+
