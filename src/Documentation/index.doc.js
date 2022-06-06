@@ -175,10 +175,68 @@ paths: {
       }
     }, 
   }
-}
+},
+'/api/v1/user/auth/signup': {
+  post: {
+    tags: ['authentication'],
+    description: 'user signup with JWT',
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/SignupAuthShema"
+          },
+          "example": {
+            "firstName":"eddy",
+            "lastName":"leftie",
+            "username":"leftie",
+            "phoneNumber":"0785632478",
+            "role":"requester",
+            "gender":"male",
+            "email":"uwambajeddy@gmail.com",
+            "password":"leftie",
+            "repeat_password":"leftie"
+          }
+        }
+      }
+    },
+    responses: {
+      200: {
+        description: 'success status',
+      }
+    },
+  },
+},
 },
 components: {
   schemas: {
+    "SignupAuthShema": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "repeat_password": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
     User: {
       type: 'object',
 
@@ -226,71 +284,8 @@ components: {
       scheme: 'bearer',
       bearerFormat: 'JWT',
     },
-  },
-'/api/v1/user/auth/signup': {
-  post: {
-    tags: ['authentication'],
-    description: 'user signup with JWT',
-    "requestBody": {
-      "required": true,
-      "content": {
-        "application/json": {
-          "schema": {
-            "$ref": "#/components/schemas/SignupAuthShema"
-          },
-          "example": {
-            "firstName":"eddy",
-            "lastName":"leftie",
-            "username":"leftie",
-            "phoneNumber":"0785632478",
-            "role":"requester",
-            "gender":"male",
-            "email":"uwambajeddy@gmail.com",
-            "password":"leftie",
-            "repeat_password":"leftie"
-          }
-        }
-      }
-    },
-    responses: {
-      200: {
-        description: 'success status',
-      }
-    },
-  },
-},
-},
-"components": {
-  "schemas": {
-    "SignupAuthShema": {
-      "type": "object",
-      "properties": {
-        "username": {
-          "type": "string"
-        },
-        "firstName": {
-          "type": "string"
-        },
-        "lastName": {
-          "type": "string"
-        },
-        "phoneNumber": {
-          "type": "string"
-        },
-        "password": {
-          "type": "string"
-        },
-        "repeat_password": {
-          "type": "string"
-        },
-        "email": {
-          "type": "string"
-        }
-      }
-    }
   }
 }
-
 }
 
 
