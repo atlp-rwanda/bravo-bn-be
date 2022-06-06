@@ -58,7 +58,6 @@ export const login = catchAsync(async (req, res, next) => {
 });
 
 export const signup = catchAsync(async (req, res, next) => {
-
      await signupAuthSchema.validateAsync(req.body);
 
     if (!req.body.password || !req.body.email) {

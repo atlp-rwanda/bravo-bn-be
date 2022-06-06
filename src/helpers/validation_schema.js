@@ -19,6 +19,8 @@ export const signupAuthSchema = Joi.object({
 
     role: Joi.string(),
 
+    gender: Joi.string(),
+
     password: Joi.string().min(5).pattern(new RegExp('^[a-zA-Z]{3,30}$'))
         .max(8).required(),
 
