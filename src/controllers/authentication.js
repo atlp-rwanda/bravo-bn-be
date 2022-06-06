@@ -102,7 +102,7 @@ export const protect = catchAsync(async (req, res, next) => {
 
     if (!currentUser) {
         return next(
-            new AppError('The user belonging to this token does no longer exist', 401)
+            new AppError('Sorry, the user belonging to this token does no longer exist', 401)
         );
     }
 
@@ -117,11 +117,3 @@ export const logout = (req, res) => {
     });
     res.status(200).json({ status: 'success', data: null });
 }
-
-
-export const addNumber= catchAsync(async (req, res, next) => {
-    const add = 1+2;
-    if(add === 2){
-        return next(new AppError("add is not equal to 2",500));
-    }
-})
