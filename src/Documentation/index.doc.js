@@ -57,7 +57,7 @@ paths: {
           },
           example: {
             email: 'john@gmail.com',
-            password: '123456',
+            password: 'aaaaaaaa',
           },
         },
       },
@@ -76,94 +76,67 @@ paths: {
     },
   }, 
   },
-'/api/v1/user/': {
-  get: {
-    tags: ['User'],
-    description: 'get all user data',
-    security: [],
-    parameters: [],
-    responses: {
-      200: {
-        description: 'successfully',
-      },
-      400: {
-        description: 'Invalid credation',
-      },
-      500: {
-          description: 'Internal Server Error'
-      }
-    }, 
-  }
-},
-'/api/v1/user/{id}': {
-  get: {
-    tags: ['User'],
-    description: 'get all user data',
-    parameters: [
-      {
-        name: 'id',
-        in: 'path',
-        description: 'user id',
-        required: true,
-        schema: {
-          type: 'string',
-        },
-      },
-    ],
-    responses: {
-      200: {
-        description: 'successfully',
-      },
-      400: {
-        description: 'Invalid credation',
-      },
-      500: {
-          description: 'Internal Server Error'
-      }
-    }, 
-  }
-},
-'/api/v1/user/update/{id}': {
+'/api/v1/user/auth/signup': {
   post: {
-    tags: ['User'],
-    description: 'update user data',
-    parameters: [
-      {
-        name: 'id',
-        in: 'path',
-        description: 'user id',
-        required: true,
-        schema: {
-          type: 'string',
-        },
-      },
-    ],
-    requestBody: {
-      content: {
-        'multipart/form-data': {
-          schema: {
-            $ref: '#/components/schemas/User',
+    tags: ['authentication'],
+    description: 'user signup with JWT',
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/SignupAuthShema"
           },
-        },
-      },
-      required: true,
+          "example": {
+            "firstName":"eddy",
+            "lastName":"leftie",
+            "username":"leftie",
+            "phoneNumber":"0785632478",
+            "role":"requester",
+            "gender":"male",
+            "email":"uwambajeddy@gmail.com",
+            "password":"leftie",
+            "repeat_password":"leftie"
+          }
+        }
+      }
     },
     responses: {
       200: {
-        description: 'successfully',
-      },
-      400: {
-        description: 'Invalid credation',
-      },
-      500: {
-          description: 'Internal Server Error'
+        description: 'success status',
       }
-    }, 
-  }
-}
+    },
+  },
+},
 },
 components: {
   schemas: {
+    "SignupAuthShema": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "repeat_password": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
     User: {
       type: 'object',
 
@@ -211,7 +184,7 @@ components: {
       scheme: 'bearer',
       bearerFormat: 'JWT',
     },
-  },
+  }
 }
 }
 
@@ -219,5 +192,3 @@ components: {
 docrouter.use('/', serve, setup(options));
 
 export default docrouter;
-
-// firstName,lastName,email,phoneNumber,image,provider,gender,preferredLanguage,preferredCurrency,department,lineManager,role

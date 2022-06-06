@@ -8,8 +8,5 @@ const userRouter = express.Router();
 userRouter.get('/',getAll);
 userRouter.post('/signup',signup);
 userRouter.post('/login',login);
-userRouter.post('/update/:id',protect,updateUserProfile);
-userRouter.get('/',getAllUsers)
-userRouter.get('/:id',protect,getUserData)
 
 export default userRouter
