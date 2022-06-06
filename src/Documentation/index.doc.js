@@ -57,7 +57,7 @@ paths: {
           },
           example: {
             email: 'john@gmail.com',
-            password: '123456',
+            password: 'aaaaaaaa',
           },
         },
       },
@@ -140,10 +140,25 @@ paths: {
     ],
     requestBody: {
       content: {
-        'multipart/form-data': {
+        'application/json': {
           schema: {
             $ref: '#/components/schemas/User',
           },
+          example: {
+            "firstName": "Samuel",
+            "lastName": "Doe",
+            "username": "johnDoe",
+            "email": "john@gmail.com",
+            "phoneNumber": "0780591269",
+            "image": "",
+            "provider": "",
+            "gender": "male",
+            "preferredLanguage": "kinyarwanda",
+            "preferredCurrency": "RWF",
+            "department": "developers",
+            "lineManager": "Mugisha Eric",
+            "role": "manager"
+        },
         },
       },
       required: true,
