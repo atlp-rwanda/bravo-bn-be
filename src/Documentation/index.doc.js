@@ -141,13 +141,11 @@ paths: {
             "email": "john@gmail.com",
             "phoneNumber": "0780591269",
             "image": "",
-            "provider": "",
             "gender": "male",
             "preferredLanguage": "kinyarwanda",
             "preferredCurrency": "RWF",
             "department": "developers",
             "lineManager": "Mugisha Eric",
-            "role": "manager"
         },
         },
       },
