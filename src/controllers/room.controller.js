@@ -128,7 +128,7 @@ export const deleteRoom = async(req, res) => {
    
     if(!room){
         return res.status(404).json({
-            status:"success",
+            status:"fail",
             message:"No room found with that ID"
         })
     }

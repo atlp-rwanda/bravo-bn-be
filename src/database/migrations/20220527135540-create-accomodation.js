@@ -24,7 +24,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull:false
       },
-      availability: {
+      geoLocation: {
         type: Sequelize.STRING,
         allowNull:false
       },

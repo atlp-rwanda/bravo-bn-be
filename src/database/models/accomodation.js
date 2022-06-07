@@ -20,7 +20,7 @@ export default (sequelize, DataTypes) => {
     description: DataTypes.STRING,
     location: DataTypes.STRING,
     image: DataTypes.STRING,
-    availability: DataTypes.STRING,
+    geoLocation: DataTypes.STRING,
     highlight: DataTypes.STRING,
     amenities: DataTypes.STRING,
     

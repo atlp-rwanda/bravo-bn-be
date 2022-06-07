@@ -13,9 +13,9 @@ export const createAccomodation = async (req, res) => {
 				"https://images.unsplash.com/photo-1553095066-5014bc7b7f2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8d2FsbCUyMGJhY2tncm91bmR8ZW58MHx8MHx8&w=1000&q=80";
 		}
 
-		const newUser = await accomodations.create(req.body);
-		const {name,description,location,image,availability,highlight,amenities} = req.body;
-		return res.status(201).json({status:"success", data:{name,description,location,image,availability,highlight,amenities}, message:"New Accomodation have been created"});
+		const newAccomodation = await accomodations.create(req.body);
+		const {name,description,location,image,geoLocation,highlight,amenities} = req.body;
+		return res.status(201).json({status:"success", data:{name,description,location,image,geoLocation,highlight,amenities}, message:"New Accomodation have been created"});
 	} catch (error) {
 		return res.status(500).json(error.message);
 	}
@@ -52,7 +52,7 @@ export const updateAccomodation = async(req, res) => {
 		  });
 		} else {
 		  res.send({
-			message: `Cannot update accomodation with id=${id}. Maybe accomodation was not found or req.body is empty!`
+			message: `Cannot update accomodation with id=${id}.`
 		  });
 		}
 	  })
@@ -94,26 +94,25 @@ export const getSingleAccomodation = async (req, res) => {
 }
 
 export const deleteAccomodation = async (req, res) => {
+
 	try{
 		const id = req.params.id;
-	accomodations.destroy({
-	  where: { id: id }
-	})
-	  .then(num => {
-		if (num == 1) {
-		  
-			return res.status(200).json({status:true,message:"Accomodation deleted successfully"});
-		  
-		} else {
-		  res.send({
-			message: `Cannot delete accomodation with id=${id}. Maybe accomodation was not found!`
-		  });
+		const accomodation =  await accomodations.findOne({where:{id}})
+	   
+		if(!accomodation){
+			return res.status(404).json({
+				status:"fail",
+				message:"No acccomodation found with that ID"
+			})
 		}
-	  });
-	  }catch(err)  {
-		res.send({ error: "This Accomodation doesn't exist!" })	  
-  }
+	
+		await accomodations.destroy({where:{id}})
+	
+		res.status(200).json({
+			status:"success",
+			message:"accomodation deleted successfully"
+		})
+		}catch(err) {
+			res.send(err)
+	  };
 }
-
-
-
