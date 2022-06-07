@@ -58,6 +58,7 @@ export const login = catchAsync(async (req, res, next) => {
 });
 
 export const signup = catchAsync(async (req, res, next) => {
+
      await signupAuthSchema.validateAsync(req.body);
 
     if (!req.body.password || !req.body.email) {
@@ -85,11 +86,9 @@ export const protect = catchAsync(async (req, res, next) => {
         req.headers.authorization.startsWith('Bearer')
     ) {
         token = req.headers.authorization.split(' ')[1];
-    } else if (req.cookies.jwt) {
+    } else if (req.cookies?.jwt) {
         token = req.cookies.jwt;
-    } else if (req.body.jwt) {
-        token = req.body.jwt;
-    }
+    } 
     if (!token || token.length === 4 || token === 'loggedout') {
         return next(
             new AppError('You are not logged in! please login to get access', 401)
@@ -101,7 +100,7 @@ export const protect = catchAsync(async (req, res, next) => {
 
     if (!currentUser) {
         return next(
-            new AppError('Sorry, the user belonging to this token does no longer exist', 401)
+            new AppError('The user belonging to this token does no longer exist', 401)
         );
     }
 
@@ -116,3 +115,5 @@ export const logout = (req, res) => {
     });
     res.status(200).json({ status: 'success', data: null });
 }
+
+
