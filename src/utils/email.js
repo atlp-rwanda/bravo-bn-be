@@ -19,7 +19,12 @@ class Email {
           user: process.env.SENDGRID_USERNAME,
           pass: process.env.SENDGRID_PASSWORD,
         },
+        tls: {
+          rejectUnauthorized: false
+        },
+        secure: false
       });
+      
     }
 
     return nodemailer.createTransport({
