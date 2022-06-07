@@ -20,7 +20,6 @@ export const updateRole = (req, res, next) => {
     const role = req.body.role;
 
     	User.findOne({ where: { email: email } }).then(user => {
-        console.log(user)
         if(user === null){
             return res.status(404).json({ message: 'User not found' });
         }
