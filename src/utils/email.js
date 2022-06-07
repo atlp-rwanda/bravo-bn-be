@@ -20,10 +20,11 @@ class Email {
           pass: process.env.SENDGRID_PASSWORD,
         },
         tls: {
-          rejectUnauthorized: false,
+          rejectUnauthorized: false
         },
-        secure: false,
+        secure: false
       });
+      
     }
 
     return nodemailer.createTransport({
