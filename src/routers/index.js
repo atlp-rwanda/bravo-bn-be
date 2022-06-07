@@ -6,9 +6,10 @@ import accomodation from "./api/accomodation.routes.js";
 
 const allRoutes = express.Router();
 
-allRoutes.get('/',  (req,res) => {
+allRoutes.get("/", (req,res) => {
     res.json({message: "Welcome to barefoot!"})
 });
+
 allRoutes.use('/api/v1', apiRouter);
 allRoutes.use('/docs',swaggerRouter)
 allRoutes.use("/api/v1/accomodation", accomodation);

@@ -25,9 +25,6 @@ export default (sequelize, DataTypes) => {
     phoneNumber: DataTypes.STRING,
     passwordChangedAt: DataTypes.DATE,
     passwordResetExpires: DataTypes.DATE,
-    phoneNumber: DataTypes.STRING,
-    passwordChangedAt: DataTypes.DATE,
-    passwordResetExpires: DataTypes.DATE, 
     passwordResetToken: DataTypes.STRING,
     role: DataTypes.ENUM(
         'manager', 
