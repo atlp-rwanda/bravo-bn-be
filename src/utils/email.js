@@ -24,6 +24,7 @@ class Email {
         },
         secure: false,
       });
+      
     }
 
     return nodemailer.createTransport({
