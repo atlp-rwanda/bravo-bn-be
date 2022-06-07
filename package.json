@@ -13,7 +13,8 @@
     "undo-seed": "npx sequelize-cli db:seed:undo",
     "test": "cross-env NODE_ENV=test npm run down && npm run migrate && npm run seed && mocha --require @babel/register --timeout 30000 --exit",
     "coverage": "nyc npm run test | coveralls",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "db:connect": "babel-node ./src/database/models/ connect"
   },
   "nyc": {
     "all": true,

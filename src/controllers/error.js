@@ -1,6 +1,6 @@
 
 import { defaults } from 'joi';
-import AppError from '../utils/AppError';
+import AppError from '../utils/appError';
 
 
 const handleJWTError = () =>
