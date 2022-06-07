@@ -123,21 +123,11 @@ paths: {
     }, 
   }
 },
-'/api/v1/user/update/{id}': {
+'/api/v1/user/update': {
   patch: {
     tags: ['User'],
     description: 'update user data',
-    parameters: [
-      {
-        name: 'id',
-        in: 'path',
-        description: 'user id',
-        required: true,
-        schema: {
-          type: 'string',
-        },
-      },
-    ],
+    parameters: [],
     requestBody: {
       content: {
         'application/json': {

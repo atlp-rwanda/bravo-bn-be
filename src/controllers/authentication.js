@@ -80,6 +80,7 @@ export const signup = catchAsync(async (req, res, next) => {
 
 
 export const protect = catchAsync(async (req, res, next) => {
+    // console.log(req.headers)
     let token = 'loggedout';
     if (
         req.headers.authorization &&

@@ -8,7 +8,7 @@ const userRouter = express.Router();
 userRouter.get('/',getAll);
 userRouter.post('/signup',signup);
 userRouter.post('/login',login);
-userRouter.patch('/update/:id',protect,updateUserProfile);
+userRouter.patch('/update',protect,updateUserProfile);
 userRouter.get('/',getAllUsers)
 userRouter.get('/:id',protect,getUserData)
 

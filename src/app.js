@@ -4,6 +4,7 @@ import cors from 'cors';
 import router from './routers/index';
 import globalErrorHandler from './controllers/error';
 import AppError from './utils/appError';
+import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 const app = express();
 
@@ -11,6 +12,7 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 app.use(router);
 
