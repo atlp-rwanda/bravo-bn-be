@@ -43,21 +43,22 @@ export const getUserData=catchAsync(async (req,res,next)=>{
 });
 
 export const updateUserProfile = catchAsync(async (req, res, next) => {
-    const user = await User.findByPk(req.user.dataValues.id);
-if(!user){
-    return next(new AppError('User not found', 404));
-}
-if(user.id!=req.params.id){
-    return next(new AppError('You are not authorized to update this user', 401));
-}
-const {firstName,lastName,email,phoneNumber,image,gender,preferredLanguage,preferredCurrency,department,lineManager} = req.body;
-const updatedUser=  await User.update({
-    firstName,lastName,email,phoneNumber,image,gender,preferredLanguage,preferredCurrency,department,lineManager
-},{
-    where:{id:user.id}
-})
-if(updatedUser)
-res.status(200).json({message:"user Profile updated well done"})
+//     const user = await User.findByPk(req.user.dataValues.id);
+// if(!user){
+//     return next(new AppError('User not found', 404));
+// }
+// if(user.id!=req.params.id){
+//     return next(new AppError('You are not authorized to update this user', 401));
+// }
+// const {firstName,lastName,email,phoneNumber,image,gender,preferredLanguage,preferredCurrency,department,lineManager} = req.body;
+// const updatedUser=  await User.update({
+//     firstName,lastName,email,phoneNumber,image,gender,preferredLanguage,preferredCurrency,department,lineManager
+// },{
+//     where:{id:user.id}
+// })
+// if(updatedUser)
+// res.status(200).json({message:"user Profile updated well done"})
+console.log(req.body)
 });
 
 

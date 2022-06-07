@@ -12,7 +12,8 @@
     "seed": "npx sequelize-cli db:seed:all",
     "undo-seed": "npx sequelize-cli db:seed:undo",
     "test": "cross-env NODE_ENV=test npm run down && npm run migrate && npm run seed && mocha --require @babel/register --timeout 30000 --exit",
-    "coverage": "nyc npm run test | coveralls"
+    "coverage": "nyc npm run test | coveralls",
+    "prepare": "husky install"
   },
   "nyc": {
     "all": true,
