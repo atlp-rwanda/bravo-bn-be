@@ -11,7 +11,7 @@
     "down": "npx sequelize-cli db:migrate:undo:all",
     "seed": "npx sequelize-cli db:seed:all",
     "undo-seed": "npx sequelize-cli db:seed:undo",
-    "test": "cross-env NODE_ENV=test npm run down && npm run migrate && npm run seed && mocha --require @babel/register --timeout 30000 --exit run lint && npm run test:run",
+    "test": "cross-env NODE_ENV=test npm run down && npm run migrate && npm run seed && mocha --require @babel/register --timeout 30000 --exit",
     "coverage": "nyc npm run test | coveralls",
     "prepare": "husky install",
     "lint-staged": "lint-staged",
