@@ -14,9 +14,16 @@ jobs:
       postgres:
         image: postgres:14
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: postgres 
+          DATABASE_HOST: ${{secrets.DATABASE_HOST}}
+            DATABASE_USER: ${{secrets.DATABASE_USER}}
+            TEST_DATABASE: ${{secrets.TEST_DATABASE}}
+            DATABASE_PASSWORD: ${{secrets.TEST_DB_PASSWORD}}
+            DATABASE_PORT: ${{secrets.DATABASE_PORT}}
+            NODE_ENV: ${{secrets.NODE_ENV}}
+            PORT: ${{secrets.PORT}}
+            JWT_SECRET: ${{secrets.JWT_SECRET}}
+            JWT_EXPIRES_IN: ${{secrets.JWT_EXPIRES_IN}}
+            JWT_COOKIE_EXPIRES_IN: ${{secrets.JWT_COOKIE_EXPIRES_IN}
         ports:
           - 5432:5432  
         options: >-
