@@ -13,7 +13,7 @@ on:
 
 jobs:
 
-  build:
+  test & build:
 
     name: Running tests
 
@@ -22,9 +22,31 @@ jobs:
     strategy:
 
       matrix:
-
         node-version: [16.x]
-
+  - name: setup Database
+    env:
+      
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          DATABASE_HOST: ${{secrets.DATABASE_HOST}}
+          DATABASE_USER: ${{secrets.DATABASE_USER}}
+          TEST_DATABASE: ${{secrets.TEST_DATABASE}}
+          DATABASE_PASSWORD: ${{secrets.TEST_DB_PASSWORD}}
+          DATABASE_PORT: ${{secrets.DATABASE_PORT}}
+          NODE_ENV: ${{secrets.NODE_ENV}}
+          PORT: ${{secrets.PORT}}
+          JWT_SECRET: ${{secrets.JWT_SECRET}}
+          JWT_EXPIRES_IN: ${{secrets.JWT_EXPIRES_IN}}
+          JWT_COOKIE_EXPIRES_IN: ${{secrets.JWT_COOKIE_EXPIRES_IN}}
+        ports:
+          - 5432: 5432
+        options:
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
 
     - uses: actions/checkout@v3
@@ -39,7 +61,7 @@ jobs:
 
         cache: 'npm'
 
-    - name: Install
+    - name: Install packages
       run: npm install -f
     - name: Build
       run: npm run build --if-present
