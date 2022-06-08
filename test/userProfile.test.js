@@ -7,9 +7,6 @@ const { expect } = chai;
 import server from '../src/app.js';
 
 describe('User Profile', () => {
-    const unProcessableEntity =422;
-    const conflict =409;
-    const created =201;
     const user ={
                   email: "uwambaqje1@gmail.com",
                   password: "uwambaje",
@@ -33,15 +30,22 @@ describe('User Profile', () => {
       .post('/api/v1/user/login')
       .send(user)
       .end((err, res) => {
-        console.log(res);
         token=res.body.token
         api.patch('/api/v1/user/update')
         .send(updateUser)
-        .set({'Cookie': `jwt=${token}`})
+        .set('Authorization',`Bearer ${token}`)
           .end((err,res)=>{
             expect(res.status).to.equal(200)
             done()
           })
     });
-  })
   });
+    it('Should return 401 for unauthorized user', (done) => {
+      api.patch('/api/v1/user/update')
+      .send(updateUser)
+      .end((err, res) => {
+        expect(res.status).to.equal(401)
+        done()
+      });
+  })
+    });

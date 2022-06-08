@@ -164,6 +164,36 @@ paths: {
     }, 
   }
 },
+'/api/v1/user/roles': {
+    put: {
+      tags: ['Admin'],
+      description: 'Updating user roles',
+      security: [
+        {
+          Authorization: []
+        }
+      ],
+      parameters: [],
+      requestBody: {
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/components/schemas/userRole',
+            },
+          },
+        },
+        required: true,
+      },
+      responses: {
+        200: {
+          description: 'success'
+        },
+        500: {
+          description: 'Internal server error'
+        }
+      }
+    }
+  },
 '/api/v1/user/auth/signup': {
   post: {
     tags: ['authentication'],
@@ -199,6 +229,19 @@ paths: {
 },
 components: {
   schemas: {
+    userRole: {
+      type:"object",
+      properties:{
+        email: {
+          type: 'string',
+          description: 'user email',
+        },
+        role: {
+          type: 'string',
+          description: 'new role to set to user',
+        },
+      }
+    },
     "SignupAuthShema": {
       "type": "object",
       "properties": {
@@ -225,7 +268,7 @@ components: {
         }
       }
     },
-    User: {
+    "User": {
       type: 'object',
 
       properties: {
@@ -267,12 +310,14 @@ components: {
     },
   },
   securitySchemes: {
-    bearerAuth: {
-      type: 'http',
-      scheme: 'bearer',
-      bearerFormat: 'JWT',
-    },
-  }
+    Authorization: {
+      type: "apiKey",
+      name: "Authorization",
+      description: "Value: Bearer ",
+      in: "header",
+      scheme: "bearer"
+    }
+  },
 }
 }
 
