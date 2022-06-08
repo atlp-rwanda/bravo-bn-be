@@ -9,8 +9,8 @@ on:
     branches: [ develop ]
 
 jobs:
-  test:
-    name: Running tests
+  build:
+    name: Build and Test
     runs-on: ubuntu-latest
 
     strategy:
