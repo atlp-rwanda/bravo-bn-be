@@ -1,4 +1,3 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 name: CI
 
 on:
@@ -15,16 +14,9 @@ jobs:
       postgres:
         image: postgres:14
         env:
-          DATABASE_HOST: ${{secrets.DATABASE_HOST}}
-          DATABASE_USER: ${{secrets.DATABASE_USER}}
-          TEST_DATABASE: ${{secrets.TEST_DATABASE}}
-          DATABASE_PASSWORD: ${{secrets.TEST_DB_PASSWORD}}
-          DATABASE_PORT: ${{secrets.DATABASE_PORT}}
-          NODE_ENV: ${{secrets.NODE_ENV}}
-          PORT: ${{secrets.PORT}}
-          JWT_SECRET: ${{secrets.JWT_SECRET}}
-          JWT_EXPIRES_IN: ${{secrets.JWT_EXPIRES_IN}}
-          JWT_COOKIE_EXPIRES_IN: ${{secrets.JWT_COOKIE_EXPIRES_IN}
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres 
         ports:
           - 5432:5432  
         options: >-
