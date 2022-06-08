@@ -13,11 +13,6 @@
     "format": "npm run prettier:fix && npm run lint:fix",
     "lint:watch": "npm run lint -- --watch"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run format"
-    }
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/atlp-rwanda/bravo-bn-be.git"
@@ -49,11 +44,5 @@
     "eslint-plugin-react-hooks": "^4.5.0",
     "nodemon": "^2.0.16",
     "prettier": "^2.6.2"
-  },
-  "lint-staged": {
-    "*.{js,json,css,scss,html,md}": [
-      "prettier --write",
-      "git add"
-    ]
   }
 }
