@@ -1,6 +1,6 @@
 'use strict';
 const {
-  Model
+  Model 
 } = require('sequelize');
 const bcryptjs = require('bcryptjs');
 const { hash } = bcryptjs;
