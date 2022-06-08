@@ -12,7 +12,6 @@ on:
 
 
 jobs:
-
   test and build:
 
     name: Running tests
