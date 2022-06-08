@@ -5,7 +5,7 @@
       pull_request:
         branches: [ develop ]
 
-    jobs:
+      jobs:
       build:
       runs-on: ${{ matrix.os }}
 
