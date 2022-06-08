@@ -8,7 +8,7 @@ on:
 jobs:
   build:
 
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     services:
       postgres:
         image: postgres:14
@@ -33,7 +33,7 @@ jobs:
     strategy:
       matrix:
         node-version: [12.x, 14.x, 16.x]
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+        
 
     steps:
     - uses: actions/checkout@v3
