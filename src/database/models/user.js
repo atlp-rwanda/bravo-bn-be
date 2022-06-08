@@ -1,6 +1,6 @@
 'use strict';
 const {
-  Model 
+  Model
 } = require('sequelize');
 const bcryptjs = require('bcryptjs');
 const { hash } = bcryptjs;
@@ -27,14 +27,14 @@ export default (sequelize, DataTypes) => {
     passwordResetExpires: DataTypes.DATE,
     passwordResetToken: DataTypes.STRING,
     role: DataTypes.ENUM(
-        'manager', 
-        'super user', 
-        'requester', 
-        'super admin', 
-        'travel admin', 
-        'travel team member',
-        'accommodation supplier'
-        )
+      'manager',
+      'super user',
+      'requester',
+      'super admin',
+      'travel admin',
+      'travel team member',
+      'accommodation supplier'
+    )
   }, {
     sequelize,
     modelName: 'users',
