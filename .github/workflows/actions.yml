@@ -10,18 +10,14 @@ on:
 
 jobs:
   test:
-
     name: Running tests
-
     runs-on: ubuntu-latest
 
     strategy:
-
       matrix:
         node-version: [16.x]
-  - name: setup Database
-    env:
-      
+
+    - name: setup Database
     services:
       postgres:
         image: postgres:latest
