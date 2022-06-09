@@ -13,11 +13,11 @@ jobs:
       postgres:
         image: postgres:14
         env:
-          DATABASE_HOST: ${{secrets.DATABASE_HOST}}
-          DATABASE_USER: ${{secrets.DATABASE_USER}}
-          TEST_DATABASE: ${{secrets.TEST_DATABASE}}
-          DATABASE_PASSWORD: ${{secrets.DATABASE_PASSWORD}}
-          DATABASE_PORT: ${{secrets.DATABASE_PORT}}
+          DATABASE_HOST: ec2-3-224-164-189.compute-1.amazonaws.com
+          DATABASE_USER: jhkephbsndwwml
+          TEST_DATABASE: dc78tgk0q076qh
+          DATABASE_PASSWORD: 090cae6d0e6c21e338d8e83b2ac1a85db99ea24b0d3c8d96a009657cab77bb36
+          DATABASE_PORT: 5432
           NODE_ENV: ${{secrets.NODE_ENV}}
           PORT: ${{secrets.PORT}}
           JWT_SECRET: ${{secrets.JWT_SECRET}}
