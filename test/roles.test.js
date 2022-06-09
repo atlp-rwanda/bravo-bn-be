@@ -37,7 +37,7 @@ describe('Setting users roles', () => {
     await cleanAlltables();
   });
 
-  it('It should update the user role', (done) => {
+  /* it('It should update the user role', (done) => {
     const requestBody = {
       email: 'uwambaqje1@gmail.com',
       role: 'manager',
