@@ -27,8 +27,7 @@ module.exports = {
     host: DATABASE_HOST,
     port: DATABASE_PORT,
     dialect: 'postgres',
-    logging: false,
-    ssl: false
+    logging: false
   },
   production: {
     username: DATABASE_USER,
