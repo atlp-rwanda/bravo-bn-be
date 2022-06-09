@@ -1,53 +1,46 @@
-name: CI
-on: push
-
+'on':
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - develop
 jobs:
- 
-  container-job:
-    # Containers must run in Linux based operating systems
-    runs-on: ubuntu-latest
-    # Docker Hub image that `container-job` executes in
-    container: node:10.18-jessie
-
-    # Service containers to run with `container-job`
+  build:
+    runs-on: '${{ matrix.os }}'
     services:
-      # Label used to access the service container
       postgres:
-        # Docker Hub image
-        image: postgres
-        # Provide the password for postgres
+        image: 'postgres:14'
         env:
-          DATABASE_PASSWORD: 090cae6d0e6c21e338d8e83b2ac1a85db99ea24b0d3c8d96a009657cab77bb36
-        # Set health checks to wait until postgres has started
+          DATABASE_HOST: '${{secrets.DATABASE_HOST}}'
+          DATABASE_USER: '${{secrets.DATABASE_USER}}'
+          TEST_DATABASE: '${{secrets.TEST_DATABASE}}'
+          DATABASE_PASSWORD: '${{secrets.TEST_DB_PASSWORD}}'
+          DATABASE_PORT: '${{secrets.DATABASE_PORT}}'
+          NODE_ENV: '${{secrets.NODE_ENV}}'
+          PORT: '${{secrets.PORT}}'
+          JWT_SECRET: '${{secrets.JWT_SECRET}}'
+          JWT_EXPIRES_IN: '${{secrets.JWT_EXPIRES_IN}}'
+          JWT_COOKIE_EXPIRES_IN: '${{secrets.JWT_COOKIE_EXPIRES_IN}}'
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - '5432:5432'
         options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
+          --health-cmd pg_isready --health-interval 10s --health-timeout 5s
           --health-retries 5
-
+    strategy:
+      matrix:
+        node-version:
+          - 16.x
+        os:
+          - ubuntu-latest
     steps:
-      # Downloads a copy of the code in your repository before running CI tests
-      - name: Check out repository code
-        uses: actions/checkout@v3
-
-      # Performs a clean installation of all dependencies in the `package.json` file
-      # For more information, see https://docs.npmjs.com/cli/ci.html
-      - name: Install dependencies
-        run: npm install
-
-      - name: Connect to PostgreSQL
-        # Runs a script that creates a PostgreSQL table, populates
-        # the table with data, and then retrieves the data.
-        #run: node client.js
-        run: npm test
-        # Environment variables used by the `client.js` script to create a new PostgreSQL table.
-        env:
-          # The hostname used to communicate with the PostgreSQL service container
-          DATABASE_HOST: ec2-3-224-164-189.compute-1.amazonaws.com
-          # The default PostgreSQL port
-          DATABASE_PORT: 5432
-          
-          DATABASE_USER: jhkephbsndwwml
-          TEST_DATABASE: dc78tgk0q076qh
-          NODE_ENV: test
-        
+      - uses: actions/checkout@v3
+      - name: 'Use Node.js ${{ matrix.node-version }}'
+        uses: actions/setup-node@v3
+        with:
+          node-version: '${{ matrix.node-version }}'
+          cache: npm
+      - run: npm install
+      - run: npm test
