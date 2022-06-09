@@ -12,30 +12,31 @@ const {
 
 
 module.exports = {
-    development: {
-      username: DATABASE_USER,
-      password: DATABASE_PASSWORD,
-      database: DEV_DATABASE,
-      host: DATABASE_HOST,
-      port: DATABASE_PORT,
-      dialect: 'postgres'
-    },
-    test: {
-      username: DATABASE_USER,
-      password: DATABASE_PASSWORD,
-      database: TEST_DATABASE,
-      host: DATABASE_HOST,
-      port: DATABASE_PORT,
-      dialect: 'postgres',
-      logging: false
-    },
-    production: {
-      username: DATABASE_USER,
-      password: DATABASE_PASSWORD,
-      database: PRODUCTION_DATABASE,
-      host: DATABASE_HOST,
-      port: DATABASE_PORT,
-      dialect: 'postgres'
-    },
-  };
-  
+  development: {
+    username: DATABASE_USER,
+    password: DATABASE_PASSWORD,
+    database: DEV_DATABASE,
+    host: DATABASE_HOST,
+    port: DATABASE_PORT,
+    dialect: 'postgres'
+  },
+  test: {
+    username: DATABASE_USER,
+    password: DATABASE_PASSWORD,
+    database: TEST_DATABASE,
+    host: DATABASE_HOST,
+    port: DATABASE_PORT,
+    dialect: 'postgres',
+    logging: false,
+    ssl: false
+  },
+  production: {
+    username: DATABASE_USER,
+    password: DATABASE_PASSWORD,
+    database: PRODUCTION_DATABASE,
+    host: DATABASE_HOST,
+    port: DATABASE_PORT,
+    dialect: 'postgres'
+  },
+};
+
