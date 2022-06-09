@@ -24,6 +24,7 @@ security: [
 tags: [
   {name: 'setup swagger', description: 'Testing swagger setup'},
   {name: 'User', description: 'users endpoint'},
+  {name: 'Admin', description: 'update user role'}
 ],
 paths: {
 '/api/v1/testSwagger': {
@@ -168,11 +169,6 @@ paths: {
     put: {
       tags: ['Admin'],
       description: 'Updating user roles',
-      security: [
-        {
-          Authorization: []
-        }
-      ],
       parameters: [],
       requestBody: {
         content: {
@@ -196,6 +192,7 @@ paths: {
   },
 '/api/v1/user/auth/signup': {
   post: {
+    security: [],
     tags: ['authentication'],
     description: 'user signup with JWT',
     "requestBody": {
@@ -274,11 +271,11 @@ components: {
       properties: {
         firstName: {
           type: 'string',
-          description: "User's fullname",
+          description: 'new role to set to user',
         },
         lastName: {
           type: 'string',
-          description: "User's username",
+          description: "User's fullname",
         },
         email:{
           type: 'string',
@@ -310,13 +307,11 @@ components: {
     },
   },
   securitySchemes: {
-    Authorization: {
-      type: "apiKey",
-      name: "Authorization",
-      description: "Value: Bearer ",
-      in: "header",
-      scheme: "bearer"
-    }
+    bearerAuth: {
+      type: 'http',
+      scheme: 'bearer',
+      bearerFormat: 'JWT',
+    },
   },
 }
 }
