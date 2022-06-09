@@ -37,12 +37,9 @@ export default (sequelize, DataTypes) => {
     isVerified: DataTypes.BOOLEAN,
     gender: DataTypes.STRING,
     preferredLanguage: DataTypes.STRING,
-<<<<<<< HEAD
     preferredCurrency:DataTypes.STRING,
     department:DataTypes.STRING,
     lineManager:DataTypes.STRING,
-=======
->>>>>>> 24c109d (chore(setup): set up an empty Express Boilerplate with dotenv)
     birthDate: DataTypes.DATE,
     phoneNumber: DataTypes.STRING,
     image: DataTypes.STRING,
