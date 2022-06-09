@@ -23,10 +23,11 @@ security: [
 ],
 tags: [
   {name: 'setup swagger', description: 'Testing swagger setup'},
+  {name: 'User', description: 'users endpoint'},
   {name: 'Admin', description: 'update user role'}
 ],
 paths: {
-'/api/testSwagger': {
+'/api/v1/testSwagger': {
   get: {
     tags: ['setup swagger'],
     description: 'testing swagger setup',
@@ -43,7 +44,6 @@ paths: {
     },
   },
 },
-
 '/api/v1/user/roles': {
   put: {
     tags: ['Admin'],
@@ -74,7 +74,39 @@ paths: {
     }
   }
 },
-
+'/api/v1/user/login': {
+  post: {
+    tags: ['User'],
+    description: 'login user',
+    security: [],
+    parameters: [],
+    requestBody: {
+      content: {
+        'application/json': {
+          schema: {
+            $ref: '#/components/schemas/User',
+          },
+          example: {
+            email: 'john@gmail.com',
+            password: 'aaaaaaaa',
+          },
+        },
+      },
+      required: true,
+    },
+    responses: {
+      200: {
+        description: 'successfully',
+      },
+      400: {
+        description: 'Invalid credation',
+      },
+      500: {
+          description: 'Internal Server Error'
+      }
+    },
+  }, 
+  },
 '/api/v1/user/auth/signup': {
   post: {
     tags: ['authentication'],
@@ -141,23 +173,8 @@ paths: {
   }
 }
 },
-
 components: {
   schemas: {
-   userRole: {
-      type:"object",
-      properties:{
-        email: {
-          type: 'string',
-          description: 'user email',
-        },
-        role: {
-          type: 'string',
-          description: 'new role to set to user',
-        },
-      }
-    },
-
     "SignupAuthShema": {
       "type": "object",
       "properties": {
@@ -183,42 +200,62 @@ components: {
           "type": "string"
         }
       }
-    }
-
-   },
-    User: {
-      type: "Object",
-      properties: {
-        id: {
-          type: 'string',
-          description: 'The auto-generated id of the user',
-        },
-        fullname: {
-          type: 'string',
-          description: "User's fullname",
-        },
-        username: {
-          type: 'string',
-          description: "User's username",
-        },
-        password: {
-          type: 'string',
-          description: "User's password",
-        },
+    },
+    userRole: {
+      type:"object",
+      properties:{
         email: {
           type: 'string',
-          description: "User's email",
+          description: 'user email',
         },
         role: {
           type: 'string',
-          description: "User role",
+          description: 'new role to set to user',
         },
-      },
-    }
-    
-   },
+      }
+    },
+    User: {
+      type: 'object',
 
-securitySchemes: {
+      properties: {
+        firstName: {
+          type: 'string',
+          description: "User's fullname",
+        },
+        lastName: {
+          type: 'string',
+          description: "User's username",
+        },
+        email:{
+          type: 'string',
+          description: "User's email",
+        },phoneNumber:{
+          type: 'string',
+          description: "User's phone number",
+        },image:{
+          type: 'string',
+          description: "User's image url",
+          format: 'binary'
+        },gender:{
+          type:'string',
+          description:"User's gender"
+        },preferredLanguage:{
+          type:'string',
+          description:"User's preferred language"
+        },preferredCurrency:{
+          type:'string',
+          description:"User's preferred currency"
+        },department:{
+          type:'string',
+          description:"User's department"
+        },lineManager:{
+          type:'string',
+          description:"User's line manager"
+        }
+      },
+    },
+  },
+  securitySchemes: {
     Authorization: {
       type: "apiKey",
       name: "Authorization",
@@ -228,6 +265,8 @@ securitySchemes: {
     }
   },
 }
+}
+
 
 docrouter.use('/', serve, setup(options));
 
