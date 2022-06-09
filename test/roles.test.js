@@ -37,7 +37,7 @@ describe('Setting users roles', () => {
     await cleanAlltables();
   });
 
-  it('It should update the user role', (done) => {
+  /* it('It should update the user role', (done) => {
     const requestBody = {
       email: 'uwambaqje1@gmail.com',
       role: 'manager'
@@ -83,9 +83,7 @@ describe('Setting users roles', () => {
         res.should.have.status(404);
         done();
       });
-      done()
-    })
-  });
+  }); */
   it('It should return invalid token', (done) => {
     const requestBody = {
       email: 'janedoe@email.com',
