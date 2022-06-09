@@ -24,11 +24,11 @@ describe('User sign up', () => {
             email: "uwambaqje1@gmail.com",
             password: "uwambajeee",
             repeat_password: "uwambajeee",
-            phoneNumber: "25078505805",
+            phoneNumber: "0785058050",
             role: "requester"
         }
       api
-      .post('/api/v1/user/signup')
+      .post('/api/v1/user/auth/signup')
         .send(user)
         .end((err, res) => {
           const { message } = res.body;
@@ -46,11 +46,11 @@ describe('User sign up', () => {
             email: "uwambaqjegmailcom",
             password: "uwambaje",
             repeat_password: "uwambaje",
-            phoneNumber: "25078505805",
+            phoneNumber: "0785058050",
             role: "requester"
         }
         api
-        .post('/api/v1/user/signup')
+        .post('/api/v1/user/auth/signup')
           .send(user)
         .send(user)
         .end((err, res) => {
@@ -69,11 +69,11 @@ describe('User sign up', () => {
             email: "uwambaqje@gmail.com",
             password: "uwa1baje",
             repeat_password: "uwa1baje",
-            phoneNumber: "25078505805",
+            phoneNumber: "0785058050",
             role: "requester"
         }
         api
-        .post('/api/v1/user/signup')
+        .post('/api/v1/user/auth/signup')
           .send(user)
         .send(user)
         .end((err, res) => {
@@ -92,12 +92,12 @@ describe('User sign up', () => {
             email: "uwambaqje1@gmail.com",
             password: "uwambaje",
             repeat_password: "uwambaje",
-            phoneNumber: "25078505805",
+            phoneNumber: "0785058050",
             role: "requester"
         }
 
         api
-        .post('/api/v1/user/signup')
+        .post('/api/v1/user/auth/signup')
           .send(user)
         .end((err, res) => {
           const { token } = res.body;
@@ -115,11 +115,11 @@ describe('User sign up', () => {
             email: "uwambaqje1@gmail.com",
             password: "uwambaje",
             repeat_password: "uwambaje",
-            phoneNumber: "25078505805",
+            phoneNumber: "0785058050",
             role: "requester"
         }
         api
-        .post('/api/v1/user/signup')
+        .post('/api/v1/user/auth/signup')
           .send(user)
         .end((err, res) => {
           const { message } = res.body;
