@@ -3,8 +3,11 @@ const accomodations = db['accomodation']
 import { fileUpload } from "../helpers/multer";
 
 export const createAccomodation = async (req, res) => {
-    try {
 
+    try {
+		if (req.user.dataValues.role !== 'travel admin') {
+			return res.status(403).json({message: "not traveler admin"})
+		 }
 		if (req.file) {
 			req.body.image = await fileUpload(req);
 		} 

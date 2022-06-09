@@ -122,4 +122,50 @@ describe('User sign up', () => {
         });
     });
   });
-  
+  describe('User login', () => {
+    const unProcessableEntity =422;
+    const conflict =401;
+    const success =200;
+    it("Should login user", (done) => {
+        const user ={
+           
+            email:"uwambaqje1@gmail.com",
+            password: "uwambaje",
+        }
+        api
+        .post('/api/v1/user/login')
+        .send(user)
+        .end((err, res) => {
+            const { message } = res.body;
+            expect(res.status).to.equal(success);
+            expect(message);
+            done();
+            });});
+    it("Should return 401 for the provided worng email or password ", (done) => {
+        const user ={
+           
+            email:"wrong@gmail.com",
+            password: "wrong",
+        }
+        api
+        .post('/api/v1/user/login')
+        .send(user)
+        .end((err, res) => {
+            const { message } = res.body;
+            expect(res.status).to.equal(conflict);
+            expect(message);
+            done();
+            });});
+    it("Should return 400 for the provided empty fields!", (done) => {
+        const user ={
+        }
+        api
+        .post('/api/v1/user/login')
+        .send(user)
+        .end((err, res) => {
+            const { message } = res.body;
+            expect(res.status).to.equal(400);
+            expect(message);
+            done();
+            });});
+  });

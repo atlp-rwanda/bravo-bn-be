@@ -1,11 +1,10 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import morgan from 'morgan';
+import router from './routers/index';
 import globalErrorHandler from './controllers/error';
 import AppError from './utils/appError';
-import allRoutes from './routers/index';
-
+import morgan from 'morgan';
 const app = express();
 
 app.use(cors());
@@ -13,7 +12,15 @@ app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use(allRoutes);
+app.use(router);
+
+
+app.all('*', (req, res, next) => {
+    next(
+        new AppError(`Opps! can't find "${req.originalUrl}" on this server!`, 404)
+    );
+});
+
 
 app.all('*', (req, res, next) => {
     next(
