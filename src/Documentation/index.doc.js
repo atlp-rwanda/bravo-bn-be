@@ -24,6 +24,7 @@ security: [
 tags: [
   {name: 'setup swagger', description: 'Testing swagger setup'},
   {name: 'User', description: 'users endpoint'},
+  {name: 'Admin', description: 'update user role'}
 ],
 paths: {
 '/api/v1/testSwagger': {
@@ -274,11 +275,11 @@ components: {
       properties: {
         firstName: {
           type: 'string',
-          description: "User's fullname",
+          description: 'new role to set to user',
         },
         lastName: {
           type: 'string',
-          description: "User's username",
+          description: "User's fullname",
         },
         email:{
           type: 'string',
