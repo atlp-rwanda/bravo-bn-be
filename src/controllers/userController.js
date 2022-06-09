@@ -3,7 +3,7 @@ import catchAsync  from '../utils/catchAsync';
 import AppError  from '../utils/appError';
 import db from '../database/models/index.js';
 import { fileUpload } from "../helpers/multer";
-
+import { updateProfileSchema } from '../helpers/validation_schema';
 const User = db['users']
 
 export const getAllUsers=catchAsync(async (req,res,next)=>{
@@ -44,25 +44,34 @@ export const getUserData=catchAsync(async (req,res,next)=>{
 });
 
 export const updateUserProfile = catchAsync(async (req, res, next) => {
-    const user = await User.findByPk(req.user.dataValues.id);
-if(!user){
-    return next(new AppError('User not found', 404));
-}
-if (req.file) {
-    req.body.image = await fileUpload(req);
-} 
-else {
-    req.body.image =
-        "https://images.unsplash.com/photo-1553095066-5014bc7b7f2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8d2FsbCUyMGJhY2tncm91bmR8ZW58MHx8MHx8&w=1000&q=80";
-}
-const {firstName,lastName,email,phoneNumber,image,gender,preferredLanguage,preferredCurrency,department,lineManager} = req.body;
-const updatedUser=  await User.update({
-    firstName,lastName,email,phoneNumber,image,gender,preferredLanguage,preferredCurrency,department,lineManager
-},{
-    where:{id:user.id}
-})
-if(updatedUser)
-res.status(200).json({message:"user Profile updated well done"})
+
+    try {
+        const user = await User.findByPk(req.user.dataValues.id);
+        if(!user){
+            return next(new AppError('User not found', 404));
+        }
+        if (req.file) {
+            req.body.image = await fileUpload(req);
+        } 
+        else {
+            req.body.image =
+                "https://images.unsplash.com/photo-1553095066-5014bc7b7f2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8d2FsbCUyMGJhY2tncm91bmR8ZW58MHx8MHx8&w=1000&q=80";
+        }
+        await updateProfileSchema.validateAsync(req.body);
+        const {firstName,lastName,username,email,phoneNumber,image,gender,preferredLanguage,preferredCurrency,department,lineManager} = req.body;
+        if(!firstName || !lastName || !username || !email || !phoneNumber || !image || !gender || !preferredLanguage || !preferredCurrency || !department || !lineManager){
+            return next(new AppError('Please fill empty fields!', 400));
+        }
+        const updatedUser=  await User.update({
+            firstName,lastName,username,email,phoneNumber,image,gender,preferredLanguage,preferredCurrency,department,lineManager
+        },{
+            where:{id:user.id}
+        })
+        if(updatedUser)
+        res.status(200).json({message:"user Profile updated well done"})
+    } catch (error) {
+        return next(new AppError(error.message, 500));
+    }
 });
 
 
