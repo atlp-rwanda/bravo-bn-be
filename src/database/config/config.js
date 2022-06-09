@@ -21,11 +21,11 @@ module.exports = {
     dialect: 'postgres'
   },
   test: {
-    username: DATABASE_USER,
-    password: DATABASE_PASSWORD,
-    database: TEST_DATABASE,
-    host: DATABASE_HOST,
-    port: DATABASE_PORT,
+    username: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.TEST_DATABASE,
+    host: process.env.DATABASE_HOST,
+    port: process.env.DATABASE_PORT,
     dialect: 'postgres',
     logging: false
   },
