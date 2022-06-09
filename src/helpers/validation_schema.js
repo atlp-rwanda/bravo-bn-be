@@ -15,11 +15,7 @@ export const signupAuthSchema = Joi.object({
 
     birthDate: Joi.date(),
 
-<<<<<<< HEAD
     phoneNumber: Joi.string().regex(/^[0-9]{10}$/).messages({'string.pattern.base': `Phone number must have 10 digits.`}).required(),
-=======
-    phoneNumber: Joi.string().regex(/^[0-9]{10}$/).messages({'string.pattern.base': `Phone number must have 10 digits.`}),
->>>>>>> 24c109d (chore(setup): set up an empty Express Boilerplate with dotenv)
 
     role: Joi.string(),
 

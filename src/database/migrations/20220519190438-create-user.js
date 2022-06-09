@@ -35,12 +35,9 @@ export default {
       passwordResetExpires: {
         type: Sequelize.DATE
       },
-<<<<<<< HEAD
       birthDate: {
         type: Sequelize.DATE
       },
-=======
->>>>>>> 24c109d (chore(setup): set up an empty Express Boilerplate with dotenv)
       passwordResetToken: {
         type: Sequelize.STRING
       },
@@ -59,7 +56,6 @@ export default {
       preferredLanguage:{
         type: Sequelize.STRING
       },
-<<<<<<< HEAD
       preferredCurrency:{
         type: Sequelize.STRING
       },
@@ -69,8 +65,6 @@ export default {
       lineManager:{
         type: Sequelize.STRING
       },
-=======
->>>>>>> 24c109d (chore(setup): set up an empty Express Boilerplate with dotenv)
       role: {
         type: Sequelize.ENUM,
         values: ['super user', 'super admin', 'travel admin', 'travel team member',
