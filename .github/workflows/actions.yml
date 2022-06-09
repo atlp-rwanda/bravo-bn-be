@@ -14,7 +14,7 @@ jobs:
         image: postgres:14
         env:
           DATABASE_HOST: ${{secrets.DATABASE_HOST}}
-          DATABASE_USER: j${{secrets.DATABASE_USER}}
+          DATABASE_USER: ${{secrets.DATABASE_USER}}
           TEST_DATABASE: ${{secrets.TEST_DATABASE}}
           DATABASE_PASSWORD: ${{secrets.DATABASE_PASSWORD}}
           DATABASE_PORT: 5432
