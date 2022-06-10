@@ -6,7 +6,7 @@ export const createAccomodation = async (req, res) => {
 
     try {
 		if (req.user.dataValues.role !== 'travel admin') {
-			return res.status(403).json({message: "not traveler admin"})
+			return res.status(403).json({status:"fail",message: "not traveler admin"})
 		 }
 		if (req.file) {
 			req.body.image = await fileUpload(req);
@@ -37,6 +37,9 @@ export const  getAllAccomodation = async (req, res) => {
 export const updateAccomodation = async(req, res) => {
 
 	try{
+		if (req.user.dataValues.role !== 'travel admin') {
+			return res.status(403).json({status:"fail",message: "not traveler admin"})
+		 }
 	const id = req.params.id;
 	if (req.file) {
 		req.body.image = await fileUpload(req);
@@ -72,7 +75,8 @@ export const getSingleAccomodation = async (req, res) => {
 
 		const accomodation =  await accomodations.findOne({
 			where:{id},
-			include:['rooms']
+			include:['rooms','amenities']
+			
 		})
 
 	  if(!accomodation){
@@ -99,6 +103,10 @@ export const getSingleAccomodation = async (req, res) => {
 export const deleteAccomodation = async (req, res) => {
 
 	try{
+		if (req.user.dataValues.role !== 'travel admin') {
+			return res.status(403).json({status:"fail",message: "not traveler admin"})
+		 }
+
 		const id = req.params.id;
 		const accomodation =  await accomodations.findOne({where:{id}})
 	   

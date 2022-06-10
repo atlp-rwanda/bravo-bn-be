@@ -1,19 +1,19 @@
 import db from '../database/models/index.js';
-const Room = db['Room']
+const Amenity = db['Amenity']
 const Accomodation = db['accomodation']
-import { fileUpload } from "../helpers/multer";
 
-export const createRoom = async (req, res) => {
+export const createAmenity = async (req, res) => {
     try {
         /**
          * Get accomadation id 
          * get room information
          */
          if (req.user.dataValues.role !== 'travel admin') {
-			return res.status(403).json({message: "not traveler admin"})
+			return res.status(403).json({status:"fail",message: "not traveler admin"})
 		 }
+
         const accomodationId =  req.params.accomodationId
-        const {bedType,bedCost,bedDescription} = req.body;
+        const {amenityType,amenityDescription} = req.body;
 
         /**
          * check if accomodation is there
@@ -31,31 +31,31 @@ export const createRoom = async (req, res) => {
         }
 
 
-		const newRoom = await Room.create({
-            bedType,
-            bedCost,
-            bedDescription,
+		const newAmenity = await Amenity.create({
+            amenityType,
+            amenityDescription,
             accomodationId:accomodation.id
 
         });
 		return res.status(201).json({
             status:"success",
             data:{
-                newRoom
+                newAmenity
             }
         })		
 	} catch (error) {
 		return res.status(500).json(error.message);
 	}
 };
-export const  getAllRooms = async (req, res) => {
+
+export const  getAllAmenity = async (req, res) => {
 	try{
 
-        const rooms =  await Room.findAndCountAll()
+        const amenity =  await Amenity.findAndCountAll()
        res.status(200).json({
            status:"success",
            data:{
-            rooms 
+            amenity 
            }
        })
 	}
@@ -64,22 +64,22 @@ export const  getAllRooms = async (req, res) => {
 	}
 };
 
-export const getSingleRoom = async(req, res) => {
+export const getSingleAmenity = async(req, res) => {
 
 	try{
 	const id = req.params.id;
-    const room =  await Room.findOne({where:{id},include:['accomodation']})
+    const amenity =  await Amenity.findOne({where:{id},include:['accomodation']})
 
-    if(!room){
+    if(!amenity){
         return res.status(404).json({
             status:"success",
-            message:"No room found with that ID"
+            message:"No amenity found with that ID"
         })
     }
 	res.status(200).json({
         status:"success",
         data:{
-            room
+            amenity
         }
     })
 	}catch(err) {
@@ -87,35 +87,34 @@ export const getSingleRoom = async(req, res) => {
 	
   };
 }
-
-export const updateRoom = async(req, res) => {
+export const updateAmenity = async(req, res) => {
 
 	try{
         if (req.user.dataValues.role !== 'travel admin') {
 			return res.status(403).json({status:"fail",message: "not traveler admin"})
 		 }
+       
 	const id = req.params.id;
-    const {bedType,bedCost,bedDescription} = req.body;
-    const room =  await Room.findOne({where:{id}})
+    const {amenityType,amenityDescription} = req.body;
+    const amenity =  await Amenity.findOne({where:{id}})
 
-    if(!room){
+    if(!amenity){
         return res.status(404).json({
             status:"success",
-            message:"No room found with that ID"
+            message:"No amenity found with that ID"
         })
     }
 
-    await Room.update({
-        bedType:bedType,
-        bedCost:bedCost,
-        bedDescription:bedDescription
+    await Amenity.update({
+        amenityType,
+        amenityDescription
     },{where:{id}})
 
 
 	res.status(200).json({
         status:"success",
         data:{
-            room
+            amenity
         }
     })
 	}catch(err) {
@@ -124,34 +123,30 @@ export const updateRoom = async(req, res) => {
   };
 }
 
-export const deleteRoom = async(req, res) => {
+export const deleteAmenity = async(req, res) => {
 
 	try{
         if (req.user.dataValues.role !== 'travel admin') {
 			return res.status(403).json({status:"fail",message: "not traveler admin"})
 		 }
 	const id = req.params.id;
-    const room =  await Room.findOne({where:{id}})
+    const amenity =  await Amenity.findOne({where:{id}})
    
-    if(!room){
+    if(!amenity){
         return res.status(404).json({
             status:"fail",
-            message:"No room found with that ID"
+            message:"No Amenity found with that ID"
         })
     }
 
-    await Room.destroy({where:{id}})
+    await Amenity.destroy({where:{id}})
 
 	res.status(200).json({
         status:"success",
-        message:"Room deleted successfully"
+        message:"Amenity deleted successfully"
     })
 	}catch(err) {
 		res.send(err)
 	
   };
 }
-
-
-
-

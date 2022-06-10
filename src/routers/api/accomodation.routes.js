@@ -18,8 +18,8 @@ cb(null,true);
 const uploads=multer({storage,fileFilter});
 router.get('/', getAllAccomodation);
 router.post('/create',protect,uploads.single("image"),createAccomodation);
-router.put('/update/:id',uploads.single("image"),updateAccomodation);
-router.delete('/delete/:id',deleteAccomodation);
+router.put('/update/:id',protect,uploads.single("image"),updateAccomodation);
+router.delete('/delete/:id',protect,deleteAccomodation);
 router.get('/:id',getSingleAccomodation)
 
 export default router;
