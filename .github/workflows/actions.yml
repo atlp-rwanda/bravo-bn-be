@@ -15,12 +15,19 @@ jobs:
         os:
           - ubuntu-latest
     env:
-      TEST_DATABASE_HOST: 'ec2-3-224-164-189.compute-1.amazonaws.com'
-      TEST_DATABASE_USER: 'jhkephbsndwwml'
-      TEST_DATABASE: 'dc78tgk0q076qh'
-      TEST_DATABASE_PASSWORD: '090cae6d0e6c21e338d8e83b2ac1a85db99ea24b0d3c8d96a009657cab77bb36'
-      TEST_DATABASE_PORT: '5432'
-      NODE_ENV: 'test'
+      TEST_DATABASE_HOST: ec2-3-224-164-189.compute-1.amazonaws.com
+      TEST_DATABASE_USER: jhkephbsndwwml
+      TEST_DATABASE: dc78tgk0q076qh
+      TEST_DATABASE_PASSWORD: 090cae6d0e6c21e338d8e83b2ac1a85db99ea24b0d3c8d96a009657cab77bb36
+      TEST_DATABASE_PORT: 5432
+      TEST_GIT_ACTIONS: true
+      NODE_ENV: test
+      PORT: 3000
+      JWT_SECRET: Yu0CanTD01TL1kEUl0vE1T-5oD0iTL1kEY0UhaTe1T-setu
+      JWT_EXPIRES_IN: 1d
+      JWT_COOKIE_EXPIRES_IN: 1
+      HEROKU: false
+     
     steps:
       - uses: actions/checkout@v3
       - name: 'Use Node.js ${{ matrix.node-version }}'
