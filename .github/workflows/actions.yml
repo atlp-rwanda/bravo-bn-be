@@ -32,10 +32,6 @@ jobs:
       DATABASE_PASSWORD: '090cae6d0e6c21e338d8e83b2ac1a85db99ea24b0d3c8d96a009657cab77bb36'
       DATABASE_PORT: '5432'
       NODE_ENV: 'test'
-      PORT: '${{secrets.PORT}}'
-      JWT_SECRET: '${{secrets.JWT_SECRET}}'
-      JWT_EXPIRES_IN: '${{secrets.JWT_EXPIRES_IN}}'
-      JWT_COOKIE_EXPIRES_IN: '${{secrets.JWT_COOKIE_EXPIRES_IN}}'
     steps:
       - uses: actions/checkout@v3
       - name: 'Use Node.js ${{ matrix.node-version }}'

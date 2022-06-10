@@ -1,15 +1,24 @@
 import dotenv from 'dotenv';
 dotenv.config();
 const {
+  PRODUCTION_DATABASE,
+  DEV_DATABASE,
   DATABASE_USER,
   DATABASE_PASSWORD,
-  DEV_DATABASE,
-  PRODUCTION_DATABASE,
-  TEST_DATABASE,
   DATABASE_HOST,
-  DATABASE_PORT
+  DATABASE_PORT,
+  TEST_DATABASE_URL,
+  TEST_GIT_ACTIONS
 } = process.env;
 
+const dialectToggle = () => {
+  return TEST_GIT_ACTIONS == "true" ? {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
+    }
+  } : {}
+}
 
 module.exports = {
   development: {
@@ -21,13 +30,11 @@ module.exports = {
     dialect: 'postgres'
   },
   test: {
-    username: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PASSWORD,
-    database: process.env.TEST_DATABASE,
-    host: process.env.DATABASE_HOST,
-    port: process.env.DATABASE_PORT,
+    TEST_DATABASE_URL,
     dialect: 'postgres',
-    logging: false
+    logging: false,
+    protocol: 'postgres',
+    dialectOptions: dialectToggle(),
   },
   production: {
     username: DATABASE_USER,
@@ -38,4 +45,3 @@ module.exports = {
     dialect: 'postgres'
   },
 };
-
