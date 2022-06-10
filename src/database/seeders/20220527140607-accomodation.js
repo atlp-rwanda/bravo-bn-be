@@ -6,7 +6,7 @@ export async function up(queryInterface, Sequelize) {
     description: "we offer everything",
     location: "kigali",
     image: "url",
-    availability: "5 rooms",
+    geoLocation: "5 rooms",
     highlight: "deal",
     amenities: "hellooo",
     createdAt: new Date(),

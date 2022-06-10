@@ -7,10 +7,13 @@ import {
   deleteRoom,
 } from "../../controllers/room.controller";
 
+import { protect } from '../../controllers/authentication';
+
 const router = express.Router();
 
-router.route("/").get(getAllRooms);
-router.route('/:accomodationId').post(createRoom)
-router.route("/:id").get(getSingleRoom).put(updateRoom).delete(deleteRoom);
-
+router.get("/",getAllRooms);
+router.post('/:accomodationId',protect,createRoom);
+router.get("/:id",getSingleRoom);
+router.put("/:id",protect,updateRoom);
+router.delete("/:id",protect,deleteRoom);
 export default router;

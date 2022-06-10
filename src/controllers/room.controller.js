@@ -9,7 +9,9 @@ export const createRoom = async (req, res) => {
          * Get accomadation id 
          * get room information
          */
-
+         if (req.user.dataValues.role !== 'travel admin') {
+			return res.status(403).json({message: "not traveler admin"})
+		 }
         const accomodationId =  req.params.accomodationId
         const {bedType,bedCost,bedDescription} = req.body;
 
@@ -89,7 +91,9 @@ export const getSingleRoom = async(req, res) => {
 export const updateRoom = async(req, res) => {
 
 	try{
-    
+        if (req.user.dataValues.role !== 'travel admin') {
+			return res.status(403).json({message: "not traveler admin"})
+		 }
 	const id = req.params.id;
     const {bedType,bedCost,bedDescription} = req.body;
     const room =  await Room.findOne({where:{id}})

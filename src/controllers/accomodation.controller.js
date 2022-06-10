@@ -99,6 +99,10 @@ export const getSingleAccomodation = async (req, res) => {
 export const deleteAccomodation = async (req, res) => {
 
 	try{
+		if (req.user.dataValues.role !== 'travel admin') {
+			return res.status(403).json({message: "not traveler admin"})
+		 }
+
 		const id = req.params.id;
 		const accomodation =  await accomodations.findOne({where:{id}})
 	   
