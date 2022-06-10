@@ -1,5 +1,6 @@
 import db from '../database/models/index.js'
 const users = db['users']
+import jwt from 'jsonwebtoken'
 
 export const getAllUsers = async (req, res) => {
  
@@ -37,3 +38,59 @@ export const createUser = async (req, res) => {
 	}
 };
 
+const updateUser = (user, userInfo) => users.update(userInfo, {
+    where: user,
+    returning: true
+  });
+
+export const updateRole = (req, res, next) => {
+    const email = req.body.email;
+    const role = req.body.role;
+
+    	users.findOne({ where: { email: email } }).then(user => {
+        console.log(user)
+        if(user === null){
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        if (user.role === 'super admin') {
+           return res.status(403).json({message: "Super admin can not be updated"})
+        }
+        updateUser({ email: email }, { role: role })
+       
+        return res.status(200).json({result: "user role updated"})
+    })
+      .catch((error) => res.status(404).json({ error }));
+    
+}
+
+export const loginUser= async (req, res) => {
+	try{
+		const {email,password} = req.body;
+		if(!email || !password){
+			throw new Error('Please make sure you add email and password');
+		}
+		const user = await users.findOne({
+			where:{
+				email,
+				password
+			}
+		,attributes: {exclude: ['password','createdAt','updatedAt']}});
+		if(!user){
+			throw new Error('User not found');
+		}
+		return res.status(200).json({
+			status:true,
+			token:generateToken(user.id),
+			data:user,
+			message:"Login Successful"});
+	}
+	catch(error){
+		return res.status(500).json(error.message);
+	}
+}
+
+// generate token 
+const generateToken=(id)=>{
+    return jwt.sign({id},process.env.JWT_SECRET,{expiresIn:'30d'})
+}

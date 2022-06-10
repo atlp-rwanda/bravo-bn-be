@@ -1,4 +1,3 @@
-import '@babel/polyfill';
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
@@ -20,7 +19,7 @@ app.all('*', (req, res, next) => {
     next(
         new AppError(`Opps! can't find "${req.originalUrl}" on this server!`, 404)
     );
-});
+});  
 
 app.use(globalErrorHandler);
 

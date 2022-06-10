@@ -23,6 +23,7 @@ security: [
 ],
 tags: [
   {name: 'setup swagger', description: 'Testing swagger setup'},
+  {name: 'Admin', description: 'update user role'}
 ],
 paths: {
 '/api/testSwagger': {
@@ -42,7 +43,190 @@ paths: {
     },
   },
 },
+
+'/api/v1/user/roles': {
+  put: {
+    tags: ['Admin'],
+    description: 'Updating user roles',
+    security: [
+      {
+        Authorization: []
+      }
+    ],
+    parameters: [],
+    requestBody: {
+      content: {
+        'application/json': {
+          schema: {
+            $ref: '#/components/schemas/userRole',
+          },
+        },
+      },
+      required: true,
+    },
+    responses: {
+      200: {
+        description: 'success'
+      },
+      500: {
+        description: 'Internal server error'
+      }
+    }
+  }
 },
+
+'/api/v1/user/auth/signup': {
+  post: {
+    tags: ['authentication'],
+    description: 'user signup with JWT',
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/SignupAuthShema"
+          },
+          "example": {
+            "firstName":"eddy",
+            "lastName":"leftie",
+            "username":"leftie",
+            "phoneNumber":"0785632478",
+            "role":"requester",
+            "gender":"male",
+            "email":"uwambajeddy@gmail.com",
+            "password":"leftie",
+            "repeat_password":"leftie"
+          }
+        }
+      }
+    },
+    responses: {
+      200: {
+        description: 'success status',
+      }
+    },
+  },
+},
+'/api/v1/user/login': {
+  post: {
+    tags: ['User'],
+    description: 'login user',
+    security: [],
+    parameters: [],
+    requestBody: {
+      content: {
+        'application/json': {
+          schema: {
+            $ref: '#/components/schemas/User',
+          },
+          example: {
+            email: 'john@gmail.com',
+            password: '123456',
+          },
+        }, 
+      },
+        required: true,
+      },
+      responses: {
+        200: {
+          description: 'successfully',
+        },
+        400: {
+          description: 'Invalid credation',
+        },
+        500: {
+            description: 'Internal Server Error'
+        }
+      }, 
+  }
+}
+},
+
+components: {
+  schemas: {
+   userRole: {
+      type:"object",
+      properties:{
+        email: {
+          type: 'string',
+          description: 'user email',
+        },
+        role: {
+          type: 'string',
+          description: 'new role to set to user',
+        },
+      }
+    },
+
+    "SignupAuthShema": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "repeat_password": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    }
+
+   },
+    User: {
+      type: "Object",
+      properties: {
+        id: {
+          type: 'string',
+          description: 'The auto-generated id of the user',
+        },
+        fullname: {
+          type: 'string',
+          description: "User's fullname",
+        },
+        username: {
+          type: 'string',
+          description: "User's username",
+        },
+        password: {
+          type: 'string',
+          description: "User's password",
+        },
+        email: {
+          type: 'string',
+          description: "User's email",
+        },
+        role: {
+          type: 'string',
+          description: "User role",
+        },
+      },
+    }
+    
+   },
+
+securitySchemes: {
+    Authorization: {
+      type: "apiKey",
+      name: "Authorization",
+      description: "Value: Bearer ",
+      in: "header",
+      scheme: "bearer"
+    }
+  },
 }
 
 docrouter.use('/', serve, setup(options));
