@@ -7,7 +7,11 @@ const {
   DATABASE_PASSWORD,
   DATABASE_HOST,
   DATABASE_PORT,
-  TEST_DATABASE_URL,
+  TEST_DATABASE_USER,
+  TEST_DATABASE_PASSWORD,
+  TEST_DATABASE,
+  TEST_DATABASE_HOST,
+  TEST_DATABASE_PORT,
   TEST_GIT_ACTIONS
 } = process.env;
 
@@ -30,7 +34,11 @@ module.exports = {
     dialect: 'postgres'
   },
   test: {
-    TEST_DATABASE_URL,
+    username: TEST_DATABASE_USER,
+    password: TEST_DATABASE_PASSWORD,
+    database: TEST_DATABASE,
+    host: TEST_DATABASE_HOST,
+    port: TEST_DATABASE_PORT,
     dialect: 'postgres',
     logging: false,
     protocol: 'postgres',
