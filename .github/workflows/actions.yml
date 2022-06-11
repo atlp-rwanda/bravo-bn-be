@@ -23,7 +23,15 @@ jobs:
       TEST_GIT_ACTIONS: ${{secrets.TEST_GIT_ACTIONS}}
       NODE_ENV: ${{secrets.NODE_ENV}}
       PORT: ${{secrets.PORT}}
-      
+      JWT_SECRET: ${{secrets.JWT_SECRET}}
+      JWT_EXPIRES_IN: ${{secrets.JWT_EXPIRES_IN}}
+      JWT_COOKIE_EXPIRES_IN: ${{secrets.JWT_COOKIE_EXPIRES_IN}}
+      FACEBOOK_AUTH_ID: ${{secrets.FACEBOOK_AUTH_ID}}
+      FACEBOOK_AUTH_SECRET: ${{secrets.FACEBOOK_AUTH_SECRET}}
+      FACEBOOK_AUTH_CALLBACK_URL: ${{secrets.FACEBOOK_AUTH_CALLBACK_URL}}
+      GOOGLE_AUTH_ID: ${{secrets.GOOGLE_AUTH_ID}}
+      GOOGLE_AUTH_SECRET: ${{secrets.GOOGLE_AUTH_SECRET}}
+      GOOGLE_AUTH_CALLBACK_URL: ${{secrets.GOOGLE_AUTH_CALLBACK_URL}}
     steps:
       - uses: actions/checkout@v3
       - name: 'Use Node.js ${{ matrix.node-version }}'
@@ -32,4 +40,5 @@ jobs:
           node-version: '${{ matrix.node-version }}'
           cache: npm
       - run: npm install
-      - run: npm test
+      - run: npm run test
+      
