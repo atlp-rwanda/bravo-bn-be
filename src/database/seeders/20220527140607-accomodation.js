@@ -8,7 +8,6 @@ export async function up(queryInterface, Sequelize) {
     image: "url",
     geoLocation: "5 rooms",
     highlight: "deal",
-    amenities: "hellooo",
     createdAt: new Date(),
     updatedAt: new Date()
   }], {});

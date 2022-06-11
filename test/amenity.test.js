@@ -2,7 +2,7 @@ import chai from 'chai';
 import chaiHTTP from 'chai-http';
 import app from '../src/app.js';
 import db from '../src/database/models/index.js'
-const rooms = db['rooms']
+const rooms = db['amenities']
 
 chai.should();
 chai.use(chaiHTTP);
@@ -10,27 +10,27 @@ const api = chai.request(app).keepOpen();
 const { expect } = chai;
 
   
-describe('POST api/v1/rooms/accomodationId', () => {
+describe('POST api/v1/amenities/accomodationId', () => {
    
-    const room = {
-        bedType: 'twin',
-        bedCost:'100$',
-        bedDescription:'lorem Ipsum'
-    };
-    const roomUpdate = {
-        bedType: 'twin1',
-        bedCost:'1000$',
-        bedDescription:'lorem Ipsum1'
-    };
+    const amenities={
+        amenityType:"hot water2",
+        amenityDescription:"5G "
+    }
+    const amenityUpdate = 
+        {
+            amenityType:"hot water23",
+            amenityDescription:"6G "
+        }
+
     let newToken;
     const accomodationId=2;
 
     it('Should return 201', (done) => {
         const user ={
-            firstName: "Edd",
-            lastName: "Uwambaje12345",
-            username: "Edd54321",
-            email: "uwambaqe211@gmail.com",
+            firstName: "Eddimo",
+            lastName: "Uwambajimana",
+            username: "Eddy123",
+            email: "uwambaqe123@gmail.com",
             password: "uwambaje",
             repeat_password: "uwambaje",
             phoneNumber: "0785058050",
@@ -47,24 +47,25 @@ describe('POST api/v1/rooms/accomodationId', () => {
         });
     });
 
-    it('should create a room according to the accomodation id',(done)=>{
+    it('should create a amenities according to the accomodation id',(done)=>{
         api
-        .post('/api/v1/rooms/'+accomodationId) 
+        .post('/api/v1/amenities/'+accomodationId) 
         .set('Authorization',`Bearer ${newToken}`)
-        .send(room)
+        .send(amenities)
         .end((err,res)=>{
             expect(res.status).to.be.equal(201);
             done()
         })
      })
        
-          it("Should delete room according to id",(done)=>{
-            const roomId = 2;
+          it("Should delete amenities according to id",(done)=>{
+            const amenityId = 1;
              api
-              .delete("/api/v1/rooms/"+roomId)
+              .delete("/api/v1/amenities/"+amenityId)
               .set("Authorization", `Bearer ${newToken}`)
               .send()
               .end((err,res)=>{
+                if (err) return done(err);
                   expect(res).to.have.status(200);
                   expect(res.body).to.have.property("status");
                   expect(res.body).to.have.property("message");
@@ -72,13 +73,13 @@ describe('POST api/v1/rooms/accomodationId', () => {
               })
       
         })
-     describe("update /api/v1/rooms",()=>{
-        const roomId = 3;
-          it("Should update room according to id",(done)=>{
+     describe("update /api/v1/amenities",()=>{
+        const amenityId = 2;
+          it("Should update amenity according to id",(done)=>{
               api
-              .put("/api/v1/rooms/"+roomId)
+              .put("/api/v1/amenities/"+amenityId)
               .set("Authorization", `Bearer ${newToken}`)
-              .send(roomUpdate)
+              .send(amenityUpdate)
               .end((err,res)=>{
                   expect(res).to.have.status(200);
                   expect(res.body).to.have.property("status");
@@ -89,12 +90,12 @@ describe('POST api/v1/rooms/accomodationId', () => {
         })
     
 })
-describe("GET API /api/v1/rooms", () => {
+describe("GET API /api/v1/amenities", () => {
 
-    it("should get all rooms", (done) => {
+    it("should get all amenity", (done) => {
       chai
         .request(app)
-        .get("/api/v1/rooms")
+        .get("/api/v1/amenities")
         .end((err, res) => {
           if (err) return done(err);
           expect(res).to.have.status(200);
@@ -104,12 +105,12 @@ describe("GET API /api/v1/rooms", () => {
     });
     
   });
-  describe("GET API /api/v1/rooms", () => {
-const id = 1;
-    it("should get single rooms", (done) => {
+  describe("GET API /api/v1/amenities", () => {
+const id = 2;
+    it("should get single amenity", (done) => {
       chai
         .request(app)
-        .get("/api/v1/rooms/"+id)
+        .get("/api/v1/amenities/"+id)
         .end((err, res) => {
           expect(res).to.have.status(200);
           expect(res.body).to.be.a("object");
@@ -118,4 +119,3 @@ const id = 1;
     });
     
   });
-
