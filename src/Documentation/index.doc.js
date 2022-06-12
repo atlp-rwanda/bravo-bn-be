@@ -110,6 +110,7 @@ paths: {
 '/api/v1/user/auth/signup': {
   post: {
     tags: ['authentication'],
+    security:[],
     description: 'user signup with JWT',
     "requestBody": {
       "required": true,
@@ -233,6 +234,7 @@ paths: {
     tags: [
       "Accomodation"
     ],
+    security:[],
     summary: "Get all accomodation",
     description: "list of all accomodation",
     OperationId: "List of all accomodation",
@@ -255,6 +257,7 @@ paths: {
     produces: [
       "application/json"
     ],
+    security:[],
     parameters: [
       {
         name: "id",
@@ -364,6 +367,75 @@ paths: {
       }
     }
   }
+},
+"/api/v1/accomodation/like/{id}":{
+put:{
+  tags: [
+    "Accomodation"
+  ],
+  summary: "like or unlike an Accomodation",
+  description: "like or unlike an Accomodation",
+  OperationId: "like or unlike an Accomodation",
+
+  produces: [
+    "application/json"
+  ],
+  parameters: [
+    {
+      name: "id",
+      in: "path",
+      type: "string",
+      description: "Accomodation Id",
+      required: true
+    }
+  ],
+  responses: {
+    200: {
+      description: "Successful"
+    },
+    404: {
+      description: "Not Found"
+    },
+    500:{
+      description:"Internal server error"
+    }
+  }
+}
+},
+"/api/v1/accomodation/like/{accomodationId}":{
+get:{
+  tags: [
+    "Accomodation"
+  ],
+  summary: "Get likes for an Accomodation",
+  description: "Get likes for an Accomodation",
+  OperationId: "Get likes for an Accomodation",
+
+  produces: [
+    "application/json"
+  ],
+  security:[],
+  parameters: [
+    {
+      name: "accomodationId",
+      in: "path",
+      type: "string",
+      description: "Accomodation Id",
+      required: true
+    }
+  ],
+  responses: {
+    200: {
+      description: "Successful"
+    },
+    404: {
+      description: "Not Found"
+    },
+    500:{
+      description:"Internal server error"
+    }
+  }
+}
 },
 "/api/v1/rooms/{accomodationId}": {
   post: {
@@ -536,13 +608,11 @@ components: {
     },
   },
   securitySchemes: {
-    Authorization: {
-      type: "apiKey",
-      name: "Authorization",
-      description: "Value: Bearer ",
-      in: "header",
-      scheme: "bearer"
-    }
+    bearerAuth: {
+      type: 'http',
+      scheme: 'bearer',
+      bearerFormat: 'JWT',
+    },
   },
 }
 }

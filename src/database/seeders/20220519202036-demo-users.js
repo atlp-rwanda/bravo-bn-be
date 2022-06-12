@@ -30,7 +30,7 @@ export default {
               username: 'rose',
               email: 'test3@gmail.com',
               password:  await hash('test3', 12),
-              role: 'requester',
+              role: 'travel admin',
               createdAt: new Date(),
               updatedAt: new Date()
         },

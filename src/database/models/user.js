@@ -35,14 +35,14 @@ export default (sequelize, DataTypes) => {
     department:DataTypes.STRING,
     lineManager:DataTypes.STRING,
     role: DataTypes.ENUM(
-        'manager', 
-        'super user', 
-        'requester', 
-        'super admin', 
-        'travel admin', 
-        'travel team member',
-        'accommodation supplier'
-        )
+      'manager',
+      'super user',
+      'requester',
+      'super admin',
+      'travel admin',
+      'travel team member',
+      'accommodation supplier'
+    )
   }, {
     sequelize,
     modelName: 'users',

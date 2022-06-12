@@ -105,3 +105,50 @@ describe("GET API /api/v1/accomodation", () => {
         });
         
       });
+    
+      describe("Like/Unlike accommodation",()=>{
+        const user ={  
+          email:"uwambaqje1@gmail.com",
+          password: "uwambaje",
+      }
+        it("Should return 200 for success",(done)=>{
+          let token
+      api
+      .post('/api/v1/user/login')
+      .send(user)
+      .end((err, res) => {
+        token=res.body.token
+        api.put('/api/v1/accomodation/like/2')
+        .set('Authorization',`Bearer ${token}`)
+          .end((err,res)=>{
+            expect(res.status).to.equal(200)
+            done()
+          })
+    });
+        })
+        it("Should return 400 for unavailable accommodation id",(done)=>{
+          let token
+      api
+      .post('/api/v1/user/login')
+      .send(user)
+      .end((err, res) => {
+        token=res.body.token
+        api.put('/api/v1/accomodation/like/00')
+        .set('Authorization',`Bearer ${token}`)
+          .end((err,res)=>{
+            expect(res.status).to.equal(400)
+            done()
+          })
+    });
+        })
+        it("Should return 401 for unauthorization",(done)=>{
+        api.put('/api/v1/accomodation/like/00')
+          .end((err,res)=>{
+            expect(res.status).to.equal(401)
+            done()
+          })
+    });
+        })
+  
+    
+   
