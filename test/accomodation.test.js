@@ -148,7 +148,11 @@ describe("GET API /api/v1/accomodation", () => {
             done()
           })
     });
-        })
+      } )     
+
+      
+     
+
   
     
    
