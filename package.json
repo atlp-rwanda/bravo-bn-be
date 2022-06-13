@@ -37,9 +37,7 @@
     "exclude": [
       "node_modules/*",
       "coverage/*"
-    ],
-    "sourceMap": false,
-    "instrument": false
+    ]
   },
   "repository": {
     "type": "git",
