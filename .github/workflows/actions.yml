@@ -1,31 +1,47 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-
-
-name: CI
-
-on:
+'on':
   push:
-    branches: [ develop ]
+    branches:
+      - '*'
   pull_request:
-    branches: [ develop ]
-
+    branches:
+      - develop
 jobs:
   build:
-
-    runs-on: ${{ matrix.os }}
-
+    runs-on: '${{ matrix.os }}'
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x]
-        os: [ubuntu-latest, windows-latest, macOS-latest]
-
+        node-version:
+          - 16.x
+        os:
+          - ubuntu-latest
+    env:
+      TEST_DATABASE_HOST: ${{secrets.TEST_DATABASE_HOST}}
+      TEST_DATABASE_USER: ${{secrets.TEST_DATABASE_USER}}
+      TEST_DATABASE: ${{secrets.TEST_DATABASE}}
+      TEST_DATABASE_PASSWORD: ${{secrets.TEST_DATABASE_PASSWORD}}
+      TEST_DATABASE_PORT: ${{secrets.TEST_DATABASE_PORT}}
+      TEST_GIT_ACTIONS: ${{secrets.TEST_GIT_ACTIONS}}
+      NODE_ENV: ${{secrets.NODE_ENV}}
+      PORT: ${{secrets.PORT}}
+      JWT_SECRET: ${{secrets.JWT_SECRET}}
+      JWT_EXPIRES_IN: ${{secrets.JWT_EXPIRES_IN}}
+      JWT_COOKIE_EXPIRES_IN: ${{secrets.JWT_COOKIE_EXPIRES_IN}}
+      FACEBOOK_AUTH_ID: ${{secrets.FACEBOOK_AUTH_ID}}
+      FACEBOOK_AUTH_SECRET: ${{secrets.FACEBOOK_AUTH_SECRET}}
+      FACEBOOK_AUTH_CALLBACK_URL: ${{secrets.FACEBOOK_AUTH_CALLBACK_URL}}
+      GOOGLE_AUTH_ID: ${{secrets.GOOGLE_AUTH_ID}}
+      GOOGLE_AUTH_SECRET: ${{secrets.GOOGLE_AUTH_SECRET}}
+      GOOGLE_AUTH_CALLBACK_URL: ${{secrets.GOOGLE_AUTH_CALLBACK_URL}}
+      
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm install
-    - run: npm run build --if-present
-    - run: npm test
+      - uses: actions/checkout@v3
+      - name: 'Use Node.js ${{ matrix.node-version }}'
+        uses: actions/setup-node@v3
+        with:
+          node-version: '${{ matrix.node-version }}'
+          
+      - run: npm install
+      - run: npm run test
+      - run: npm run coverage
+      - run: npm run down
+      
