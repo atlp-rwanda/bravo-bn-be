@@ -38,28 +38,28 @@ export default {
       passwordResetToken: {
         type: Sequelize.STRING
       },
-      socialMediaId:{
+      socialMediaId: {
         type: Sequelize.STRING
       },
-      provider:{
+      provider: {
         type: Sequelize.STRING
       },
-      isVerified:{
+      isVerified: {
         type: Sequelize.BOOLEAN
       },
-      gender:{
+      gender: {
         type: Sequelize.STRING
       },
-      preferredLanguage:{
+      preferredLanguage: {
         type: Sequelize.STRING
       },
-      preferredCurrency:{
+      preferredCurrency: {
         type: Sequelize.STRING
       },
-      department:{
+      department: {
         type: Sequelize.STRING
       },
-      lineManager:{
+      lineManager: {
         type: Sequelize.STRING
       },
       role: {

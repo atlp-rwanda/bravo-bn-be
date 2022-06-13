@@ -78,6 +78,74 @@ export const signup = catchAsync(async (req, res, next) => {
     createSendToken(createUser, 201, res);
 });
 
+export const googleLogin = catchAsync(async (req, res, next) => {
+    const googleUser = req.user;
+    const { id, provider, displayName, given_name, family_name, verified, language, email, picture } = googleUser;
+
+    const defineUser = {
+        firstName: given_name,
+        lastName: family_name,
+        username: displayName,
+        email: email,
+        socialMediaId: id,
+        provider: provider,
+        isVerified: verified,
+        preferredLanguage: language,
+        image: picture,
+        role: "requester"
+    }
+    let userExist = await User.findOne({
+        where: {
+            email: defineUser.email,
+            username: {
+                [Op.or]: [`${defineUser.username}`]
+            },
+            socialMediaId: {
+                [Op.or]: [`${defineUser.socialMediaId}`]
+            }
+        }
+    });
+    if (userExist) {
+        return createSendToken(userExist, 200, res);
+    }
+
+    const createUser = await User.create(defineUser, {
+        individualHooks: true
+    });
+    createSendToken(createUser, 201, res);
+})
+
+export const facebookLogin = catchAsync(async (req, res, next) => {
+    const facebookUser = req.user;
+    const { id, provider, displayName, name, photos } = facebookUser;
+
+    const defineUser = {
+        firstName: name.givenName,
+        lastName: name.familyName,
+        username: displayName,
+        socialMediaId: id,
+        provider: provider,
+        image: photos[0].value,
+        role: "requester"
+    }
+    let userExist = await User.findOne({
+        where: {
+            username: defineUser.username,
+            socialMediaId: {
+                [Op.or]: [`${defineUser.socialMediaId}`]
+            }
+        }
+    });
+    if (userExist) {
+        return createSendToken(userExist, 200, res);
+    }
+
+    const createUser = await User.create(defineUser, {
+        individualHooks: true
+    });
+    createSendToken(createUser, 201, res);
+})
+
 
 export const protect = catchAsync(async (req, res, next) => {
     let token = 'loggedout';

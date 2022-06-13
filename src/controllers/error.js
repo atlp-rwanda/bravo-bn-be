@@ -1,7 +1,4 @@
-
-import { defaults } from 'joi';
 import AppError from '../utils/appError';
-
 
 const handleJWTError = () =>
     new AppError('Invalid token. Please login again!', 401);
