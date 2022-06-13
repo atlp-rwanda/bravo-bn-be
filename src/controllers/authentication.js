@@ -1,10 +1,10 @@
-import jsonwebtoken  from 'jsonwebtoken';
-import catchAsync  from '../utils/catchAsync';
-import AppError  from '../utils/appError';
-import { promisify }  from 'util';
-import bcryptjs  from 'bcryptjs';
+import jsonwebtoken from 'jsonwebtoken';
+import catchAsync from '../utils/catchAsync';
+import AppError from '../utils/appError';
+import { promisify } from 'util';
+import bcryptjs from 'bcryptjs';
 import db from '../database/models/index.js';
-import {signupAuthSchema} from '../helpers/validation_schema'
+import { signupAuthSchema } from '../helpers/validation_schema'
 
 const User = db['users']
 const { compare } = bcryptjs;
@@ -44,7 +44,7 @@ export const login = catchAsync(async (req, res, next) => {
     if (!req.body.password || !req.body.email) {
         return next(new AppError('Please fill empty fields!', 400));
     }
-    
+
     let currentUser = await User.findOne({ where: { email: req.body.email } });
     if (!currentUser)
         return next(new AppError('Wrong email or password!', 401));
@@ -59,7 +59,7 @@ export const login = catchAsync(async (req, res, next) => {
 
 export const signup = catchAsync(async (req, res, next) => {
 
-     await signupAuthSchema.validateAsync(req.body);
+    await signupAuthSchema.validateAsync(req.body);
 
     if (!req.body.password || !req.body.email) {
         return next(new AppError('Please fill empty fields!', 400));
@@ -71,9 +71,9 @@ export const signup = catchAsync(async (req, res, next) => {
     if (usernameExist)
         return next(new AppError('Username already taken!', 409));
 
-     const createUser= await User.create(req.body, {
-            individualHooks: true
-        });
+    const createUser = await User.create(req.body, {
+        individualHooks: true
+    });
 
     createSendToken(createUser, 201, res);
 });
@@ -88,7 +88,7 @@ export const protect = catchAsync(async (req, res, next) => {
         token = req.headers.authorization.split(' ')[1];
     } else if (req.cookies?.jwt) {
         token = req.cookies.jwt;
-    } 
+    }
     if (!token || token.length === 4 || token === 'loggedout') {
         return next(
             new AppError('You are not logged in! please login to get access', 401)
