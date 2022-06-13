@@ -1,12 +1,11 @@
 import jsonwebtoken  from 'jsonwebtoken';
 import catchAsync  from '../utils/catchAsync';
 import AppError  from '../utils/appError';
-import Email  from '../utils/email';
 import { promisify }  from 'util';
 import bcryptjs  from 'bcryptjs';
 import db from '../database/models/index.js';
 import {signupAuthSchema} from '../helpers/validation_schema';
-import {Op} from'Sequelize';
+import {Op} from'sequelize';
 
 const User = db['users']
 const { compare } = bcryptjs;
@@ -77,14 +76,6 @@ export const signup = catchAsync(async (req, res, next) => {
             individualHooks: true
         });
 
-        const url = `${req.protocol}://${req.get('host')}/`;
-
-        try {
-            await new Email(createUser, url).sendWelcome();
-          } catch (err) {
-            console.log(err);
-          }
-
     createSendToken(createUser, 201, res);
 });
 
@@ -120,25 +111,17 @@ export const googleLogin = catchAsync(async (req, res, next) => {
     const createUser= await User.create(defineUser, {
         individualHooks: true
     });
-    const url = `${req.protocol}://${req.get('host')}/`;
-    try {
-        await new Email(createUser, url).sendWelcome();
-      } catch (err) {
-        console.log(err);
-      }
-
     createSendToken(createUser, 201, res);
   })
 
 export const facebookLogin = catchAsync(async (req, res, next) => {
     const facebookUser = req.user;
-    const {id,provider,displayName,name,photos,email} = facebookUser;
+    const {id,provider,displayName,name,photos} = facebookUser;
     
     const defineUser ={
         firstName: name.givenName,
         lastName: name.familyName,
         username: displayName,
-        email: email || null,
         socialMediaId: id,
         provider: provider,
         image: photos[0].value,
@@ -154,20 +137,9 @@ export const facebookLogin = catchAsync(async (req, res, next) => {
         return  createSendToken(userExist, 200, res);
     }
 
-    
     const createUser= await User.create(defineUser, {
         individualHooks: true
     });
-    
-    if(email){
-        const url = `${req.protocol}://${req.get('host')}/`;
-        try {
-            await new Email(createUser, url).sendWelcome();
-          } catch (err) {
-            console.log(err);
-          }
-    }
-
     createSendToken(createUser, 201, res);
 })
 
