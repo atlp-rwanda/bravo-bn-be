@@ -37,6 +37,17 @@ export default (sequelize, DataTypes) => {
     preferredCurrency:DataTypes.STRING,
     department:DataTypes.STRING,
     lineManager:DataTypes.STRING,
+    birthDate: DataTypes.DATE,
+    phoneNumber: DataTypes.STRING,
+    image: DataTypes.STRING,
+    passwordChangedAt: DataTypes.DATE,
+    passwordResetExpires: DataTypes.DATE,
+    passwordResetToken: DataTypes.STRING,
+    socialMediaId: DataTypes.STRING,
+    provider: DataTypes.STRING,
+    isVerified: DataTypes.BOOLEAN,
+    gender: DataTypes.STRING,
+    preferredLanguage: DataTypes.STRING,
     role: DataTypes.ENUM(
       'manager',
       'super user',
@@ -52,12 +63,7 @@ export default (sequelize, DataTypes) => {
   });
 
   user.beforeSave(async user => {
-    user.password = await hash(user.password, 12);
-
-  });
-
-  user.beforeBulkCreate(async (users, options) => {
-    for (const user of users) {
+    if(user.password){
       user.password = await hash(user.password, 12);
     }
 

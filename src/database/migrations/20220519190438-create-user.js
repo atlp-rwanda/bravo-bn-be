@@ -35,6 +35,9 @@ export default {
       passwordResetExpires: {
         type: Sequelize.DATE
       },
+      birthDate: {
+        type: Sequelize.DATE
+      },
       passwordResetToken: {
         type: Sequelize.STRING
       },

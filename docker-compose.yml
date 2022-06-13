@@ -38,7 +38,11 @@ services:
             - migration
     node_db:
         container_name: node_db
+<<<<<<< HEAD
         image: "postgres:12"
+=======
+        image: "postgres:14"
+>>>>>>> 24c109d (chore(setup): set up an empty Express Boilerplate with dotenv)
         ports: 
             - "5432"
         environment: 

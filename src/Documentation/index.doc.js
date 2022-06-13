@@ -224,9 +224,10 @@ paths: {
   },
 },
 },
+
 components: {
   schemas: {
-    userRole: {
+   userRole: {
       type:"object",
       properties:{
         email: {

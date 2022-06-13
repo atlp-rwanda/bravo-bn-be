@@ -2,7 +2,6 @@ import chai from 'chai';
 import chaiHTTP from 'chai-http';
 import app from '../src/app.js';
 
-
 import db from '../src/database/models/index.js'
 const users = db['users']
 
