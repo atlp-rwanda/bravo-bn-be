@@ -46,7 +46,7 @@ export const getSingleTripRequest = async (req, res) => {
                 return res.status(200).json({ status: 'success', data: trip });
             }
 
-        } else if (req.user.role == 'travel admin') {
+        } else if (req.user.role == 'manager') {
             const trip = await tripRequests.findOne({ where: { id: requestId } })
 
             if (!trip) {
@@ -76,7 +76,7 @@ export const getAllTripRequest = async (req, res) => {
                 return res.status(200).json({ status: 'success', data: trips })
             }
 
-        } else if (req.user.role == 'travel admin') {
+        } else if (req.user.role == 'manager') {
             const trips = await tripRequests.findAll()
 
             if (!trips) {
