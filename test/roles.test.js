@@ -37,53 +37,34 @@ describe('Setting users roles', () => {
     await cleanAlltables();
   });
 
-  /* it('It should update the user role', (done) => {
-    const requestBody = {
-      email: 'uwambaqje1@gmail.com',
-      role: 'manager'
-    };
-
-    chai.request(app)
-      .post('/api/v1/user/auth/signup')
-      .send(user)
-      .end((err,res)=>{})
-
-    let token
-    chai.request(app)
-      .post('/api/v1/user/auth/signup')
-      .send(superAdmin)
-      .end((err, res) => {
-        token=res.body.token
-    chai.request(app)
-      .put('/api/v1/user/roles')
-      .set('Authorization',`Bearer ${token}`)
-      .send(requestBody)
-      .end((err, res) => {
-        res.should.have.status(200);
-        done();
-      });
-    })
-  });
-  it('It should return User not found', (done) => {
-    const requestBody = {
-      email: 'janedoeee@email.com',
-      role: 'requester'
-    };
-    let token
-    chai.request(app)
-      .post('/api/v1/user/auth/signup')
-      .send(superAdmin)
-      .end((err, res) => {
-        token=res.body.token
-       chai.request(app)
-      .put('/api/v1/user/roles')
-      .set('Authorization',`Bearer ${token}`)
-      .send(requestBody)
-      .end((err, res) => {
-        res.should.have.status(404);
-        done();
-      });
-  }); */
+  //  it('It should update the user role', (done) => {
+  //   const requestBody = {
+  //     email: 'janedoe@email.com',
+  //     role: 'manager'
+  //   };
+  //   chai.request(app)
+  //     .put('/api/v1/user/roles')
+  //     // .set('token', superAdminToken)
+  //     .send(requestBody)
+  //     .end((err, res) => {
+  //       res.should.have.status(200);
+  //       done();
+  //     });
+  // });
+  // it('It should return User not found', (done) => {
+  //   const requestBody = {
+  //     email: 'janedoeee@email.com',
+  //     role: 'requester'
+  //   };
+  //   chai.request(app)
+  //     .put('/api/v1/user/roles')
+  //      .set('token', superAdminToken)
+  //     .send(requestBody)
+  //     .end((err, res) => {
+  //       res.should.have.status(404);
+  //       done();
+  //     });
+  // }); 
   it('It should return invalid token', (done) => {
     const requestBody = {
       email: 'janedoe@email.com',
