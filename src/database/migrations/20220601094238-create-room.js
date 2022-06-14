@@ -17,8 +17,8 @@ export async function up(queryInterface, DataTypes) {
       allowNull: false,
     },
     bedDescription: { type: DataTypes.STRING, allowNull: false },
-    accomodationId:{
-      type:DataTypes.INTEGER
+    accomodationId: {
+      type: DataTypes.INTEGER,
     },
     createdAt: {
       allowNull: false,

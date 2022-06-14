@@ -1,10 +1,10 @@
-import chai from 'chai';
-import chaiHTTP from 'chai-http';
-import app from '../src/app.js';
+import chai from "chai";
+import chaiHTTP from "chai-http";
+import app from "../src/app.js";
 // import { superAdminToken, requesterToken } from './fixtures/users';
 
-import db from '../src/database/models/index.js'
-const users = db['users']
+import db from "../src/database/models/index.js";
+const users = db["users"];
 
 chai.should();
 chai.use(chaiHTTP);
@@ -13,12 +13,12 @@ const cleanAlltables = async () => {
   await users.destroy({ where: {} });
 };
 
-describe('Setting users roles', () => {
+describe("Setting users roles", () => {
   before(async () => {
     await cleanAlltables();
   });
 
-  it('It should update the user role', (done) => {
+  /* it('It should update the user role', (done) => {
     const requestBody = {
       email: 'janedoe@email.com',
       role: 'manager'
@@ -45,28 +45,30 @@ describe('Setting users roles', () => {
         res.should.have.status(404);
         done();
       });
-  });
-  it('It should return invalid token', (done) => {
+  });  */
+  it("It should return invalid token", (done) => {
     const requestBody = {
-      email: 'janedoe@email.com',
-      role: 'manager'
+      email: "janedoe@email.com",
+      role: "manager",
     };
-    chai.request(app)
-      .put('/api/v1/user/roles')
-      .set('token', 'loremipsum')
+    chai
+      .request(app)
+      .put("/api/v1/user/roles")
+      .set("token", "loremipsum")
       .send(requestBody)
       .end((err, res) => {
         res.should.have.status(401);
         done();
       });
   });
-  it('It should return Not Authorized', (done) => {
+  it("It should return Not Authorized", (done) => {
     const requestBody = {
-      email: 'janedoe@gmail.com',
-      role: 'requester'
+      email: "janedoe@gmail.com",
+      role: "requester",
     };
-    chai.request(app)
-      .put('/api/v1/user/roles')
+    chai
+      .request(app)
+      .put("/api/v1/user/roles")
       // .set('token', requesterToken)
       .send(requestBody)
       .end((err, res) => {
@@ -74,18 +76,19 @@ describe('Setting users roles', () => {
         done();
       });
   });
-  it('It should return Not Authenticated', (done) => {
+  it("It should return Not Authenticated", (done) => {
     const requestBody = {
-      email: 'janedoe@gmail.com',
-      role: 'manager'
+      email: "janedoe@gmail.com",
+      role: "manager",
     };
-    chai.request(app)
-      .put('/api/v1/user/roles')
-      .set('token', '')
+    chai
+      .request(app)
+      .put("/api/v1/user/roles")
+      .set("token", "")
       .send(requestBody)
       .end((err, res) => {
         res.should.have.status(401);
         done();
       });
-  })
+  });
 });

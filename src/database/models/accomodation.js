@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
 /////////////////////////////////
 
-'use strict';
-import { Model } from 'sequelize';
+"use strict";
+import { Model } from "sequelize";
 export default (sequelize, DataTypes) => {
   class accomodation extends Model {
     /**
@@ -11,22 +11,29 @@ export default (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate({Room,Amenity}) {
-     this.hasMany(Room,{foreignKey:"accomodationId",as:"rooms"})
-     this.hasMany(Amenity,{foreignKey:"accomodationId",as:"amenities"})
+    static associate({ Room}) {
+      this.hasMany(Room, { foreignKey: "accomodationId", as: "rooms" });
+    }
+    toJSON() {
+      return {
+        ...this.get(),
+      };
     }
   }
-  accomodation.init({
-    name: DataTypes.STRING,
-    description: DataTypes.STRING,
-    location: DataTypes.STRING,
-    image: DataTypes.STRING,
-    geoLocation: DataTypes.STRING,
-    highlight: DataTypes.STRING,
-    
-  }, {
-    sequelize,
-    modelName: 'accomodation',
-  });
+  accomodation.init(
+    {
+      name: DataTypes.STRING,
+      description: DataTypes.STRING,
+      location: DataTypes.STRING,
+      image: DataTypes.STRING,
+      geoLocation: DataTypes.STRING,
+      highlight: DataTypes.STRING,
+      amenitiesList: DataTypes.ARRAY(DataTypes.STRING),
+    },
+    {
+      sequelize,
+      modelName: "accomodation",
+    }
+  );
   return accomodation;
 };

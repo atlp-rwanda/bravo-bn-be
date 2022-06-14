@@ -1,48 +1,52 @@
-'use strict';
+"use strict";
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('accomodations', {
+    return queryInterface.createTable("accomodations", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       name: {
         type: Sequelize.STRING,
-        allowNull:false
+        allowNull: false,
       },
       description: {
         type: Sequelize.STRING,
-        allowNull:false
+        allowNull: false,
       },
       location: {
         type: Sequelize.STRING,
-        allowNull:false
+        allowNull: false,
       },
       image: {
         type: Sequelize.STRING,
-        allowNull:false
+        allowNull: false,
       },
       geoLocation: {
         type: Sequelize.STRING,
-        allowNull:false
+        allowNull: false,
       },
       highlight: {
         type: Sequelize.STRING,
-        allowNull:false
+        allowNull: false,
+      },
+      amenitiesList:{
+      type: Sequelize.ARRAY(Sequelize.STRING),
+      defaultValue: []
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('accomodations');
-  }
+    return queryInterface.dropTable("accomodations");
+  },
 };
