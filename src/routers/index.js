@@ -1,7 +1,7 @@
 import express from 'express';
 import apiRouter from './api/index';
 import swaggerRouter from './api/swagger';
-import tripRequestRouter from './api/tripRequest.routes';
+
 
 const allRoutes = express.Router();
 
@@ -11,6 +11,5 @@ allRoutes.get("/", (req, res) => {
 
 allRoutes.use('/api/v1', apiRouter);
 allRoutes.use('/docs', swaggerRouter)
-allRoutes.use('/api/v1/trip-request', tripRequestRouter)
 
 export default allRoutes;
