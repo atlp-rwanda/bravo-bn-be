@@ -15,8 +15,8 @@ describe('User sign up', () => {
         const user ={
             firstName: "Eddy",
             lastName: "Uwambaje",
-            username: "Eddy",
-            email: "uwambaqje1@gmail.com",
+            username: "Eddy1",
+            email: "uwambaqje11@gmail.com",
             password: "uwambajeee",
             repeat_password: "uwambajeee",
             phoneNumber: "0785058050",
