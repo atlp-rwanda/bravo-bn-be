@@ -44,36 +44,6 @@ paths: {
     },
   },
 },
-'/api/v1/user/roles': {
-  put: {
-    tags: ['Admin'],
-    description: 'Updating user roles',
-    security: [
-      {
-        Authorization: []
-      }
-    ],
-    parameters: [],
-    requestBody: {
-      content: {
-        'application/json': {
-          schema: {
-            $ref: '#/components/schemas/userRole',
-          },
-        },
-      },
-      required: true,
-    },
-    responses: {
-      200: {
-        description: 'success'
-      },
-      500: {
-        description: 'Internal server error'
-      }
-    }
-  }
-},
 '/api/v1/user/login': {
   post: {
     tags: ['User'],
@@ -107,8 +77,122 @@ paths: {
     },
   }, 
   },
+'/api/v1/user/': {
+  get: {
+    tags: ['User'],
+    description: 'get all user data',
+    security: [],
+    parameters: [],
+    responses: {
+      200: {
+        description: 'successfully',
+      },
+      400: {
+        description: 'Invalid credation',
+      },
+      500: {
+          description: 'Internal Server Error'
+      }
+    }, 
+  }
+},
+'/api/v1/user/{id}': {
+  get: {
+    tags: ['User'],
+    description: 'get all user data',
+    parameters: [
+      {
+        name: 'id',
+        in: 'path',
+        description: 'user id',
+        required: true,
+        schema: {
+          type: 'string',
+        },
+      },
+    ],
+    responses: {
+      200: {
+        description: 'successfully',
+      },
+      400: {
+        description: 'Invalid credation',
+      },
+      500: {
+          description: 'Internal Server Error'
+      }
+    }, 
+  }
+},
+'/api/v1/user/update': {
+  patch: {
+    tags: ['User'],
+    description: 'update user data',
+    parameters: [],
+    requestBody: {
+      content: {
+        'application/json': {
+          schema: {
+            $ref: '#/components/schemas/User',
+          },
+          example: {
+            "firstName": "Samuel",
+            "lastName": "Doe",
+            "username": "johnDoe",
+            "email": "john@gmail.com",
+            "phoneNumber": "0780591269",
+            "image": "",
+            "gender": "male",
+            "preferredLanguage": "kinyarwanda",
+            "preferredCurrency": "RWF",
+            "department": "developers",
+            "lineManager": "Mugisha Eric",
+        },
+        },
+      },
+      required: true,
+    },
+    responses: {
+      200: {
+        description: 'successfully',
+      },
+      400: {
+        description: 'Invalid credation',
+      },
+      500: {
+          description: 'Internal Server Error'
+      }
+    }, 
+  }
+},
+'/api/v1/user/roles': {
+    put: {
+      tags: ['Admin'],
+      description: 'Updating user roles',
+      parameters: [],
+      requestBody: {
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/components/schemas/userRole',
+            },
+          },
+        },
+        required: true,
+      },
+      responses: {
+        200: {
+          description: 'success'
+        },
+        500: {
+          description: 'Internal server error'
+        }
+      }
+    }
+  },
 '/api/v1/user/auth/signup': {
   post: {
+    security: [],
     tags: ['authentication'],
     description: 'user signup with JWT',
     "requestBody": {
@@ -139,39 +223,6 @@ paths: {
     },
   },
 },
-'/api/v1/user/login': {
-  post: {
-    tags: ['User'],
-    description: 'login user',
-    security: [],
-    parameters: [],
-    requestBody: {
-      content: {
-        'application/json': {
-          schema: {
-            $ref: '#/components/schemas/User',
-          },
-          example: {
-            email: 'john@gmail.com',
-            password: '123456',
-          },
-        }, 
-      },
-        required: true,
-      },
-      responses: {
-        200: {
-          description: 'successfully',
-        },
-        400: {
-          description: 'Invalid credation',
-        },
-        500: {
-            description: 'Internal Server Error'
-        }
-      }, 
-  }
-}
 },
 
 components: {
@@ -189,7 +240,6 @@ components: {
         },
       }
     },
-
     "SignupAuthShema": {
       "type": "object",
       "properties": {
@@ -216,30 +266,17 @@ components: {
         }
       }
     },
-    userRole: {
-      type:"object",
-      properties:{
-        email: {
-          type: 'string',
-          description: 'user email',
-        },
-        role: {
-          type: 'string',
-          description: 'new role to set to user',
-        },
-      }
-    },
-    User: {
+    "User": {
       type: 'object',
 
       properties: {
         firstName: {
           type: 'string',
-          description: "User's fullname",
+          description: 'new role to set to user',
         },
         lastName: {
           type: 'string',
-          description: "User's username",
+          description: "User's fullname",
         },
         email:{
           type: 'string',
@@ -271,13 +308,11 @@ components: {
     },
   },
   securitySchemes: {
-    Authorization: {
-      type: "apiKey",
-      name: "Authorization",
-      description: "Value: Bearer ",
-      in: "header",
-      scheme: "bearer"
-    }
+    bearerAuth: {
+      type: 'http',
+      scheme: 'bearer',
+      bearerFormat: 'JWT',
+    },
   },
 }
 }

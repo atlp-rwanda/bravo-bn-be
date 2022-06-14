@@ -19,7 +19,10 @@ export default (sequelize, DataTypes) => {
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
     username: DataTypes.STRING,
-    email: DataTypes.STRING,
+    email: {
+      type: DataTypes.STRING,
+      unique: true,
+    },
     password: DataTypes.STRING,
     phoneNumber: DataTypes.STRING,
     image: DataTypes.STRING,

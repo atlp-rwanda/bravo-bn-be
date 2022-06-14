@@ -30,3 +30,30 @@ export const signupAuthSchema = Joi.object({
         .email().required()
 })
 
+export const updateProfileSchema = Joi.object({
+    username: Joi.string()
+        .alphanum()
+        .required(),
+
+    firstName: Joi.string()
+        .alphanum()
+        .required(),
+
+    lastName: Joi.string()
+        .alphanum()
+        .required(),
+
+    birthDate: Joi.date(),
+
+    phoneNumber: Joi.string().regex(/^[0-9]{10}$/).messages({'string.pattern.base': `Phone number must have 10 digits.`}).required(),
+
+    gender: Joi.string(),
+    image:Joi.string(),
+    email: Joi.string().lowercase()
+        .email().required(),
+    preferredLanguage:Joi.string()
+    .alphanum(),
+    preferredCurrency:Joi.string(),
+    department:Joi.string(),
+    lineManager:Joi.string()
+})
