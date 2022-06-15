@@ -37,9 +37,7 @@
     "exclude": [
       "node_modules/*",
       "coverage/*"
-    ],
-    "sourceMap": false,
-    "instrument": false
+    ]
   },
   "repository": {
     "type": "git",
@@ -81,11 +79,17 @@
     "lint": "^0.7.0",
     "lint-fix": "^0.24.0",
     "lint-staged": "^13.0.0",
+    "multer": "^1.4.5-lts.1",
+    "multer-storage-cloudinary": "^4.0.0",
+    "passport": "^0.4.1",
+    "passport-facebook": "^3.0.0",
+    "passport-google-oauth2": "^0.2.0",
     "pg": "^8.7.3",
     "pg-hstore": "^2.3.4",
     "prettier": "^2.6.2",
     "sequelize": "^5.22.5",
-    "swagger-ui-express": "^4.4.0"
+    "swagger-ui-express": "^4.4.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.17.12",

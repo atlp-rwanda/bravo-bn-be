@@ -4,19 +4,18 @@ import jwt from 'jsonwebtoken'
 
 export const getAllUsers = async (req, res) => {
  
-	// try{
-	// 		users.findAndCountAll().then(users => {
+	try{
+			users.findAndCountAll().then(users => {
 				
-	// 			return res.status(200).json({
-	// 				status:true,
-	// 				data:users,
-	// 				message:"Retrieved"});
-	// 		})		
-	// }
-	// catch(error) {
-	// 	return res.status(500).json(error.message);
-	console.log(req.user.dataValues)
-	// }	
+				return res.status(200).json({
+					status:true,
+					data:users,
+					message:"Retrieved"});
+			})		
+	}
+	catch(error) {
+		return res.status(500).json(error.message);
+	}	
 };
 export const createUser = async (req, res) => {
     try {

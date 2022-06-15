@@ -27,6 +27,7 @@ describe('User sign up', () => {
         .send(user)
         .end((err, res) => {
           const { message } = res.body;
+          console.log(message);
           expect(res.status).to.equal(unProcessableEntity);
           expect(message);
           done();
@@ -49,6 +50,7 @@ describe('User sign up', () => {
         .send(user)
         .end((err, res) => {
           const { message } = res.body;
+          console.log(res.body);
           expect(res.status).to.equal(unProcessableEntity);
           expect(message);
           done();

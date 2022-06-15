@@ -12,7 +12,7 @@ module.exports = async(req, res, next) => {
     const userId = jwt.verify(token, process.env.JWT_SECRET).id;
     const user = await users.findByPk(userId);
 
-    if (user.role !== 'super admin'||user.role !== 'travel admin')  {
+    if (user.role !== 'super admin')  {
         return res.status(403).json({message: 'Not Authorized'})
     }
 
