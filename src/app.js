@@ -8,8 +8,8 @@ import allRoutes from './routers/index';
 
 const app = express();
 
-app.use(cors()); 
-app.use(morgan('dev')); 
+app.use(cors());
+app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -19,7 +19,7 @@ app.all('*', (req, res, next) => {
     next(
         new AppError(`Opps! can't find "${req.originalUrl}" on this server!`, 404)
     );
-});  
+});
 
 
 app.all('*', (req, res, next) => {
