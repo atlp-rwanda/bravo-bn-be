@@ -1,15 +1,6 @@
 import express from 'express';
-import {
-  login,
-  logout,
-  protect,
-  signup,
-} from '../../controllers/authentication';
-import {
-  getUserData,
-  updateUserProfile,
-  getAllUsers,
-} from '../../controllers/userController';
+import { forgotPassword, login, logout, protect, resetPassword, signup } from '../../controllers/authentication';
+import { getUserData, updateUserProfile,getAllUsers } from '../../controllers/userController';
 import { updateRole } from '../../controllers/users';
 import isValidRole from '../../middlewares/isValidRole';
 import isAdmin from '../../middlewares/isAdmin';
