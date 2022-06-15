@@ -1,5 +1,5 @@
 import express from 'express';
-import { forgotPassword, login, logout, protect, resetPassword, signup } from '../../controllers/authentication';
+import { forgotPassword, login, protect, resetPassword, signup } from '../../controllers/authentication';
 import { getUserData, updateUserProfile,getAllUsers } from '../../controllers/userController';
 import { updateRole } from '../../controllers/users';
 import isValidRole from '../../middlewares/isValidRole';

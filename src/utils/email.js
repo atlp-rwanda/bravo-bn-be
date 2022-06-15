@@ -64,6 +64,13 @@ class Email {
       await this.send('welcome', "Welcome to Barefoot nomad");
     }
   }
+
+  async sendPasswordReset() {
+    await this.send(
+      'passwordreset',
+      'Your password reset token'
+    );
+  }
 }
 
 export default Email;
