@@ -5,7 +5,6 @@ const {accommodations, UserAccommodation} = db;
 export const updateLike = async (req, res) => {
 	const userId=req.user.dataValues.id
 	const accommodationId=req.params.id
-	console.log(userId);
     try {
       const accommodation = await accommodations.findOne({where:{
         id: accommodationId
@@ -20,7 +19,6 @@ export const updateLike = async (req, res) => {
       );
 
 		if (like) {
-			console.log(like.dataValues.like);
 				if(like.dataValues.like)
 				{
 				await UserAccommodation.update({
