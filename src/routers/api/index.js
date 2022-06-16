@@ -2,7 +2,7 @@ import express from 'express';
 import userRouter from './users';
 import swaggerRouter from './swagger.js';
 import authRouter from './authentication';
-import accommodation from './accommodation.routes';
+import accommodation from './accommodationRoutes';
 
 const apiRouter = express.Router();
 

@@ -31,8 +31,9 @@ describe("Like/Unlike accommodation",()=>{
     .set('Authorization',`Bearer ${token}`)
       .end((err,res)=>{
         const { message } = res.body;
+        console.log(res.body)
         expect(res.status).to.equal(200)
-        expect(message).to.equal('Like added')
+        expect(message).to.equal('accommodation liked')
         done()
       })
 });
