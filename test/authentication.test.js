@@ -15,8 +15,8 @@ describe('User sign up', () => {
         const user ={
             firstName: "Eddy",
             lastName: "Uwambaje",
-            username: "Eddy1",
-            email: "uwambaqje11@gmail.com",
+            username: "Eddy",
+            email: "uwambaqje1@gmail.com",
             password: "uwambajeee",
             repeat_password: "uwambajeee",
             phoneNumber: "0785058050",
@@ -160,46 +160,14 @@ describe('User sign up', () => {
             });});
     it("Should return 400 for the provided empty fields!", (done) => {
         const user ={
-            firstName: "Eddy",
-            lastName: "Uwambaje",
-            username: "Eddy",
-            email: "uwambaqje1@gmail.com",
-            password: "uwambaje",
-            repeat_password: "uwambaje",
-            phoneNumber: "0785058050",
-            role: "requester"
-        }
-
-        api
-        .post('/api/v1/user/auth/signup')
-          .send(user)
-        .end((err, res) => {
-          const { token } = res.body;
-          expect(res.status).to.equal(created);
-          expect(token);
-          done();
-        });
-    });
-
-    it('Should return 409 for the provided email or username exist', (done) => {
-        const user ={
-            firstName: "Eddy",
-            lastName: "Uwambaje",
-            username: "Eddy",
-            email: "uwambaqje1@gmail.com",
-            password: "uwambaje",
-            repeat_password: "uwambaje",
-            phoneNumber: "0785058050",
-            role: "requester"
         }
         api
-        .post('/api/v1/user/auth/signup')
-          .send(user)
+        .post('/api/v1/user/login')
+        .send(user)
         .end((err, res) => {
-          const { message } = res.body;
-          expect(res.status).to.equal(conflict);
-          expect(message).to.equal('Email already taken!');
-          done();
-        });
-    });
+            const { message } = res.body;
+            expect(res.status).to.equal(400);
+            expect(message);
+            done();
+            });});
   });
