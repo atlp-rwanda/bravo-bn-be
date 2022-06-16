@@ -208,7 +208,7 @@ paths: {
       description: 'Read all notifications',
       parameters: [],
       responses: {
-        204: {
+        200: {
           description: 'success'
         }
       }
@@ -230,7 +230,7 @@ paths: {
         },
       ],
       responses: {
-        204: {
+        200: {
           description: 'success',
         }
       }, 

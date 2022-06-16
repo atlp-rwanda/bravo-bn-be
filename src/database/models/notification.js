@@ -18,6 +18,7 @@ export default (sequelize, DataTypes) => {
     description: DataTypes.STRING,
     url: DataTypes.STRING,
     userId: DataTypes.INTEGER,
+    read: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'Notifications',

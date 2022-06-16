@@ -8,7 +8,6 @@ import server from '../src/app.js';
 
 describe('User notification', () => {
     const created =201;
-    const noContent =204;
     const success =200;
     let newToken;
     
@@ -50,7 +49,7 @@ describe('User notification', () => {
         .delete(`/api/v1/user/notification/${1}`)
         .set('Authorization',`Bearer ${newToken}`)
         .end((err, res) => {
-            expect(res.status).to.equal(noContent);
+            expect(res.status).to.equal(success);
             done();
         });
     });
@@ -60,7 +59,7 @@ describe('User notification', () => {
         .put('/api/v1/user/notification/read')
         .set('Authorization',`Bearer ${newToken}`)
         .end((err, res) => {
-          expect(res.status).to.equal(noContent);
+          expect(res.status).to.equal(success);
           done();
         });
     });

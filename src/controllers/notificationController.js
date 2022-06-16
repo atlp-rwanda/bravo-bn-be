@@ -5,12 +5,12 @@ const Notifications = db['Notifications'];
 
 export const createNotification = catchAsync(async (userId,title, description, url ) => {
     const createdNotification = await Notifications.create({ 
-        title,description,url, userId
+        title,description,url, userId, read: false
      });
 
     return createdNotification;
 
-})
+});
 
 export const getAllNotifications = catchAsync(async (req, res, next) => {
     const allNotifications = await Notifications.findAndCountAll({ where: { 
@@ -19,23 +19,26 @@ export const getAllNotifications = catchAsync(async (req, res, next) => {
 
     res.status(200).json({ status: 'success', data: allNotifications });
 
+});
 
-})
-
-export const removeNotification = catchAsync(async (req, res, next) => {
-     await Notifications.destroy({ where: { 
+export const readNotification = catchAsync(async (req, res, next) => {
+    await Notifications.update({
+         read: true,
+     },{ where: { 
         id: req.params.id
     } });
 
-    res.status(204).json({ status: 'success', data: null });
+    res.status(200).json({ status: 'success', data: "notification is read" });
 
 });
 
-export const removeAllNotification = catchAsync(async (req, res, next) => {
-     await Notifications.destroy({ where: { 
+export const readAllNotification = catchAsync(async (req, res, next) => {
+    await Notifications.update({
+         read: true
+     },{ where: { 
         userId: req.user.id
     } });
 
-    res.status(204).json({ status: 'success', data: null });
+    res.status(200).json({ status: 'success', message: "all notifications are read" });
 
 });

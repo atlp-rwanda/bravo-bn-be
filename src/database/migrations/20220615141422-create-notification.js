@@ -20,6 +20,9 @@ module.exports = {
       userId: {
         type: Sequelize.INTEGER
       },
+      read: {
+        type: Sequelize.BOOLEAN
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
