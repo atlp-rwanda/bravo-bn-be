@@ -24,7 +24,8 @@ security: [
 tags: [
   {name: 'setup swagger', description: 'Testing swagger setup'},
   {name: 'User', description: 'users endpoint'},
-  {name: 'Admin', description: 'update user role'}
+  {name: 'Admin', description: 'update user role'},
+  {name:'Accommodation', description: 'accommodation endpoint'},
 ],
 paths: {
 '/api/v1/testSwagger': {
@@ -110,6 +111,7 @@ paths: {
 '/api/v1/user/auth/signup': {
   post: {
     tags: ['authentication'],
+    security:[],
     description: 'user signup with JWT',
     "requestBody": {
       "required": true,
@@ -171,7 +173,80 @@ paths: {
         }
       }, 
   }
-}
+},
+"/api/v1/accommodation/like/{id}":{
+  put:{
+    tags: [
+      "Accommodation"
+    ],
+    summary: "like or unlike an Accommodation",
+    description: "like or unlike an Accommodation",
+    OperationId: "like or unlike an Accommodation",
+  
+    produces: [
+      "application/json"
+    ],
+    security: [
+      {
+        Authorization: []
+      }
+    ],
+    parameters: [
+      {
+        name: "id",
+        in: "path",
+        type: "string",
+        description: "Accommodation Id",
+        required: true
+      }
+    ],
+    responses: {
+      200: {
+        description: "Successful"
+      },
+      404: {
+        description: "Not Found"
+      },
+      500:{
+        description:"Internal server error"
+      }
+    }
+  }
+  },
+  "/api/v1/accommodation/like/{accommodationId}":{
+  get:{
+    tags: [
+      "Accommodation"
+    ],
+    summary: "Get likes for an Accommodation",
+    description: "Get likes for an Accommodation",
+    OperationId: "Get likes for an Accommodation",
+    security: [],
+    produces: [
+      "application/json"
+    ],
+    parameters: [
+      {
+        name: "accommodationId",
+        in: "path",
+        type: "string",
+        description: "Accommodation Id",
+        required: true
+      }
+    ],
+    responses: {
+      200: {
+        description: "Successful"
+      },
+      404: {
+        description: "Not Found"
+      },
+      500:{
+        description:"Internal server error"
+      }
+    }
+  }
+  },         
 },
 
 components: {
