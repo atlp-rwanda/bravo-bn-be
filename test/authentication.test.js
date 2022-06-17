@@ -27,7 +27,6 @@ describe('User sign up', () => {
         .send(user)
         .end((err, res) => {
           const { message } = res.body;
-          console.log(message);
           expect(res.status).to.equal(unProcessableEntity);
           expect(message);
           done();
@@ -50,7 +49,6 @@ describe('User sign up', () => {
         .send(user)
         .end((err, res) => {
           const { message } = res.body;
-          console.log(res.body);
           expect(res.status).to.equal(unProcessableEntity);
           expect(message);
           done();
@@ -102,7 +100,7 @@ describe('User sign up', () => {
         });
     });
 
-    it('Should return 409 for the provided email or username exist', (done) => {
+    it('Should return 409 for the provided email exist', (done) => {
         const user ={
             firstName: "Eddy",
             lastName: "Uwambaje",
@@ -120,6 +118,27 @@ describe('User sign up', () => {
           const { message } = res.body;
           expect(res.status).to.equal(conflict);
           expect(message).to.equal('Email already taken!');
+          done();
+        });
+    });
+    it('Should return 409 for the provided username exist', (done) => {
+        const user ={
+            firstName: "Eddy",
+            lastName: "Uwambaje",
+            username: "Eddy",
+            email: "uwambaqjeee1@gmail.com",
+            password: "uwambaje",
+            repeat_password: "uwambaje",
+            phoneNumber: "0785058050",
+            role: "requester"
+        }
+        api
+        .post('/api/v1/user/auth/signup')
+          .send(user)
+        .end((err, res) => {
+          const { message } = res.body;
+          expect(res.status).to.equal(conflict);
+          expect(message).to.equal('Username already taken!');
           done();
         });
     });
