@@ -94,8 +94,8 @@ describe('User sign up', () => {
       .send(user)
       .end((err, res) => {
         const { message } = res.body;
-        console.log(message);
-        expect(res.status).to.equal(unProcessableEntity);
+        //console.log(message);
+        expect(res.status).to.equal(created);
         expect(message);
         done();
       });
@@ -113,7 +113,6 @@ describe('User sign up', () => {
     }
     api
       .post('/api/v1/user/auth/signup')
-      .send(user)
       .send(user)
       .end((err, res) => {
         const { message } = res.body;
@@ -179,6 +178,7 @@ describe('User sign up', () => {
           done();
         });
     });
+    done();
   });
   describe('User login', () => {
     const unProcessableEntity = 422;
@@ -230,3 +230,4 @@ describe('User sign up', () => {
         });
     });
   });
+});

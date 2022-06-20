@@ -2,7 +2,7 @@
 module.exports = (sequelize, DataTypes) => {
   const tripRequest = sequelize.define('tripRequest', {
     leavingFrom: DataTypes.STRING,
-    goingTo: DataTypes.STRING,
+    goingTo: DataTypes.INTEGER,
     travelDate: DataTypes.STRING,
     returnDate: DataTypes.STRING,
     travelReason: DataTypes.STRING,

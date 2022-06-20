@@ -4,10 +4,10 @@ import { protect } from '../../controllers/authentication';
 
 const router = express.Router();
 
-router.post('', protect, createTripRequest)
-router.get('', protect, getAllTripRequest);
-router.get('/:id', protect, getSingleTripRequest)
-router.patch('/:id', protect, updateTripRequest)
-router.delete('/:id', protect, deleteTripRequest)
+router.post('/create', protect, createTripRequest)
+router.get('/get', protect, getAllTripRequest);
+router.get('/get/:id', protect, getSingleTripRequest)
+router.patch('/update/:id', protect, updateTripRequest)
+router.delete('/delete/:id', protect, deleteTripRequest)
 
 export default router;

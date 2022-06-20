@@ -10,6 +10,7 @@ export const createTripRequest = async (req, res) => {
         }
 
         const type = req.body.returnDate == null ? 'one way trip' : 'return type trip';
+        const status = "pending";
         const trip = {
             leavingFrom: req.body.leavingFrom,
             goingTo: req.body.goingTo,
@@ -17,7 +18,7 @@ export const createTripRequest = async (req, res) => {
             returnDate: req.body.returnDate,
             travelReason: req.body.travelReason,
             tripType: type,
-            status: req.body.status,
+            status: status,
             requesterId: req.user.id,
             accomodationId: req.body.accomodationId
         }
@@ -41,14 +42,13 @@ export const getSingleTripRequest = async (req, res) => {
             const trip = await tripRequests.findOne({ where: { id: requestId, requesterId: userId, } })
 
             if (!trip) {
-                return res.status(404).json({ status: 'fail', message: `there are no Trip Requests assigned to user with id=  ${userId}` })
+                return res.status(404).json({ status: 'fail', message: `there are no Trip Requests assigned to user with id=  ${requestId}` })
             } else {
                 return res.status(200).json({ status: 'success', data: trip });
             }
 
         } else if (req.user.role == 'manager') {
             const trip = await tripRequests.findOne({ where: { id: requestId } })
-
             if (!trip) {
                 return res.status(404).json({ status: 'fail', message: `there are no Trip Request found` })
             } else {
@@ -57,7 +57,6 @@ export const getSingleTripRequest = async (req, res) => {
         } else {
             return res.status(403).json({ status: 'fail', message: 'you are not allowed to retrieve a trip request' })
         }
-
     } catch (error) {
         res.status(500).json({ status: 'error', message: 'error while getting trip request' })
     }
@@ -66,6 +65,7 @@ export const getSingleTripRequest = async (req, res) => {
 export const getAllTripRequest = async (req, res) => {
     try {
         const userId = req.user.id;
+        console.log(userId);
 
         if (req.user.role == 'requester') {
             const trips = await tripRequests.findAll({ where: { requesterId: userId } })
@@ -113,11 +113,13 @@ export const updateTripRequest = async (req, res) => {
 
         if (tripRequest.status == 'pending') {
             const type = req.body.returnDate == null ? 'one way trip' : 'return type trip';
+            const returnDate = type == 'one way trip' ? null : req.body.returnDate;
+
             const updatedTrip = {
                 leavingFrom: req.body.leavingFrom,
                 goingTo: req.body.goingTo,
                 travelDate: req.body.travelDate,
-                returnDate: req.body.returnDate,
+                returnDate: returnDate,
                 travelReason: req.body.travelReason,
                 tripType: type,
                 status: req.body.stastus,
@@ -156,7 +158,6 @@ export const deleteTripRequest = async (req, res) => {
         const tripRequest = await tripRequests.findOne({
             where: { id: requestId }
         })
-
         if (!tripRequest) {
             return res.status(404).json({ status: 'fail', message: `No Trip Request with id = ${requestId}` })
         }
