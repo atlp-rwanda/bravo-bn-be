@@ -6,7 +6,7 @@ import bcryptjs  from 'bcryptjs';
 import db from '../database/models/index.js';
 import {signupAuthSchema} from '../helpers/validation_schema';
 import {Op} from'sequelize';
-import { createNotification } from './notificationController';
+import  createNotification  from '../services/notification.service';
 
 const User = db['users']
 const { hash, compare } = bcryptjs;
