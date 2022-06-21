@@ -16,17 +16,16 @@ app.use(bodyParser.json());
 app.use(allRoutes);
 
 app.all('*', (req, res, next) => {
-    next(
-        new AppError(`Opps! can't find "${req.originalUrl}" on this server!`, 404)
-    );
+  next(
+    new AppError(`Opps! can't find "${req.originalUrl}" on this server!`, 404),
+  );
 });
 
-
 app.all('*', (req, res, next) => {
-    next(
-        new AppError(`Opps! can't find "${req.originalUrl}" on this server!`, 404)
-    );
-});  
+  next(
+    new AppError(`Opps! can't find "${req.originalUrl}" on this server!`, 404),
+  );
+});
 
 app.use(globalErrorHandler);
 

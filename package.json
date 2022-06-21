@@ -113,9 +113,7 @@
     "nyc": "^15.1.0",
     "sequelize-cli": "^5.5.1"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run format && npm run lint && npm run test"
-    }
-  }
+  "lint-staged": {
+    "*.{js,css,md,ts, tsx}": "prettier --write"
+  } 
 }
