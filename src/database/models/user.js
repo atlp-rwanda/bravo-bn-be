@@ -46,6 +46,7 @@ export default (sequelize, DataTypes) => {
     socialMediaId: DataTypes.STRING,
     provider: DataTypes.STRING,
     isVerified: DataTypes.BOOLEAN,
+    verificationToken:DataTypes.STRING,
     gender: DataTypes.STRING,
     preferredLanguage: DataTypes.STRING,
     role: DataTypes.ENUM(
