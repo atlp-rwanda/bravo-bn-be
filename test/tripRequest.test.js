@@ -72,7 +72,7 @@ describe('perform CRUD operations on trip request', () => {
     it('It should create trip request and return 201', (done) => {
         const tripRequest = {
             leavingFrom: "musanze",
-            goingTo: "Bugesera",
+            goingTo: 2,
             travelDate: "2022-10-5",
             returnDate: "2022-11-6",
             travelReason: "picnic",
@@ -95,7 +95,7 @@ describe('perform CRUD operations on trip request', () => {
     it('It should not create trip and  return 403', (done) => {
         const tripRequest = {
             leavingFrom: "musanze",
-            goingTo: "Bugesera",
+            goingTo: 2,
             travelDate: "2022-10-5",
             returnDate: "2022-11-6",
             travelReason: "picnic",
@@ -116,7 +116,7 @@ describe('perform CRUD operations on trip request', () => {
 
     //requester should retrieve all trip request that  he owns
     it('Requester should get all trip requests and return 200', (done) => {
-        api.get('/api/v1/user/trip/get')
+        api.get('/api/v1/user/trip/get/allTrips')
             .set('Authorization', `Bearer ${requesterToken}`)
             .end((err, res) => {
                 requestId = res.body.data[0].id;
@@ -129,7 +129,7 @@ describe('perform CRUD operations on trip request', () => {
 
     //manager should retrieve all trip requests
     it('Manager should get all trip requests and return 200', (done) => {
-        api.get('/api/v1/user/trip/get')
+        api.get('/api/v1/user/trip/get/allTrips')
             .set('Authorization', `Bearer ${managerToken}`)
             .end((err, res) => {
                 //requestId = res.body.data[0].id;
@@ -170,7 +170,7 @@ describe('perform CRUD operations on trip request', () => {
     it('Requester should update trip request and return 200', (done) => {
         const tripRequest = {
             leavingFrom: "kgl",
-            goingTo: "gcity",
+            goingTo: 2,
             travelDate: "2022-10-5",
             travelReason: "leisure",
             accomodationId: 3
@@ -192,7 +192,7 @@ describe('perform CRUD operations on trip request', () => {
     it('Manger should not update and return 403', (done) => {
         const tripRequest = {
             leavingFrom: "kgl",
-            goingTo: "gcity",
+            goingTo: 2,
             travelDate: "2022-10-5",
             travelReason: "leisure",
             accomodationId: 3
