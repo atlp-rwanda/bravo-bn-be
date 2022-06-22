@@ -4,7 +4,7 @@ module.exports = {
   up: (queryInterface, Sequelize) => queryInterface.bulkInsert('tripRequests', [
     {
       leavingFrom: 'Rubavu',
-      goingTo: 'Mombasa',
+      goingTo: 1,
       travelDate: '2022-07-10',
       returnDate: '2022-07-20',
       travelReason: 'vacation',
@@ -17,7 +17,7 @@ module.exports = {
     },
     {
       leavingFrom: 'kgl',
-      goingTo: 'Gisenyi',
+      goingTo: 2,
       travelDate: '2022-07-10',
       returnDate: '2022-07-20',
       travelReason: 'product lunch',

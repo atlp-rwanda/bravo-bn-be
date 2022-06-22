@@ -14,7 +14,7 @@ module.exports = {
       },
       goingTo: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
       },
       travelDate: {
         allowNull: false,

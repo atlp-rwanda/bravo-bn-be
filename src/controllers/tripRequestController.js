@@ -1,4 +1,5 @@
 import db from '../database/models/index';
+import { tripRequestSchema } from '../helpers/validation_schema';
 const tripRequests = db['tripRequest'];
 
 // create a 'Trip Request' as requester
@@ -8,7 +9,7 @@ export const createTripRequest = async (req, res) => {
             return res.status(403).json({ status: 'fail', message: 'you are not allowed to make a trip request' })
 
         }
-
+        await tripRequestSchema.validateAsync(req.body);
         const type = req.body.returnDate == null ? 'one way trip' : 'return type trip';
         const status = "pending";
         const trip = {
@@ -55,7 +56,7 @@ export const getSingleTripRequest = async (req, res) => {
                 return res.status(200).json({ status: 'success', data: trip })
             }
         } else {
-            return res.status(403).json({ status: 'fail', message: 'you are not allowed to retrieve a trip request' })
+            return res.status(403).json({ status: 'fail', message: 'UnAuthorized' })
         }
     } catch (error) {
         res.status(500).json({ status: 'error', message: 'error while getting trip request' })
@@ -65,7 +66,6 @@ export const getSingleTripRequest = async (req, res) => {
 export const getAllTripRequest = async (req, res) => {
     try {
         const userId = req.user.id;
-        console.log(userId);
 
         if (req.user.role == 'requester') {
             const trips = await tripRequests.findAll({ where: { requesterId: userId } })
@@ -87,7 +87,6 @@ export const getAllTripRequest = async (req, res) => {
         } else {
             return res.status(403).json({ status: 'fail', message: 'you are not allowed to retrieve a trip request' })
         }
-
     } catch (error) {
         res.status(500).json({ status: 'error', message: 'error while getting trip request' })
     }
@@ -100,8 +99,7 @@ export const updateTripRequest = async (req, res) => {
         }
         const requestId = req.params.id;
         const userId = req.user.id;
-        console.log('user', userId);
-        console.log('request', requestId);
+
         const tripRequest = await tripRequests.findOne({
             where: { id: requestId }
         })
@@ -112,6 +110,7 @@ export const updateTripRequest = async (req, res) => {
         }
 
         if (tripRequest.status == 'pending') {
+            await tripRequestSchema.validateAsync(req.body);
             const type = req.body.returnDate == null ? 'one way trip' : 'return type trip';
             const returnDate = type == 'one way trip' ? null : req.body.returnDate;
 
@@ -156,7 +155,7 @@ export const deleteTripRequest = async (req, res) => {
         const userId = req.user.id;
 
         const tripRequest = await tripRequests.findOne({
-            where: { id: requestId }
+            where: { id: requestId, requesterId: userId }
         })
         if (!tripRequest) {
             return res.status(404).json({ status: 'fail', message: `No Trip Request with id = ${requestId}` })
@@ -164,11 +163,10 @@ export const deleteTripRequest = async (req, res) => {
 
         if (tripRequest.status == 'pending') {
             await tripRequests.destroy({ where: { id: requestId, requesterId: userId } })
-            res.status(200).json({ status: 'success', message: 'Trip Request Deleted successfully' })
+            res.status(202).json({ status: 'success', message: 'Trip Request Deleted successfully' })
         } else {
             return res.status(404).json({ status: 'fail', message: `Trip Request with id = ${requestId} is approved or rejected` })
         }
-
     } catch (error) {
         return res.status(500).json(error.message);
     }

@@ -11,9 +11,7 @@ const api = chai.request(app).keepOpen();
 let requesterToken, managerToken, requestId;
 
 const { expect } = chai;
-const cleanAlltables = async () => {
-    await tripRequests.destroy({ where: {} });
-};
+
 const requester = {
     firstName: "sano",
     lastName: "thierry",
@@ -46,7 +44,6 @@ describe('User signUp ', () => {
             .end((err, res) => {
                 const { message } = res.body;
                 requesterToken = res.body.token;
-                //console.log(token);
                 expect(res.status).to.equal(201);
                 expect(message);
                 done();
@@ -61,7 +58,6 @@ describe('User signUp ', () => {
             .end((err, res) => {
                 const { message } = res.body;
                 managerToken = res.body.token;
-                console.log(message);
                 expect(res.status).to.equal(201);
                 expect(message);
                 done();
@@ -71,9 +67,6 @@ describe('User signUp ', () => {
 
 
 describe('perform CRUD operations on trip request', () => {
-    /* before(async () => {
-         await cleanAlltables();
-     })*/
 
     // requester should create trip request
     it('It should create trip request and return 201', (done) => {
@@ -86,12 +79,11 @@ describe('perform CRUD operations on trip request', () => {
             accomodationId: 3
         };
 
-        api.post('/api/v1/user/trip/create')
+        api.post('/api/v1/user/trip')
             .set('Authorization', `Bearer ${requesterToken}`)
             .send(tripRequest)
             .end((err, res) => {
                 const { message } = res.body;
-                //console.log(message);
                 expect(res.status).to.equal(201);
                 expect(message);
                 done();
@@ -110,7 +102,7 @@ describe('perform CRUD operations on trip request', () => {
             accomodationId: 3
         };
 
-        api.post('/api/v1/user/trip/create')
+        api.post('/api/v1/user/trip')
             .set('Authorization', `Bearer ${managerToken}`)
             .send(tripRequest)
             .end((err, res) => {
@@ -151,7 +143,7 @@ describe('perform CRUD operations on trip request', () => {
     //requester should retrive single trip request by its id
     it('Requester should get single trip request return 200', (done) => {
 
-        api.get(`/api/v1/user/trip/get/${requestId}`)
+        api.get(`/api/v1/user/trip/${requestId}`)
             .set('Authorization', `Bearer ${requesterToken}`)
             .end((err, res) => {
                 const { message } = res.body;
@@ -164,7 +156,7 @@ describe('perform CRUD operations on trip request', () => {
     //manager should retrive single trip request by its id
     it('Manager should get single trip request return 200', (done) => {
 
-        api.get(`/api/v1/user/trip/get/${requestId}`)
+        api.get(`/api/v1/user/trip/${requestId}`)
             .set('Authorization', `Bearer ${managerToken}`)
             .end((err, res) => {
                 const { message } = res.body;
@@ -184,7 +176,7 @@ describe('perform CRUD operations on trip request', () => {
             accomodationId: 3
         };
 
-        api.patch(`/api/v1/user/trip/update/${requestId}`)
+        api.patch(`/api/v1/user/trip/${requestId}`)
             .set('Authorization', `Bearer ${requesterToken}`)
             .send(tripRequest)
             .end((err, res) => {
@@ -206,7 +198,7 @@ describe('perform CRUD operations on trip request', () => {
             accomodationId: 3
         };
 
-        api.patch(`/api/v1/user/trip/update/${requestId}`)
+        api.patch(`/api/v1/user/trip/${requestId}`)
             .set('Authorization', `Bearer ${managerToken}`)
             .send(tripRequest)
             .end((err, res) => {
@@ -219,13 +211,13 @@ describe('perform CRUD operations on trip request', () => {
     });
 
     //requester should delete trip request by its id
-    it('It should delete trip request and return 200', (done) => {
+    it('It should delete trip request and return 202', (done) => {
 
-        api.delete(`/api/v1/user/trip/delete/${requestId}`)
+        api.delete(`/api/v1/user/trip/${requestId}`)
             .set('Authorization', `Bearer ${requesterToken}`)
             .end((err, res) => {
                 const { message } = res.body;
-                expect(res.status).to.equal(200);
+                expect(res.status).to.equal(202);
                 expect(message);
                 done();
             });
@@ -234,7 +226,7 @@ describe('perform CRUD operations on trip request', () => {
     //manager should not delete trip request 
     it('It should return 403 for Unauthorized', (done) => {
 
-        api.delete(`/api/v1/user/trip/delete/${requestId}`)
+        api.delete(`/api/v1/user/trip/${requestId}`)
             .set('Authorization', `Bearer ${managerToken}`)
             .end((err, res) => {
                 const { message } = res.body;
