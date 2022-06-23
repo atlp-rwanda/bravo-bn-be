@@ -8,10 +8,22 @@ module.exports = (sequelize, DataTypes) => {
     travelReason: DataTypes.STRING,
     tripType: DataTypes.STRING,
     status: DataTypes.STRING,
-    requesterId: DataTypes.INTEGER,
     accomodationId: DataTypes.INTEGER
   }, {});
   tripRequest.associate = function (models) {
+    tripRequest.belongsTo(models.users, {
+      foreignKey: 'requesterId',
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE'
+
+    });
+
+    /* this is test
+    static associate({ users, UserAccommodation }) {
+      this.belongsToMany(users, {
+        through: UserAccommodation,
+        foreignKey: 'accommodationId',
+      });*/
     // associations can be defined here
   };
   return tripRequest;

@@ -36,8 +36,16 @@ module.exports = {
         type: Sequelize.STRING
       },
       requesterId: {
+
+        type: Sequelize.INTEGER,
         allowNull: false,
-        type: Sequelize.INTEGER
+        references: {
+          model: 'users',
+          key: 'id',
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+
       },
       accomodationId: {
         allowNull: false,
