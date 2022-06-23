@@ -116,7 +116,7 @@ describe('perform CRUD operations on trip request', () => {
 
     //requester should retrieve all trip request that  he owns
     it('Requester should get all trip requests and return 200', (done) => {
-        api.get('/api/v1/user/trip/get/allTrips')
+        api.get('/api/v1/user/trip/get')
             .set('Authorization', `Bearer ${requesterToken}`)
             .end((err, res) => {
                 requestId = res.body.data[0].id;
@@ -129,7 +129,7 @@ describe('perform CRUD operations on trip request', () => {
 
     //manager should retrieve all trip requests
     it('Manager should get all trip requests and return 200', (done) => {
-        api.get('/api/v1/user/trip/get/allTrips')
+        api.get('/api/v1/user/trip/get')
             .set('Authorization', `Bearer ${managerToken}`)
             .end((err, res) => {
                 //requestId = res.body.data[0].id;
@@ -143,7 +143,7 @@ describe('perform CRUD operations on trip request', () => {
     //requester should retrive single trip request by its id
     it('Requester should get single trip request return 200', (done) => {
 
-        api.get(`/api/v1/user/trip/${requestId}`)
+        api.get(`/api/v1/user/trip/get/${requestId}`)
             .set('Authorization', `Bearer ${requesterToken}`)
             .end((err, res) => {
                 const { message } = res.body;
@@ -156,7 +156,7 @@ describe('perform CRUD operations on trip request', () => {
     //manager should retrive single trip request by its id
     it('Manager should get single trip request return 200', (done) => {
 
-        api.get(`/api/v1/user/trip/${requestId}`)
+        api.get(`/api/v1/user/trip/get/${requestId}`)
             .set('Authorization', `Bearer ${managerToken}`)
             .end((err, res) => {
                 const { message } = res.body;
@@ -176,7 +176,7 @@ describe('perform CRUD operations on trip request', () => {
             accomodationId: 3
         };
 
-        api.patch(`/api/v1/user/trip/${requestId}`)
+        api.patch(`/api/v1/user/trip/${requestId}/update`)
             .set('Authorization', `Bearer ${requesterToken}`)
             .send(tripRequest)
             .end((err, res) => {
@@ -198,7 +198,7 @@ describe('perform CRUD operations on trip request', () => {
             accomodationId: 3
         };
 
-        api.patch(`/api/v1/user/trip/${requestId}`)
+        api.patch(`/api/v1/user/trip/${requestId}/update`)
             .set('Authorization', `Bearer ${managerToken}`)
             .send(tripRequest)
             .end((err, res) => {

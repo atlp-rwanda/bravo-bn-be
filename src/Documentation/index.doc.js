@@ -258,7 +258,7 @@ const options = {
       },
     },
 
-    '/api/v1/user/trip/get/allTrips': {
+    '/api/v1/user/trip/get': {
       get: {
         tags: ['Trip Request'],
         description: 'get all trip requests',
@@ -273,7 +273,7 @@ const options = {
         },
       },
     },
-    '/api/v1/user/trip/{id}': {
+    '/api/v1/user/trip/get/{id}': {
       get: {
         tags: ['Trip Request'],
         description: 'get single trip request',
@@ -298,12 +298,12 @@ const options = {
         },
       },
     },
-    '/api/v1/user/trip/{id}': {
+    '/api/v1/user/trip/{id}/update': {
       patch: {
         tags: ['Trip Request'],
         description: 'update trip request',
         parameters: [
-          /*
+
           {
             name: 'id',
             in: 'path',
@@ -312,7 +312,7 @@ const options = {
             schema: {
               type: 'string',
             },
-          }*/
+          }
         ],
         requestBody: {
           content: {
