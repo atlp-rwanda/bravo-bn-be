@@ -324,6 +324,72 @@ const options = {
         },
       },
     },
+'/api/v1/user/forgotpassword': {
+  post: {
+    tags: ['Reset Password'],
+    description: 'Reset password',
+    security: [],
+    parameters: [],
+    requestBody: {
+      content: {
+        'application/json': {
+          schema: {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                }
+            },
+          },
+          example: {
+            email: 'hishamunda221015883@gmail.com',
+          },
+        },
+      },
+      required: true,
+    },
+    responses: {
+      200: {
+        description: 'successfully',
+      }
+    },
+  }, 
+  },
+  '/api/v1/user/resetpassword/{token}': {
+    patch: {
+      tags: [
+        'Reseting Password',
+      ],
+      summary: 'reseting the password',
+      parameters: [
+        {
+          name: 'token',
+          in: 'path',
+          required: true,
+          description: 'token that was sent to your email adress in password reset link',
+        }, {
+          name: 'new password',
+          in: 'body',
+          required: true,
+          description: 'new password you want to keep',
+          schema: {
+            example: {
+              password: 'NewPassword',
+            },
+          },
+        },
+      ],
+      consumes: [
+        'application/json',
+      ],
+      responses: {
+        200: {
+          description: 'password reset successfully',
+        },
+      },
+    },
+  },
+},
 
     '/api/v1/accomodation/{id}': {
       get: {
@@ -804,8 +870,7 @@ const options = {
           },
         },
       },
-    },
-  },
+    
 
   components: {
     schemas: {
@@ -1004,6 +1069,7 @@ const options = {
       },
     },
   },
-};
+    }
+  }
 docrouter.use('/', serve, setup(options));
 export default docrouter;
