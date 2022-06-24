@@ -111,6 +111,7 @@ export const updateTripRequest = async (req, res) => {
 
         if (tripRequest.status == 'pending') {
             await tripRequestSchema.validateAsync(req.body);
+            const status = "pending";
             const type = req.body.returnDate == null ? 'one way trip' : 'return type trip';
             const returnDate = type == 'one way trip' ? null : req.body.returnDate;
 
@@ -121,7 +122,7 @@ export const updateTripRequest = async (req, res) => {
                 returnDate: returnDate,
                 travelReason: req.body.travelReason,
                 tripType: type,
-                status: req.body.stastus,
+                status: status,
                 requesterId: req.user.id,
                 accomodationId: req.body.accomodationId
             }
