@@ -48,8 +48,14 @@ module.exports = {
 
       },
       accomodationId: {
+        type: Sequelize.INTEGER,
         allowNull: false,
-        type: Sequelize.INTEGER
+        references: {
+          model: 'accomodations',
+          key: 'id',
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       },
       createdAt: {
         allowNull: false,

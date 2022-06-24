@@ -76,7 +76,7 @@ describe('perform CRUD operations on trip request', () => {
             travelDate: "2022-10-5",
             returnDate: "2022-11-6",
             travelReason: "picnic",
-            accomodationId: 3
+            accomodationId: 1
         };
 
         api.post('/api/v1/user/trip')
@@ -99,7 +99,7 @@ describe('perform CRUD operations on trip request', () => {
             travelDate: "2022-10-5",
             returnDate: "2022-11-6",
             travelReason: "picnic",
-            accomodationId: 3
+            accomodationId: 1
         };
 
         api.post('/api/v1/user/trip')
@@ -173,7 +173,7 @@ describe('perform CRUD operations on trip request', () => {
             goingTo: 2,
             travelDate: "2022-10-5",
             travelReason: "leisure",
-            accomodationId: 3
+            accomodationId: 1
         };
 
         api.patch(`/api/v1/user/trip/${requestId}/update`)
@@ -195,7 +195,7 @@ describe('perform CRUD operations on trip request', () => {
             goingTo: 2,
             travelDate: "2022-10-5",
             travelReason: "leisure",
-            accomodationId: 3
+            accomodationId: 1
         };
 
         api.patch(`/api/v1/user/trip/${requestId}/update`)
