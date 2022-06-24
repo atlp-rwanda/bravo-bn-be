@@ -1,5 +1,5 @@
-import { Router } from "express";
-import { serve, setup } from "swagger-ui-express";
+import { Router } from 'express';
+import { serve, setup } from 'swagger-ui-express';
 
 const docrouter = Router();
 
@@ -7,57 +7,57 @@ const local = process.env.LOCAL_HOST;
 const heroku = process.env.DB_CONNECT;
 
 const options = {
-  openapi: "3.0.1",
+  openapi: '3.0.1',
   info: {
-    title: "Barefoot Nomad API Documentation",
-    version: "1.0.0",
-    description: "This is the backend api for Barefoot Nomad project.",
+    title: 'Barefoot Nomad API Documentation',
+    version: '1.0.0',
+    description: 'This is the backend api for Barefoot Nomad project.',
   },
-  host: process.env.NODE_ENV === "production" ? heroku : local,
-  basePath: "/api",
+  host: process.env.NODE_ENV === 'production' ? heroku : local,
+  basePath: '/api',
   security: [
     {
       bearerAuth: [],
     },
   ],
   tags: [
-    { name: "setup swagger", description: "Testing swagger setup" },
-    { name: "User", description: "users endpoint" },
-    { name: "Admin", description: "update user role" },
+    { name: 'setup swagger', description: 'Testing swagger setup' },
+    { name: 'User', description: 'users endpoint' },
+    { name: 'Admin', description: 'update user role' },
   ],
   paths: {
-    "/api/v1/testSwagger": {
+    '/api/v1/testSwagger': {
       get: {
-        tags: ["setup swagger"],
-        description: "testing swagger setup",
+        tags: ['setup swagger'],
+        description: 'testing swagger setup',
         security: [],
         parameters: [],
 
         responses: {
           200: {
-            description: "success status",
+            description: 'success status',
           },
           500: {
-            description: "Internal Server Error",
+            description: 'Internal Server Error',
           },
         },
       },
     },
-    "/api/v1/user/login": {
+    '/api/v1/user/login': {
       post: {
-        tags: ["User"],
-        description: "login user",
+        tags: ['User'],
+        description: 'login user',
         security: [],
         parameters: [],
         requestBody: {
           content: {
-            "application/json": {
+            'application/json': {
               schema: {
-                $ref: "#/components/schemas/User",
+                $ref: '#/components/schemas/User',
               },
               example: {
-                email: "john@gmail.com",
-                password: "aaaaaaaa",
+                email: 'john@gmail.com',
+                password: 'aaaaaaaa',
               },
             },
           },
@@ -65,87 +65,87 @@ const options = {
         },
         responses: {
           200: {
-            description: "successfully",
+            description: 'successfully',
           },
           400: {
-            description: "Invalid credation",
+            description: 'Invalid credation',
           },
           500: {
-            description: "Internal Server Error",
+            description: 'Internal Server Error',
           },
         },
       },
     },
-    "/api/v1/user/": {
+    '/api/v1/user/': {
       get: {
-        tags: ["User"],
-        description: "get all user data",
+        tags: ['User'],
+        description: 'get all user data',
         security: [],
         parameters: [],
         responses: {
           200: {
-            description: "successfully",
+            description: 'successfully',
           },
           400: {
-            description: "Invalid credation",
+            description: 'Invalid credation',
           },
           500: {
-            description: "Internal Server Error",
+            description: 'Internal Server Error',
           },
         },
       },
     },
-    "/api/v1/user/{id}": {
+    '/api/v1/user/{id}': {
       get: {
-        tags: ["User"],
-        description: "get all user data",
+        tags: ['User'],
+        description: 'get all user data',
         parameters: [
           {
-            name: "id",
-            in: "path",
-            description: "user id",
+            name: 'id',
+            in: 'path',
+            description: 'user id',
             required: true,
             schema: {
-              type: "string",
+              type: 'string',
             },
           },
         ],
         responses: {
           200: {
-            description: "successfully",
+            description: 'successfully',
           },
           400: {
-            description: "Invalid credation",
+            description: 'Invalid credation',
           },
           500: {
-            description: "Internal Server Error",
+            description: 'Internal Server Error',
           },
         },
       },
     },
-    "/api/v1/user/update": {
+    '/api/v1/user/update': {
       patch: {
-        tags: ["User"],
-        description: "update user data",
+        tags: ['User'],
+        description: 'update user data',
         parameters: [],
         requestBody: {
           content: {
-            "application/json": {
+            'application/json': {
               schema: {
-                $ref: "#/components/schemas/User",
+                $ref: '#/components/schemas/User',
               },
               example: {
-                firstName: "Samuel",
-                lastName: "Doe",
-                username: "johnDoe",
-                email: "john@gmail.com",
-                phoneNumber: "0780591269",
-                image: "",
-                gender: "male",
-                preferredLanguage: "kinyarwanda",
-                preferredCurrency: "RWF",
-                department: "developers",
-                lineManager: "Mugisha Eric",
+                firstName: 'Samuel',
+                lastName: 'Doe',
+                username: 'johnDoe',
+                email: 'john@gmail.com',
+                phoneNumber: '0780591269',
+                image: '',
+                gender: 'male',
+                preferredLanguage: 'kinyarwanda',
+                preferredCurrency: 'RWF',
+                department: 'developers',
+                lineManager: 'Mugisha Eric',
               },
             },
           },
@@ -153,27 +153,27 @@ const options = {
         },
         responses: {
           200: {
-            description: "successfully",
+            description: 'successfully',
           },
           400: {
-            description: "Invalid credation",
+            description: 'Invalid credation',
           },
           500: {
-            description: "Internal Server Error",
+            description: 'Internal Server Error',
           },
         },
       },
     },
-    "/api/v1/user/roles": {
+    '/api/v1/user/roles': {
       put: {
-        tags: ["Admin"],
-        description: "Updating user roles",
+        tags: ['Admin'],
+        description: 'Updating user roles',
         parameters: [],
         requestBody: {
           content: {
-            "application/json": {
+            'application/json': {
               schema: {
-                $ref: "#/components/schemas/userRole",
+                $ref: '#/components/schemas/userRole',
               },
             },
           },
@@ -181,62 +181,62 @@ const options = {
         },
         responses: {
           200: {
-            description: "success",
+            description: 'success',
           },
           500: {
-            description: "Internal server error",
+            description: 'Internal server error',
           },
         },
       },
     },
-    "/api/v1/user/auth/signup": {
+    '/api/v1/user/auth/signup': {
       post: {
         security: [],
-        tags: ["authentication"],
-        description: "user signup with JWT",
+        tags: ['authentication'],
+        description: 'user signup with JWT',
         requestBody: {
           required: true,
           content: {
-            "application/json": {
+            'application/json': {
               schema: {
-                $ref: "#/components/schemas/SignupAuthShema",
+                $ref: '#/components/schemas/SignupAuthShema',
               },
               example: {
-                firstName: "eddy",
-                lastName: "leftie",
-                username: "leftie",
-                phoneNumber: "0785632478",
-                role: "requester",
-                gender: "male",
-                email: "uwambajeddy@gmail.com",
-                password: "leftie",
-                repeat_password: "leftie",
+                firstName: 'eddy',
+                lastName: 'leftie',
+                username: 'leftie',
+                phoneNumber: '0785632478',
+                role: 'requester',
+                gender: 'male',
+                email: 'uwambajeddy@gmail.com',
+                password: 'leftie',
+                repeat_password: 'leftie',
               },
             },
           },
         },
         responses: {
           200: {
-            description: "success status",
+            description: 'success status',
           },
         },
       },
     },
-    "/api/v1/user/login": {
+    '/api/v1/user/login': {
       post: {
-        tags: ["User"],
-        description: "login user",
+        tags: ['User'],
+        description: 'login user',
         security: [],
         parameters: [],
         requestBody: {
           content: {
-            "application/json": {
+            'application/json': {
               schema: {
-                $ref: "#/components/schemas/User",
+                $ref: '#/components/schemas/User',
               },
               example: {
-                email: "john@gmail.com",
-                password: "123456",
+                email: 'john@gmail.com',
+                password: '123456',
               },
             },
           },
@@ -244,30 +244,30 @@ const options = {
         },
         responses: {
           200: {
-            description: "successfully",
+            description: 'successfully',
           },
           400: {
-            description: "Invalid credation",
+            description: 'Invalid credation',
           },
           500: {
-            description: "Internal Server Error",
+            description: 'Internal Server Error',
           },
         },
       },
     },
-    "/api/v1/accomodation/create": {
+    '/api/v1/accomodation/create': {
       post: {
-        tags: ["Accomodation"],
-        summary: "Adding accomodation facility",
-        description: "accomodation management of facility operation",
-        operationId: "ADD_ACCOMODATION",
-        consumes: ["multipart/form-data"],
+        tags: ['Accomodation'],
+        summary: 'Adding accomodation facility',
+        description: 'accomodation management of facility operation',
+        operationId: 'ADD_ACCOMODATION',
+        consumes: ['multipart/form-data'],
         parameters: [],
         requestBody: {
           content: {
-            "multipart/form-data": {
+            'multipart/form-data': {
               schema: {
-                $ref: "#/components/schemas/accomodation",
+                $ref: '#/components/schemas/accomodation',
               },
             },
           },
@@ -275,69 +275,69 @@ const options = {
         },
         responses: {
           200: {
-            description: "New Accomodation have been created",
+            description: 'New Accomodation have been created',
           },
         },
       },
     },
-    "/api/v1/accomodation": {
+    '/api/v1/accomodation': {
       get: {
-        tags: ["Accomodation"],
-        summary: "Get all accomodation",
-        description: "list of all accomodation",
-        OperationId: "List of all accomodation",
+        tags: ['Accomodation'],
+        summary: 'Get all accomodation',
+        description: 'list of all accomodation',
+        OperationId: 'List of all accomodation',
         responses: {
           200: {
-            description: "Retrieved",
+            description: 'Retrieved',
           },
         },
       },
     },
-    "/api/v1/accomodation/{id}": {
+    '/api/v1/accomodation/{id}': {
       get: {
-        tags: ["Accomodation"],
-        summary: "Fetch single accomodation",
-        description: "Fetch single accomodation",
-        operationId: "Fetch accomodation",
-        produces: ["application/json"],
+        tags: ['Accomodation'],
+        summary: 'Fetch single accomodation',
+        description: 'Fetch single accomodation',
+        operationId: 'Fetch accomodation',
+        produces: ['application/json'],
         parameters: [
           {
-            name: "id",
-            in: "path",
-            type: "string",
-            description: "accomodation Id",
+            name: 'id',
+            in: 'path',
+            type: 'string',
+            description: 'accomodation Id',
             required: true,
           },
         ],
         responses: {
           200: {
-            description: "a single accomodation received successfully",
+            description: 'a single accomodation received successfully',
           },
         },
       },
     },
-    "/api/v1/accomodation/update/{id}": {
+    '/api/v1/accomodation/update/{id}': {
       put: {
-        tags: ["Accomodation"],
-        summary: "update accomodation",
-        description: "update accomodation",
-        operationId: "update accomodation",
+        tags: ['Accomodation'],
+        summary: 'update accomodation',
+        description: 'update accomodation',
+        operationId: 'update accomodation',
 
-        produces: ["application/json"],
+        produces: ['application/json'],
         parameters: [
           {
-            name: "id",
-            in: "path",
-            type: "string",
-            description: "Accomodation Id",
+            name: 'id',
+            in: 'path',
+            type: 'string',
+            description: 'Accomodation Id',
             required: true,
           },
         ],
         requestBody: {
           content: {
-            "multipart/form-data": {
+            'multipart/form-data': {
               schema: {
-                $ref: "#/components/schemas/accomodation",
+                $ref: '#/components/schemas/accomodation',
               },
             },
           },
@@ -345,58 +345,58 @@ const options = {
         },
         responses: {
           201: {
-            description: "Accomodation Updated Successfully",
+            description: 'Accomodation Updated Successfully',
           },
         },
       },
     },
-    "/api/v1/accomodation/delete/{id}": {
+    '/api/v1/accomodation/delete/{id}': {
       delete: {
-        tags: ["Accomodation"],
-        summary: "Delete an Accomodation",
-        description: "Delete an Accomodation",
-        OperationId: "Delete an Accomodation",
+        tags: ['Accomodation'],
+        summary: 'Delete an Accomodation',
+        description: 'Delete an Accomodation',
+        OperationId: 'Delete an Accomodation',
 
-        produces: ["application/json"],
+        produces: ['application/json'],
         parameters: [
           {
-            name: "id",
-            in: "path",
-            type: "string",
-            description: "Accomodation Id",
+            name: 'id',
+            in: 'path',
+            type: 'string',
+            description: 'Accomodation Id',
             required: true,
           },
         ],
         responses: {
           200: {
-            description: "Accomodation deleted successful",
+            description: 'Accomodation deleted successful',
           },
           404: {
-            description: "Not Found",
+            description: 'Not Found',
           },
         },
       },
     },
-    "/api/v1/rooms/{accomodationId}": {
+    '/api/v1/rooms/{accomodationId}': {
       post: {
-        tags: ["room"],
-        summary: "Creating user using Accomodation id",
+        tags: ['room'],
+        summary: 'Creating user using Accomodation id',
         description:
-          "You have to create a room according to the facility you have where you use accomodation id",
+          'You have to create a room according to the facility you have where you use accomodation id',
         parameters: [
           {
-            name: "accomodationId",
-            in: "path",
-            type: "string",
-            description: "Accomodation Id",
+            name: 'accomodationId',
+            in: 'path',
+            type: 'string',
+            description: 'Accomodation Id',
             required: true,
           },
         ],
         requestBody: {
           content: {
-            "application/json": {
+            'application/json': {
               schema: {
-                $ref: "#/components/schemas/rooms",
+                $ref: '#/components/schemas/rooms',
               },
             },
           },
@@ -405,67 +405,67 @@ const options = {
 
         responses: {
           200: {
-            description: "Room was successfully created",
+            description: 'Room was successfully created',
           },
         },
       },
     },
-    "/api/v1/rooms": {
+    '/api/v1/rooms': {
       get: {
-        tags: ["room"],
-        summary: "Get all rooms",
-        description: "list of all rooms",
-        OperationId: "List of all rooms",
+        tags: ['room'],
+        summary: 'Get all rooms',
+        description: 'list of all rooms',
+        OperationId: 'List of all rooms',
         responses: {
           200: {
-            description: "received all rooms",
+            description: 'received all rooms',
           },
         },
       },
     },
-    "/api/v1/rooms/{id}": {
+    '/api/v1/rooms/{id}': {
       get: {
-        tags: ["room"],
-        summary: "Fetch a single room",
-        description: "Fetch a single room",
-        operationId: "Fetch a single room",
-        produces: ["application/json"],
+        tags: ['room'],
+        summary: 'Fetch a single room',
+        description: 'Fetch a single room',
+        operationId: 'Fetch a single room',
+        produces: ['application/json'],
         parameters: [
           {
-            name: "id",
-            in: "path",
-            type: "string",
-            description: "room id",
+            name: 'id',
+            in: 'path',
+            type: 'string',
+            description: 'room id',
             required: true,
           },
         ],
         responses: {
           200: {
-            description: "a single room received successfully",
+            description: 'a single room received successfully',
           },
         },
       },
       put: {
-        tags: ["room"],
-        summary: "update room with room id",
-        description: "update room found",
-        operationId: "update accomodation ",
+        tags: ['room'],
+        summary: 'update room with room id',
+        description: 'update room found',
+        operationId: 'update accomodation ',
 
-        produces: ["application/json"],
+        produces: ['application/json'],
         parameters: [
           {
-            name: "id",
-            in: "path",
-            type: "string",
-            description: "room Id",
+            name: 'id',
+            in: 'path',
+            type: 'string',
+            description: 'room Id',
             required: true,
           },
         ],
         requestBody: {
           content: {
-            "application/json": {
+            'application/json': {
               schema: {
-                $ref: "#/components/schemas/rooms",
+                $ref: '#/components/schemas/rooms',
               },
             },
           },
@@ -473,194 +473,321 @@ const options = {
         },
         responses: {
           201: {
-            description: "Room Updated Successfully",
+            description: 'Room Updated Successfully',
           },
         },
       },
       delete: {
-        tags: ["room"],
-        summary: "Delete a room",
-        description: "Delete an room",
-        OperationId: "Delete an room",
+        tags: ['room'],
+        summary: 'Delete a room',
+        description: 'Delete an room',
+        OperationId: 'Delete an room',
 
-        produces: ["application/json"],
+        produces: ['application/json'],
         parameters: [
           {
-            name: "id",
-            in: "path",
-            type: "string",
-            description: "Room ID",
+            name: 'id',
+            in: 'path',
+            type: 'string',
+            description: 'Room ID',
             required: true,
           },
         ],
         responses: {
           200: {
-            description: "Room deleted successful",
+            description: 'Room deleted successful',
           },
           404: {
-            description: "Not Found",
+            description: 'Not Found',
           },
         },
       },
     },
+    '/api/v1/location/create': {
+      post: {
+        tags: ['locations'],
+        summary: 'Creating user location',
+        description: 'You have to create a location that will be accessed ',
+        parameters: [],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/locations',
+              },
+            },
+          },
+          required: true,
+        },
 
+        responses: {
+          200: {
+            description: 'location was successfully created',
+          },
+        },
+      },
+    },
+    '/api/v1/location': {
+      get: {
+        tags: ['locations'],
+        summary: 'Get all locations',
+        description: 'list of all locations',
+        OperationId: 'List of all locations',
+        responses: {
+          200: {
+            description: 'received all locations',
+          },
+        },
+      },
+    },
+    '/api/v1/location/{id}': {
+      get: {
+        tags: ['locations'],
+        summary: 'Fetch a single location',
+        description: 'Fetch a single location',
+        operationId: 'Fetch a single location',
+        produces: ['application/json'],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            type: 'string',
+            description: 'location id',
+            required: true,
+          },
+        ],
+        responses: {
+          200: {
+            description: 'a single location received successfully',
+          },
+        },
+      },
+      put: {
+        tags: ['locations'],
+        summary: 'update location with room id',
+        description: 'update location  found',
+        operationId: 'update locationId ',
+
+        produces: ['application/json'],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            type: 'string',
+            description: 'location Id',
+            required: true,
+          },
+        ],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/locations',
+              },
+            },
+          },
+          required: true,
+        },
+        responses: {
+          201: {
+            description: 'Location Updated Successfully',
+          },
+        },
+      },
+      delete: {
+        tags: ['locations'],
+        summary: 'Delete a location',
+        description: 'Delete an location',
+        OperationId: 'Delete an location',
+
+        produces: ['application/json'],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            type: 'string',
+            description: 'Location ID',
+            required: true,
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Location deleted successful',
+          },
+          404: {
+            description: 'Not Found',
+          },
+        },
+      },
+    },
   },
 
   components: {
     schemas: {
       userRole: {
-        type: "object",
+        type: 'object',
         properties: {
           email: {
-            type: "string",
-            description: "user email",
+            type: 'string',
+            description: 'user email',
           },
           role: {
-            type: "string",
-            description: "new role to set to user",
+            type: 'string',
+            description: 'new role to set to user',
           },
         },
       },
       SignupAuthShema: {
-        type: "object",
+        type: 'object',
         properties: {
           username: {
-            type: "string",
+            type: 'string',
           },
           firstName: {
-            type: "string",
+            type: 'string',
           },
           lastName: {
-            type: "string",
+            type: 'string',
           },
           phoneNumber: {
-            type: "string",
+            type: 'string',
           },
           password: {
-            type: "string",
+            type: 'string',
           },
           repeat_password: {
-            type: "string",
+            type: 'string',
           },
           email: {
-            type: "string",
+            type: 'string',
           },
         },
       },
       User: {
-        type: "object",
+        type: 'object',
 
         properties: {
           firstName: {
-            type: "string",
-            description: "new role to set to user",
+            type: 'string',
+            description: 'new role to set to user',
           },
           lastName: {
-            type: "string",
+            type: 'string',
             description: "User's fullname",
           },
           email: {
-            type: "string",
+            type: 'string',
             description: "User's email",
           },
           phoneNumber: {
-            type: "string",
+            type: 'string',
             description: "User's phone number",
           },
           image: {
-            type: "string",
+            type: 'string',
             description: "User's image url",
-            format: "binary",
+            format: 'binary',
           },
           gender: {
-            type: "string",
+            type: 'string',
             description: "User's gender",
           },
           preferredLanguage: {
-            type: "string",
+            type: 'string',
             description: "User's preferred language",
           },
           preferredCurrency: {
-            type: "string",
+            type: 'string',
             description: "User's preferred currency",
           },
           department: {
-            type: "string",
+            type: 'string',
             description: "User's department",
           },
           lineManager: {
-            type: "string",
+            type: 'string',
             description: "User's line manager",
           },
         },
       },
       rooms: {
-        type: "object",
+        type: 'object',
         properties: {
           bedType: {
-            type: "string",
+            type: 'string',
           },
           bedCost: {
-            type: "string",
+            type: 'string',
           },
           bedDescription: {
-            type: "string",
+            type: 'string',
           },
         },
       },
 
       accomodation: {
-        type: "object",
-        content: "multipart/form-data",
+        type: 'object',
+        content: 'multipart/form-data',
         properties: {
           name: {
-            name: "name",
-            in: "formData",
-            type: "string",
+            name: 'name',
+            in: 'formData',
+            type: 'string',
           },
           description: {
-            name: "description",
-            in: "formData",
-            type: "string",
+            name: 'description',
+            in: 'formData',
+            type: 'string',
           },
           location: {
-            name: "location",
-            in: "formData",
-            type: "string",
+            name: 'location',
+            in: 'formData',
+            type: 'string',
           },
           image: {
-            name: "image",
-            in: "formData",
-            type: "file",
+            name: 'image',
+            in: 'formData',
+            type: 'file',
           },
           geoLocation: {
-            name: "geoLocation",
-            in: "formData",
-            type: "string",
+            name: 'geoLocation',
+            in: 'formData',
+            type: 'string',
           },
           highlight: {
-            name: "highlight",
-            in: "formData",
-            type: "string",
+            name: 'highlight',
+            in: 'formData',
+            type: 'string',
           },
           amenitiesList: {
-            name: "amenitiesList",
-            in: "formData",
-            type: "json",
-          }
+            name: 'amenitiesList',
+            in: 'formData',
+            type: 'array',
+            items: {
+              type: 'string',
+            },
+          },
+        },
+      },
+      locations: {
+        type: 'object',
+        properties: {
+          locationName: {
+            type: 'string',
+          },
         },
       },
     },
     securitySchemes: {
       bearerAuth: {
-        type: "http",
-        scheme: "bearer",
-        bearerFormat: "JWT",
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
       },
     },
   },
 };
 
-docrouter.use("/", serve, setup(options));
+docrouter.use('/', serve, setup(options));
 
 export default docrouter;

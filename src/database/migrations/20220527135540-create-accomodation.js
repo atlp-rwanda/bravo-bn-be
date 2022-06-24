@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable("accomodations", {
+    return queryInterface.createTable('accomodations', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -16,9 +16,11 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      location: {
-        type: Sequelize.STRING,
+      locationId: {
+        type: Sequelize.INTEGER,
         allowNull: false,
+        onDelete: 'RESTRICT',
+        onUpdate: 'CASCADE',
       },
       image: {
         type: Sequelize.STRING,
@@ -32,9 +34,9 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      amenitiesList:{
-      type: Sequelize.ARRAY(Sequelize.STRING),
-      defaultValue: []
+      amenitiesList: {
+        type: Sequelize.ARRAY(Sequelize.STRING),
+        defaultValue: [],
       },
       createdAt: {
         allowNull: false,
@@ -47,6 +49,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable("accomodations");
+    return queryInterface.dropTable('accomodations');
   },
 };
