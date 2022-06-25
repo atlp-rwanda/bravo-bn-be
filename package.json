@@ -8,6 +8,7 @@
     "start:prod": "cross-env NODE_ENV=production nodemon --exec babel-node ./src/index.js",
     "start:dev": "cross-env NODE_ENV=development nodemon --exec babel-node ./src/index.js",
     "migrate": "npx sequelize-cli db:migrate",
+    "create-migration": "sequelize-cli migration:create --name migration-name",
     "down": "npx sequelize-cli db:migrate:undo:all",
     "seed": "npx sequelize-cli db:seed:all",
     "undo-seed": "npx sequelize-cli db:seed:undo",
