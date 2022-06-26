@@ -1,175 +1,286 @@
 import db from '../database/models/index';
 const tripRequests = db['tripRequest'];
+const users = db['users'];
 
 // create a 'Trip Request' as requester
 export const createTripRequest = async (req, res) => {
-    try {
-        if (req.user.role !== 'requester') {
-            return res.status(403).json({ status: 'fail', message: 'you are not allowed to make a trip request' })
-
-        }
-
-        const type = req.body.returnDate == null ? 'one way trip' : 'return type trip';
-        const status = "pending";
-        const trip = {
-            leavingFrom: req.body.leavingFrom,
-            goingTo: req.body.goingTo,
-            travelDate: req.body.travelDate,
-            returnDate: req.body.returnDate,
-            travelReason: req.body.travelReason,
-            tripType: type,
-            status: status,
-            requesterId: req.user.id,
-            accomodationId: req.body.accomodationId
-        }
-
-        await tripRequests.create(trip);
-        return res.status(201).json({ status: 'success', data: trip, message: 'Trip Request Created Successfully ' });
-
-    } catch (error) {
-        return res.status(500).json(error.message);
+  try {
+    if (req.user.role !== 'requester') {
+      return res.status(403).json({
+        status: 'fail',
+        message: 'you are not allowed to make a trip request',
+      });
     }
+
+    const type =
+      req.body.returnDate == null ? 'one way trip' : 'return type trip';
+    const status = 'pending';
+    const trip = {
+      leavingFrom: req.body.leavingFrom,
+      goingTo: req.body.goingTo,
+      travelDate: req.body.travelDate,
+      returnDate: req.body.returnDate,
+      travelReason: req.body.travelReason,
+      tripType: type,
+      status: status,
+      requesterId: req.user.id,
+      accomodationId: req.body.accomodationId,
+      passportName: req.body.passportName,
+    };
+
+    await tripRequests.create(trip);
+    return res.status(201).json({
+      status: 'success',
+      data: trip,
+      message: 'Trip Request Created Successfully ',
+    });
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
 };
 
 // retrieve single trip request as requester
 export const getSingleTripRequest = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const requestId = req.params.id;
 
-    try {
-        const userId = req.user.id;
-        const requestId = req.params.id;
+    if (req.user.role == 'requester') {
+      const trip = await tripRequests.findOne({
+        where: { id: requestId, requesterId: userId },
+      });
 
-        if (req.user.role == 'requester') {
-            const trip = await tripRequests.findOne({ where: { id: requestId, requesterId: userId, } })
-
-            if (!trip) {
-                return res.status(404).json({ status: 'fail', message: `there are no Trip Requests assigned to user with id=  ${requestId}` })
-            } else {
-                return res.status(200).json({ status: 'success', data: trip });
-            }
-
-        } else if (req.user.role == 'manager') {
-            const trip = await tripRequests.findOne({ where: { id: requestId } })
-            if (!trip) {
-                return res.status(404).json({ status: 'fail', message: `there are no Trip Request found` })
-            } else {
-                return res.status(200).json({ status: 'success', data: trip })
-            }
-        } else {
-            return res.status(403).json({ status: 'fail', message: 'you are not allowed to retrieve a trip request' })
-        }
-    } catch (error) {
-        res.status(500).json({ status: 'error', message: 'error while getting trip request' })
+      if (!trip) {
+        return res.status(404).json({
+          status: 'fail',
+          message: `there are no Trip Requests assigned to user with id=  ${requestId}`,
+        });
+      } else {
+        return res.status(200).json({ status: 'success', data: trip });
+      }
+    } else if (req.user.role == 'manager') {
+      const trip = await tripRequests.findOne({ where: { id: requestId } });
+      if (!trip) {
+        return res
+          .status(404)
+          .json({ status: 'fail', message: `there are no Trip Request found` });
+      } else {
+        return res.status(200).json({ status: 'success', data: trip });
+      }
+    } else {
+      return res.status(403).json({
+        status: 'fail',
+        message: 'you are not allowed to retrieve a trip request',
+      });
     }
+  } catch (error) {
+    res
+      .status(500)
+      .json({ status: 'error', message: 'error while getting trip request' });
+  }
 };
 
 export const getAllTripRequest = async (req, res) => {
-    try {
-        const userId = req.user.id;
-        console.log(userId);
+  try {
+    const userId = req.user.id;
+    console.log(userId);
 
-        if (req.user.role == 'requester') {
-            const trips = await tripRequests.findAll({ where: { requesterId: userId } })
+    if (req.user.role == 'requester') {
+      const trips = await tripRequests.findAll({
+        where: { requesterId: userId },
+      });
 
-            if (!trips) {
-                return res.status(404).json({ status: 'fail', message: `there are no Trip Requests assigned to ${userId}` })
-            } else {
-                return res.status(200).json({ status: 'success', data: trips })
-            }
+      if (!trips) {
+        return res.status(404).json({
+          status: 'fail',
+          message: `there are no Trip Requests assigned to ${userId}`,
+        });
+      } else {
+        return res.status(200).json({ status: 'success', data: trips });
+      }
+    } else if (req.user.role == 'manager') {
+      const trips = await tripRequests.findAll();
 
-        } else if (req.user.role == 'manager') {
-            const trips = await tripRequests.findAll()
-
-            if (!trips) {
-                return res.status(404).json({ status: 'fail', message: `there are no Trip Requests found` })
-            } else {
-                return res.status(200).json({ status: 'success', data: trips })
-            }
-        } else {
-            return res.status(403).json({ status: 'fail', message: 'you are not allowed to retrieve a trip request' })
-        }
-
-    } catch (error) {
-        res.status(500).json({ status: 'error', message: 'error while getting trip request' })
+      if (!trips) {
+        return res.status(404).json({
+          status: 'fail',
+          message: `there are no Trip Requests found`,
+        });
+      } else {
+        return res.status(200).json({ status: 'success', data: trips });
+      }
+    } else {
+      return res.status(403).json({
+        status: 'fail',
+        message: 'you are not allowed to retrieve a trip request',
+      });
     }
-}
+  } catch (error) {
+    res
+      .status(500)
+      .json({ status: 'error', message: 'error while getting trip request' });
+  }
+};
 
 export const updateTripRequest = async (req, res) => {
-    try {
-        if (req.user.role !== 'requester') {
-            return res.status(403).json({ status: 'fail', message: 'you are not allowed to update a trip request' })
-        }
-        const requestId = req.params.id;
-        const userId = req.user.id;
-        console.log('user', userId);
-        console.log('request', requestId);
-        const tripRequest = await tripRequests.findOne({
-            where: { id: requestId }
-        })
-
-
-        if (!tripRequest) {
-            return res.status(404).json({ status: 'fail', message: `No Trip Request with id = ${requestId}` })
-        }
-
-        if (tripRequest.status == 'pending') {
-            const type = req.body.returnDate == null ? 'one way trip' : 'return type trip';
-            const returnDate = type == 'one way trip' ? null : req.body.returnDate;
-
-            const updatedTrip = {
-                leavingFrom: req.body.leavingFrom,
-                goingTo: req.body.goingTo,
-                travelDate: req.body.travelDate,
-                returnDate: returnDate,
-                travelReason: req.body.travelReason,
-                tripType: type,
-                status: req.body.stastus,
-                requesterId: req.user.id,
-                accomodationId: req.body.accomodationId
-            }
-
-            tripRequests.update(updatedTrip, { where: { id: requestId, requesterId: userId } })
-                .then(num => {
-                    if (num == 1) {
-                        res.send({ status: 'success', message: 'trip request updated successfully.' })
-                    } else {
-                        res.send({
-                            message: `Cannot update trip request with id=${requestId}.`
-                        });
-                    }
-                })
-        } else {
-            return res.status(404).json({ status: 'fail', message: `Trip Request with id = ${requestId} is approved or rejected` })
-
-        }
-
-    } catch (error) {
-        return res.status(500).json(error.message);
+  try {
+    if (req.user.role !== 'requester') {
+      return res.status(403).json({
+        status: 'fail',
+        message: 'you are not allowed to update a trip request',
+      });
     }
-}
+    const requestId = req.params.id;
+    const userId = req.user.id;
+    console.log('user', userId);
+    console.log('request', requestId);
+    const tripRequest = await tripRequests.findOne({
+      where: { id: requestId },
+    });
+
+    if (!tripRequest) {
+      return res.status(404).json({
+        status: 'fail',
+        message: `No Trip Request with id = ${requestId}`,
+      });
+    }
+
+    if (tripRequest.status == 'pending') {
+      const type =
+        req.body.returnDate == null ? 'one way trip' : 'return type trip';
+      const returnDate = type == 'one way trip' ? null : req.body.returnDate;
+
+      const updatedTrip = {
+        leavingFrom: req.body.leavingFrom,
+        goingTo: req.body.goingTo,
+        travelDate: req.body.travelDate,
+        returnDate: returnDate,
+        travelReason: req.body.travelReason,
+        tripType: type,
+        status: req.body.stastus,
+        requesterId: req.user.id,
+        accomodationId: req.body.accomodationId,
+        passportName: req.body.passportName,
+      };
+
+      tripRequests
+        .update(updatedTrip, { where: { id: requestId, requesterId: userId } })
+        .then((num) => {
+          if (num == 1) {
+            res.send({
+              status: 'success',
+              message: 'trip request updated successfully.',
+            });
+          } else {
+            res.send({
+              message: `Cannot update trip request with id=${requestId}.`,
+            });
+          }
+        });
+    } else {
+      return res.status(404).json({
+        status: 'fail',
+        message: `Trip Request with id = ${requestId} is approved or rejected`,
+      });
+    }
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+};
 
 export const deleteTripRequest = async (req, res) => {
-    try {
-        if (req.user.role !== 'requester') {
-            return res.status(403).json({ status: 'fail', message: 'you are not allowed to delete a trip request' })
-        }
-        const requestId = req.params.id;
-        const userId = req.user.id;
-
-        const tripRequest = await tripRequests.findOne({
-            where: { id: requestId }
-        })
-        if (!tripRequest) {
-            return res.status(404).json({ status: 'fail', message: `No Trip Request with id = ${requestId}` })
-        }
-
-        if (tripRequest.status == 'pending') {
-            await tripRequests.destroy({ where: { id: requestId, requesterId: userId } })
-            res.status(200).json({ status: 'success', message: 'Trip Request Deleted successfully' })
-        } else {
-            return res.status(404).json({ status: 'fail', message: `Trip Request with id = ${requestId} is approved or rejected` })
-        }
-
-    } catch (error) {
-        return res.status(500).json(error.message);
+  try {
+    if (req.user.role !== 'requester') {
+      return res.status(403).json({
+        status: 'fail',
+        message: 'you are not allowed to delete a trip request',
+      });
     }
-}
+    const requestId = req.params.id;
+    const userId = req.user.id;
+
+    const tripRequest = await tripRequests.findOne({
+      where: { id: requestId },
+    });
+    if (!tripRequest) {
+      return res.status(404).json({
+        status: 'fail',
+        message: `No Trip Request with id = ${requestId}`,
+      });
+    }
+
+    if (tripRequest.status == 'pending') {
+      await tripRequests.destroy({
+        where: { id: requestId, requesterId: userId },
+      });
+      res.status(200).json({
+        status: 'success',
+        message: 'Trip Request Deleted successfully',
+      });
+    } else {
+      return res.status(404).json({
+        status: 'fail',
+        message: `Trip Request with id = ${requestId} is approved or rejected`,
+      });
+    }
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+};
+
+export const setAutoFill = async (req, res, next) => {
+  const userEmail = req.user.email;
+  const user = await users.findOne({ where: { email: userEmail } });
+  await users.update(
+    { autofill: !user.autofill },
+    { where: { email: userEmail } },
+  );
+  return res
+    .status(200)
+    .json({ message: 'autofill option updated successfully' });
+};
+
+export const checkInfo = async (req, res, next) => {
+  const userId = req.user.id;
+  const requester = await users.findOne({ where: { id: userId } });
+
+  if (requester.autofill === true) {
+    const prevRequest = await tripRequests.findOne({
+      where: { requesterId: userId },
+    });
+
+    if (prevRequest !== null) {
+      if (
+        (prevRequest.dataValues.passportName !== null &&
+          !req.body.passportName) ||
+        req.body.passportName === ''
+      ) {
+        req.body.passportName = prevRequest.dataValues.passportName;
+      }
+
+      if (
+        (prevRequest.dataValues.leavingFrom !== null &&
+          !req.body.leavingFrom) ||
+        req.body.leavingFrom === ''
+      ) {
+        req.body.leavingFrom = prevRequest.dataValues.leavingFrom;
+      }
+
+      if (
+        (prevRequest.dataValues.goingTo !== null && !req.body.goingTo) ||
+        req.body.goingTo === ''
+      ) {
+        req.body.goingTo = prevRequest.dataValues.goingTo;
+      }
+
+      if (
+        (prevRequest.dataValues.travelReason !== null &&
+          !req.body.travelReason) ||
+        req.body.travelReason === ''
+      ) {
+        req.body.travelReason = prevRequest.dataValues.travelReason;
+      }
+    }
+  }
+  next();
+};
