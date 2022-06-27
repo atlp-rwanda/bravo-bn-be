@@ -81,6 +81,7 @@ export const signup = catchAsync(async (req, res, next) => {
     .update(verificationToken)
     .digest('hex');
 
+  req.body.isVerified = false;
   const createUser = await User.create(req.body, {
     individualHooks: true,
   });
