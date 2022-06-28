@@ -171,3 +171,18 @@ describe('User sign up', () => {
             done();
             });});
   });
+  describe('logout the user', () => {
+
+    const success =200;
+
+    it("Should logout the user", (done) => {
+     
+      api
+      .post('/api/v1/user/logout')
+      .end((err, res) => {
+          const { message } = res.body;
+          expect(res.status).to.equal(success);
+          done();
+          });});
+
+      });

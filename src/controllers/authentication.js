@@ -1,11 +1,15 @@
 import jsonwebtoken from 'jsonwebtoken';
 import catchAsync from '../utils/catchAsync';
 import AppError from '../utils/appError';
+import Email from '../utils/email';
 import { promisify } from 'util';
 import bcryptjs from 'bcryptjs';
+import crypto from 'crypto';
 import db from '../database/models/index.js';
 import { signupAuthSchema } from '../helpers/validation_schema';
 import { Op } from 'sequelize';
+
+const { randomBytes, createHash } = crypto;
 
 const User = db['users'];
 const { compare } = bcryptjs;
@@ -72,11 +76,44 @@ export const signup = catchAsync(async (req, res, next) => {
   if (userEmailExist) return next(new AppError('Email already taken!', 409));
   if (usernameExist) return next(new AppError('Username already taken!', 409));
 
+  const verificationToken = randomBytes(32).toString('hex');
+  req.body.verificationToken = createHash('sha256')
+    .update(verificationToken)
+    .digest('hex');
+
+  req.body.isVerified = false;
   const createUser = await User.create(req.body, {
     individualHooks: true,
   });
 
+  const url = `${req.protocol}://${req.get(
+    'host',
+  )}/api/v1/user/auth/verify-email/${verificationToken}`;
+
+  try {
+    await new Email(createUser, url).sendWelcome();
+  } catch (err) {
+    console.log(err);
+  }
+
   createSendToken(createUser, 201, res);
+});
+
+export const verifyEmail = catchAsync(async (req, res) => {
+  const token = createHash('sha256').update(req.params.token).digest('hex');
+
+  const user = await User.findOne({ where: { verificationToken: token } });
+  if (user) {
+    (user.verificationToken = null), (user.isVerified = true);
+    await user.save();
+    res.status(201).json({
+      message: 'Email validated successfully.',
+    });
+  } else {
+    res.status(409).json({
+      message: 'Sorry, your validation token is invalid or expired. ',
+    });
+  }
 });
 
 export const googleLogin = catchAsync(async (req, res, next) => {

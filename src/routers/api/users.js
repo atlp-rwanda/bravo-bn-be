@@ -1,5 +1,5 @@
 import express from 'express';
-import { login, protect, signup } from '../../controllers/authentication';
+import { login, logout, protect, signup } from '../../controllers/authentication';
 import { getUserData, updateUserProfile,getAllUsers } from '../../controllers/userController';
 import { updateRole } from '../../controllers/users';
 import isValidRole from '../../middlewares/isValidRole'; 
@@ -21,6 +21,7 @@ const uploads=multer({storage,fileFilter});
 const userRouter = express.Router();
 
 userRouter.post('/signup',signup);
+userRouter.post('/logout',logout);
 userRouter.post('/login',login);
 userRouter.patch('/update',protect,uploads.single("image"),updateUserProfile);
 userRouter.get('/',getAllUsers)
