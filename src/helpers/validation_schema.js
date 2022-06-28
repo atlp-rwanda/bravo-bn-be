@@ -11,8 +11,7 @@ export const signupAuthSchema = Joi.object({
 
   phoneNumber: Joi.string()
     .regex(/^[0-9]{10}$/)
-    .messages({ 'string.pattern.base': `Phone number must have 10 digits.` })
-    .required(),
+    .messages({ 'string.pattern.base': `Phone number must have 10 digits.` }),
 
   role: Joi.string(),
 
@@ -62,7 +61,6 @@ export const tripRequestSchema = Joi.object({
 });
 export const tripRequestUpdateSchema = Joi.object({
   leavingFrom: Joi.string().required(),
-  goingTo: Joi.number().required(),
   travelDate: Joi.string().required(),
   returnDate: Joi.string(),
   travelReason: Joi.string().required(),

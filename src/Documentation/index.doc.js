@@ -237,8 +237,10 @@ const options = {
               example: {
                 leavingFrom: 'kigali',
                 goingTo: 1,
-                travelDate: '2022-10-5',
-                returnDate: '2022-10-10',
+                travelDate:
+                  'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
+                returnDate:
+                  'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
                 travelReason: 'marketing',
                 accomodationId: 1,
               },
@@ -252,6 +254,15 @@ const options = {
           },
           401: {
             description: 'Unauthorized',
+          },
+          403: {
+            description: 'Unauthorized',
+          },
+          500: {
+            description: 'Server Error',
+          },
+          404: {
+            description: 'Not Found',
           },
         },
       },
@@ -297,7 +308,7 @@ const options = {
         },
       },
     },
-    '/api/v1/user/trip/{id}/update': {
+    '/api/v1/user/trip/update/{id}': {
       patch: {
         tags: ['Trip Request'],
         description: 'update trip request',
@@ -320,9 +331,10 @@ const options = {
               },
               example: {
                 leavingFrom: 'kigali',
-                goingTo: 5,
-                travelDate: '2022-10-5',
-                returnDate: '2022-10-10',
+                travelDate:
+                  'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
+                returnDate:
+                  'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
                 travelReason: 'leasure',
               },
             },

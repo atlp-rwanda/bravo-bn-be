@@ -8,7 +8,8 @@ const tripRequests = db['tripRequests'];
 chai.should();
 chai.use(chaiHTTP);
 const api = chai.request(app).keepOpen();
-let requesterToken, managerToken, requestId;
+let requesterToken, managerToken, requestId, wrongId;
+wrongId = 2000000000;
 
 const { expect } = chai;
 
@@ -86,6 +87,52 @@ describe('perform CRUD operations on trip request', () => {
       });
   });
 
+  // test association with accomodation
+  it('It should return 404', (done) => {
+    const tripRequest = {
+      leavingFrom: 'musanze',
+      goingTo: 2,
+      travelDate: '2022-10-5',
+      returnDate: '2022-11-6',
+      travelReason: 'picnic',
+      accomodationId: 2220000,
+    };
+
+    api
+      .post('/api/v1/user/trip')
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .send(tripRequest)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(404);
+        expect(message);
+        done();
+      });
+  });
+
+  /* test association with location
+  it('It should return 404', (done) => {
+    const tripRequest = {
+      leavingFrom: 'musanze',
+      goingTo: 20000000000,
+      travelDate: '2022-10-5',
+      returnDate: '2022-11-6',
+      travelReason: 'picnic',
+      accomodationId: 1,
+    };
+
+    api
+      .post('/api/v1/user/trip')
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .send(tripRequest)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(404);
+        expect(message);
+        done();
+      });
+  });*/
+
   // manager should not create trip request
   it('It should not create trip and  return 403', (done) => {
     const tripRequest = {
@@ -150,6 +197,19 @@ describe('perform CRUD operations on trip request', () => {
       });
   });
 
+  // test when trip request not found
+  it('it should return 404', (done) => {
+    api
+      .get(`/api/v1/user/trip/get/${wrongId}`)
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(404);
+        expect(message);
+        done();
+      });
+  });
+
   //manager should retrive single trip request by its id
   it('Manager should get single trip request return 200', (done) => {
     api
@@ -167,13 +227,13 @@ describe('perform CRUD operations on trip request', () => {
   it('Requester should update trip request and return 201', (done) => {
     const tripRequest = {
       leavingFrom: 'kgl',
-      goingTo: 2,
       travelDate: '2022-10-5',
+      returnDate: '2022-10-5',
       travelReason: 'leisure',
     };
 
     api
-      .patch(`/api/v1/user/trip/${requestId}`)
+      .patch(`/api/v1/user/trip/update/${requestId}`)
       .set('Authorization', `Bearer ${requesterToken}`)
       .send(tripRequest)
       .end((err, res) => {
@@ -194,7 +254,7 @@ describe('perform CRUD operations on trip request', () => {
     };
 
     api
-      .patch(`/api/v1/user/trip/${requestId}`)
+      .patch(`/api/v1/user/trip/update/${requestId}`)
       .set('Authorization', `Bearer ${managerToken}`)
       .send(tripRequest)
       .end((err, res) => {
