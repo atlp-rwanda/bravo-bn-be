@@ -63,6 +63,20 @@ describe('POST api/v1/location/create', () => {
         return done();
       });
   });
+  it('Should delete location according to id', (done) => {
+    const locationId = '';
+    api
+      .delete('/api/v1/location/' + locationId)
+      .set('Authorization', `Bearer ${newToken}`)
+      .send()
+      .end((err, res) => {
+        expect(res).to.have.status(404);
+        expect(res.body).to.have.property('status');
+        expect(res.body).to.have.property('message');
+        return done();
+      });
+  });
+
   describe('update /api/v1/location', () => {
     const locationId = 1;
     it('Should update location according to id', (done) => {

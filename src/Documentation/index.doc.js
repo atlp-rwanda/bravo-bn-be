@@ -255,7 +255,7 @@ const options = {
         },
       },
     },
-    '/api/v1/accomodation/create': {
+    '/api/v1/accomodation': {
       post: {
         tags: ['Accomodation'],
         summary: 'Adding accomodation facility',
@@ -279,8 +279,6 @@ const options = {
           },
         },
       },
-    },
-    '/api/v1/accomodation': {
       get: {
         tags: ['Accomodation'],
         summary: 'Get all accomodation',
@@ -293,6 +291,7 @@ const options = {
         },
       },
     },
+
     '/api/v1/accomodation/{id}': {
       get: {
         tags: ['Accomodation'],
@@ -315,8 +314,6 @@ const options = {
           },
         },
       },
-    },
-    '/api/v1/accomodation/update/{id}': {
       put: {
         tags: ['Accomodation'],
         summary: 'update accomodation',
@@ -349,8 +346,6 @@ const options = {
           },
         },
       },
-    },
-    '/api/v1/accomodation/delete/{id}': {
       delete: {
         tags: ['Accomodation'],
         summary: 'Delete an Accomodation',
@@ -377,6 +372,7 @@ const options = {
         },
       },
     },
+
     '/api/v1/rooms/{accomodationId}': {
       post: {
         tags: ['room'],
@@ -739,8 +735,8 @@ const options = {
             in: 'formData',
             type: 'string',
           },
-          location: {
-            name: 'location',
+          locationId: {
+            name: 'locationId',
             in: 'formData',
             type: 'string',
           },

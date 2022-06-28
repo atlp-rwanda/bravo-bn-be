@@ -19,6 +19,10 @@ module.exports = {
       locationId: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          model: 'locations',
+          key: 'id',
+        },
         onDelete: 'RESTRICT',
         onUpdate: 'CASCADE',
       },

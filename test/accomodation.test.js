@@ -32,6 +32,15 @@ describe('POST api/v1/accomodations/', () => {
     highlight: 'simple',
     amenitiesList: ['placide'],
   };
+  const accomodationLocation = {
+    name: 'marriot',
+    description: 'name',
+    locationId: 10000000000000,
+    image: 'images',
+    geoLocation: '234',
+    highlight: 'simple',
+    amenitiesList: ['placide'],
+  };
 
   let newToken;
   let newToken1;
@@ -81,7 +90,7 @@ describe('POST api/v1/accomodations/', () => {
 
   it('should create an accomodation ', (done) => {
     api
-      .post('/api/v1/accomodation/create')
+      .post('/api/v1/accomodation')
       .set('Authorization', `Bearer ${newToken}`)
       .send(accomodation)
       .end((err, res) => {
@@ -91,10 +100,22 @@ describe('POST api/v1/accomodations/', () => {
         done();
       });
   });
+  it('should not create an accomodation through LocationId not found', (done) => {
+    api
+      .post('/api/v1/accomodation')
+      .set('Authorization', `Bearer ${newToken}`)
+      .send(accomodationLocation)
+      .end((err, res) => {
+        expect(res.status).to.be.equal(404);
+        expect(res.body).to.have.property('status');
+        expect(res.body).to.have.property('message');
+        done();
+      });
+  });
 
   it('should not create an accomodation with error ', (done) => {
     api
-      .post('/api/v1/accomodation/create')
+      .post('/api/v1/accomodation')
       .set('Authorization', `Bearer ${newToken}`)
       .send(accomodationP)
       .end((err, res) => {
@@ -106,7 +127,7 @@ describe('POST api/v1/accomodations/', () => {
 
   it('should not create an accomodation with wrong token', (done) => {
     api
-      .post('/api/v1/accomodation/create')
+      .post('/api/v1/accomodation')
       .set('Authorization', `Bearer ${newToken1}`)
       .send(accomodation)
       .end((err, res) => {
@@ -121,7 +142,7 @@ describe('POST api/v1/accomodations/', () => {
     it('Should delete accomodation according to id', (done) => {
       chai
         .request(app)
-        .delete('/api/v1/accomodation/delete/' + roomId)
+        .delete('/api/v1/accomodation/' + roomId)
         .set('Authorization', `Bearer ${newToken}`)
         .send()
         .end((err, res) => {
@@ -131,11 +152,11 @@ describe('POST api/v1/accomodations/', () => {
         });
     });
   });
-  describe('update /api/v1/accomodation/update', () => {
+  describe('update /api/v1/accomodation/', () => {
     const accomodatiomId = 1;
     it('Should update accomodation according to id', (done) => {
       api
-        .put('/api/v1/accomodation/update/' + accomodatiomId)
+        .put('/api/v1/accomodation/' + accomodatiomId)
         .set('Authorization', `Bearer ${newToken}`)
         .send(accomodation1)
         .end((err, res) => {
@@ -145,11 +166,11 @@ describe('POST api/v1/accomodations/', () => {
         });
     });
   });
-  describe('update /api/v1/accomodation/update', () => {
+  describe('update /api/v1/accomodation/', () => {
     const accomodatiomId = 1;
     it('Should not update accomodation according to id', (done) => {
       api
-        .put('/api/v1/accomodation/update/' + accomodatiomId)
+        .put('/api/v1/accomodation/' + accomodatiomId)
         .set('Authorization', `Bearer ${newToken1}`)
         .send(accomodation1)
         .end((err, res) => {

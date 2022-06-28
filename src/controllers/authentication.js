@@ -1,13 +1,17 @@
-import jsonwebtoken from "jsonwebtoken";
-import catchAsync from "../utils/catchAsync";
-import AppError from "../utils/appError";
-import { promisify } from "util";
-import bcryptjs from "bcryptjs";
-import db from "../database/models/index.js";
-import { signupAuthSchema } from "../helpers/validation_schema";
-import { Op } from "sequelize";
+import jsonwebtoken from 'jsonwebtoken';
+import catchAsync from '../utils/catchAsync';
+import AppError from '../utils/appError';
+import Email from '../utils/email';
+import { promisify } from 'util';
+import bcryptjs from 'bcryptjs';
+import crypto from 'crypto';
+import db from '../database/models/index.js';
+import { signupAuthSchema } from '../helpers/validation_schema';
+import { Op } from 'sequelize';
 
-const User = db["users"];
+const { randomBytes, createHash } = crypto;
+
+const User = db['users'];
 const { compare } = bcryptjs;
 
 const { sign, verify } = jsonwebtoken;
@@ -22,17 +26,20 @@ const createSendToken = (user, statusCode, res) => {
   const token = signToken(user.id);
   const cookieOptions = {
     expires: new Date(
-      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000,
     ),
     secure: false,
     httpOnly: true,
   };
-  res.cookie("jwt", token, cookieOptions);
+  res.cookie('jwt', token, cookieOptions);
 
   user.password = undefined;
+  user.passwordChangedAt = undefined;
+  user.passwordResetExpires = undefined;
+  user.passwordResetToken = undefined;
 
   res.status(statusCode).json({
-    status: "success",
+    status: 'success',
     token,
     data: {
       user,
@@ -42,16 +49,16 @@ const createSendToken = (user, statusCode, res) => {
 
 export const login = catchAsync(async (req, res, next) => {
   if (!req.body.password || !req.body.email) {
-    return next(new AppError("Please fill empty fields!", 400));
+    return next(new AppError('Please fill empty fields!', 400));
   }
 
   let currentUser = await User.findOne({ where: { email: req.body.email } });
-  if (!currentUser) return next(new AppError("Wrong email or password!", 401));
+  if (!currentUser) return next(new AppError('Wrong email or password!', 401));
 
   const hashedPassword = await compare(req.body.password, currentUser.password);
 
   if (!hashedPassword)
-    return next(new AppError("Wrong email or password!", 401));
+    return next(new AppError('Wrong email or password!', 401));
 
   createSendToken(currentUser, 200, res);
 });
@@ -60,20 +67,53 @@ export const signup = catchAsync(async (req, res, next) => {
   await signupAuthSchema.validateAsync(req.body);
 
   if (!req.body.password || !req.body.email) {
-    return next(new AppError("Please fill empty fields!", 400));
+    return next(new AppError('Please fill empty fields!', 400));
   }
   let userEmailExist = await User.findOne({ where: { email: req.body.email } });
   let usernameExist = await User.findOne({
     where: { username: req.body.username },
   });
-  if (userEmailExist) return next(new AppError("Email already taken!", 409));
-  if (usernameExist) return next(new AppError("Username already taken!", 409));
+  if (userEmailExist) return next(new AppError('Email already taken!', 409));
+  if (usernameExist) return next(new AppError('Username already taken!', 409));
 
+  const verificationToken = randomBytes(32).toString('hex');
+  req.body.verificationToken = createHash('sha256')
+    .update(verificationToken)
+    .digest('hex');
+
+  req.body.isVerified = false;
   const createUser = await User.create(req.body, {
     individualHooks: true,
   });
 
+  const url = `${req.protocol}://${req.get(
+    'host',
+  )}/api/v1/user/auth/verify-email/${verificationToken}`;
+
+  try {
+    await new Email(createUser, url).sendWelcome();
+  } catch (err) {
+    console.log(err);
+  }
+
   createSendToken(createUser, 201, res);
+});
+
+export const verifyEmail = catchAsync(async (req, res) => {
+  const token = createHash('sha256').update(req.params.token).digest('hex');
+
+  const user = await User.findOne({ where: { verificationToken: token } });
+  if (user) {
+    (user.verificationToken = null), (user.isVerified = true);
+    await user.save();
+    res.status(201).json({
+      message: 'Email validated successfully.',
+    });
+  } else {
+    res.status(409).json({
+      message: 'Sorry, your validation token is invalid or expired. ',
+    });
+  }
 });
 
 export const googleLogin = catchAsync(async (req, res, next) => {
@@ -100,7 +140,7 @@ export const googleLogin = catchAsync(async (req, res, next) => {
     isVerified: verified,
     preferredLanguage: language,
     image: picture,
-    role: "requester",
+    role: 'requester',
   };
   let userExist = await User.findOne({
     where: {
@@ -134,7 +174,7 @@ export const facebookLogin = catchAsync(async (req, res, next) => {
     socialMediaId: id,
     provider: provider,
     image: photos[0].value,
-    role: "requester",
+    role: 'requester',
   };
   let userExist = await User.findOne({
     where: {
@@ -155,18 +195,18 @@ export const facebookLogin = catchAsync(async (req, res, next) => {
 });
 
 export const protect = catchAsync(async (req, res, next) => {
-  let token = "loggedout";
+  let token = 'loggedout';
   if (
     req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
+    req.headers.authorization.startsWith('Bearer')
   ) {
-    token = req.headers.authorization.split(" ")[1];
+    token = req.headers.authorization.split(' ')[1];
   } else if (req.cookies?.jwt) {
     token = req.cookies.jwt;
   }
-  if (!token || token.length === 4 || token === "loggedout") {
+  if (!token || token.length === 4 || token === 'loggedout') {
     return next(
-      new AppError("You are not logged in! please login to get access", 401)
+      new AppError('You are not logged in! please login to get access', 401),
     );
   }
   const decoded = await promisify(verify)(token, process.env.JWT_SECRET);
@@ -175,7 +215,10 @@ export const protect = catchAsync(async (req, res, next) => {
 
   if (!currentUser) {
     return next(
-      new AppError("The user belonging to this token does no longer exist", 401)
+      new AppError(
+        'The user belonging to this token does no longer exist',
+        401,
+      ),
     );
   }
 
@@ -184,9 +227,9 @@ export const protect = catchAsync(async (req, res, next) => {
 });
 
 export const logout = (req, res) => {
-  res.cookie("jwt", "loggedout", {
+  res.cookie('jwt', 'loggedout', {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,
   });
-  res.status(200).json({ status: "success", data: null });
+  res.status(200).json({ status: 'success', data: null });
 };

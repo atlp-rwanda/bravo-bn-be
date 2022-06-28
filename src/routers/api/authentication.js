@@ -1,27 +1,29 @@
-import express from "express";
+import express from 'express';
 import {
   facebookLogin,
   googleLogin,
   signup,
-} from "../../controllers/authentication";
-import passport from "../../config/passport";
+  verifyEmail,
+} from '../../controllers/authentication';
+import passport, { facebookCallBack } from '../../config/passport';
+import { authenticate } from 'passport';
 const authRouter = express.Router();
 
-authRouter.post("/signup", signup);
-authRouter.get("/facebook", passport.authenticate("facebook"));
+authRouter.post('/signup', signup);
+authRouter.get('/verify-email/:token', verifyEmail);
+authRouter.get('/facebook', passport.authenticate('facebook'));
 authRouter.get(
-  "/facebook/callback",
-  passport.authenticate("facebook", { session: false }),
-  facebookLogin
+  '/facebook/callback',
+  passport.authenticate('facebook', { session: false }),
+  facebookLogin,
 );
 authRouter.get(
-  "/google",
-  passport.authenticate("google", { scope: ["email", "profile"] })
+  '/google',
+  passport.authenticate('google', { scope: ['email', 'profile'] }),
 );
 authRouter.get(
-  "/google/callback",
-  passport.authenticate("google", { session: false }),
-  googleLogin
+  '/google/callback',
+  passport.authenticate('google', { session: false }),
+  googleLogin,
 );
-
 export default authRouter;

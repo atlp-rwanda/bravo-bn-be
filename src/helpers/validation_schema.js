@@ -1,4 +1,4 @@
-import Joi from "joi";
+import Joi from 'joi';
 
 export const signupAuthSchema = Joi.object({
   username: Joi.string().alphanum().required(),
@@ -11,8 +11,11 @@ export const signupAuthSchema = Joi.object({
 
   phoneNumber: Joi.string()
     .regex(/^[0-9]{10}$/)
-    .messages({ "string.pattern.base": `Phone number must have 10 digits.` })
+    .messages({ 'string.pattern.base': `Phone number must have 10 digits.` })
     .required(),
+  phoneNumber: Joi.string()
+    .regex(/^[0-9]{10}$/)
+    .messages({ 'string.pattern.base': `Phone number must have 10 digits.` }),
 
   role: Joi.string(),
 
@@ -20,11 +23,11 @@ export const signupAuthSchema = Joi.object({
 
   password: Joi.string()
     .min(5)
-    .pattern(new RegExp("^[a-zA-Z]{3,30}$"))
+    .pattern(new RegExp('^[a-zA-Z]{3,30}$'))
     .max(8)
     .required(),
 
-  repeat_password: Joi.ref("password"),
+  repeat_password: Joi.ref('password'),
 
   email: Joi.string().lowercase().email().required(),
 });
@@ -40,7 +43,7 @@ export const updateProfileSchema = Joi.object({
 
   phoneNumber: Joi.string()
     .regex(/^[0-9]{10}$/)
-    .messages({ "string.pattern.base": `Phone number must have 10 digits.` })
+    .messages({ 'string.pattern.base': `Phone number must have 10 digits.` })
     .required(),
 
   gender: Joi.string(),

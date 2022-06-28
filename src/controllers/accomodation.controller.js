@@ -1,5 +1,6 @@
 import db from '../database/models/index.js';
 const accomodations = db['accomodation'];
+const Locations = db['Location'];
 import { fileUpload } from '../helpers/multer';
 const { Op } = require('sequelize');
 
@@ -18,28 +19,38 @@ export const createAccomodation = async (req, res) => {
     }
     const { name, description, locationId, image, geoLocation, highlight } =
       req.body;
-    let amenitiesList = req.body.amenitiesList;
+    let amenitiesList =
+      req.body.amenitiesList.length < 1 ? '[]' : req.body.amenitiesList;
 
     try {
       JSON.parse(amenitiesList);
     } catch (e) {
       amenitiesList = JSON.stringify(amenitiesList);
     }
-
-    const newAccomodation = await accomodations.create({
-      name,
-      description,
-      locationId,
-      image,
-      geoLocation,
-      highlight,
-      amenitiesList: JSON.parse(amenitiesList),
+    const locationExist = await Locations.findOne({
+      where: { id: locationId },
     });
-    return res.status(201).json({
-      status: 'success',
-      data: { newAccomodation },
-      message: 'New Accomodation have been created',
-    });
+    if (locationExist) {
+      const newAccomodation = await accomodations.create({
+        name,
+        description,
+        locationId,
+        image,
+        geoLocation,
+        highlight,
+        amenitiesList: JSON.parse(amenitiesList),
+      });
+      return res.status(201).json({
+        status: 'success',
+        data: { newAccomodation },
+        message: 'New Accomodation have been created',
+      });
+    } else {
+      return res.status(404).json({
+        status: 'fail',
+        message: "Location can't be found",
+      });
+    }
   } catch (error) {
     return res.status(500).json(error.message);
   }
@@ -72,13 +83,15 @@ export const updateAccomodation = async (req, res) => {
     }
     const { name, description, locationId, image, geoLocation, highlight } =
       req.body;
-    let amenitiesList = req.body.amenitiesList;
+    let amenitiesList =
+      req.body.amenitiesList.length < 1 ? '[]' : req.body.amenitiesList;
 
     try {
       JSON.parse(amenitiesList);
     } catch (e) {
       amenitiesList = JSON.stringify(amenitiesList);
     }
+
     accomodations
       .update(
         {
