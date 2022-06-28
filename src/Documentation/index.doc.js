@@ -130,22 +130,9 @@ const options = {
         parameters: [],
         requestBody: {
           content: {
-            'application/json': {
+            'multipart/form-data': {
               schema: {
                 $ref: '#/components/schemas/User',
-              },
-              example: {
-                firstName: 'Samuel',
-                lastName: 'Doe',
-                username: 'johnDoe',
-                email: 'john@gmail.com',
-                phoneNumber: '0780591269',
-                image: '',
-                gender: 'male',
-                preferredLanguage: 'kinyarwanda',
-                preferredCurrency: 'RWF',
-                department: 'developers',
-                lineManager: 'Mugisha Eric',
               },
             },
           },
@@ -282,7 +269,7 @@ const options = {
               },
               example: {
                 email: 'john@gmail.com',
-                password: '123456',
+                password: 'aaaaaaaa',
               },
             },
           },
@@ -870,6 +857,10 @@ const options = {
             description: 'new role to set to user',
           },
           lastName: {
+            type: 'string',
+            description: "User's fullname",
+          },
+          username: {
             type: 'string',
             description: "User's fullname",
           },

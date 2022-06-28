@@ -120,7 +120,11 @@ export const updateUserProfile = catchAsync(async (req, res, next) => {
       },
     );
     if (updatedUser)
-      res.status(200).json({ message: 'user Profile updated well done' });
+      res.status(200).json({
+        status: true,
+        data: updatedUser,
+        message: 'user Profile updated well done',
+      });
   } catch (error) {
     return next(new AppError(error.message, 500));
   }
