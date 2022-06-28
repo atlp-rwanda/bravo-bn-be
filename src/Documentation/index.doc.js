@@ -11,20 +11,19 @@ const options = {
   info: {
     title: 'Barefoot Nomad API Documentation',
     version: '1.0.0',
-    description:
-      'This is the backend api for Barefoot Nomad project.',
+    description: 'This is the backend api for Barefoot Nomad project.',
   },
   host: process.env.NODE_ENV === 'production' ? heroku : local,
   basePath: '/api',
   security: [
     {
       bearerAuth: [],
-    }
+    },
   ],
   tags: [
     { name: 'setup swagger', description: 'Testing swagger setup' },
     { name: 'User', description: 'users endpoint' },
-    { name: 'Admin', description: 'update user role' }
+    { name: 'Admin', description: 'update user role' },
   ],
   paths: {
     '/api/v1/testSwagger': {
@@ -39,8 +38,8 @@ const options = {
             description: 'success status',
           },
           500: {
-            description: 'Internal Server Error'
-          }
+            description: 'Internal Server Error',
+          },
         },
       },
     },
@@ -72,8 +71,8 @@ const options = {
             description: 'Invalid credation',
           },
           500: {
-            description: 'Internal Server Error'
-          }
+            description: 'Internal Server Error',
+          },
         },
       },
     },
@@ -91,10 +90,10 @@ const options = {
             description: 'Invalid credation',
           },
           500: {
-            description: 'Internal Server Error'
-          }
+            description: 'Internal Server Error',
+          },
         },
-      }
+      },
     },
     '/api/v1/user/{id}': {
       get: {
@@ -119,10 +118,10 @@ const options = {
             description: 'Invalid credation',
           },
           500: {
-            description: 'Internal Server Error'
-          }
+            description: 'Internal Server Error',
+          },
         },
-      }
+      },
     },
     '/api/v1/user/update': {
       patch: {
@@ -136,17 +135,17 @@ const options = {
                 $ref: '#/components/schemas/User',
               },
               example: {
-                "firstName": "Samuel",
-                "lastName": "Doe",
-                "username": "johnDoe",
-                "email": "john@gmail.com",
-                "phoneNumber": "0780591269",
-                "image": "",
-                "gender": "male",
-                "preferredLanguage": "kinyarwanda",
-                "preferredCurrency": "RWF",
-                "department": "developers",
-                "lineManager": "Mugisha Eric",
+                firstName: 'Samuel',
+                lastName: 'Doe',
+                username: 'johnDoe',
+                email: 'john@gmail.com',
+                phoneNumber: '0780591269',
+                image: '',
+                gender: 'male',
+                preferredLanguage: 'kinyarwanda',
+                preferredCurrency: 'RWF',
+                department: 'developers',
+                lineManager: 'Mugisha Eric',
               },
             },
           },
@@ -160,10 +159,10 @@ const options = {
             description: 'Invalid credation',
           },
           500: {
-            description: 'Internal Server Error'
-          }
+            description: 'Internal Server Error',
+          },
         },
-      }
+      },
     },
     '/api/v1/user/roles': {
       put: {
@@ -182,44 +181,44 @@ const options = {
         },
         responses: {
           200: {
-            description: 'success'
+            description: 'success',
           },
           500: {
-            description: 'Internal server error'
-          }
-        }
-      }
+            description: 'Internal server error',
+          },
+        },
+      },
     },
     '/api/v1/user/auth/signup': {
       post: {
         security: [],
         tags: ['authentication'],
         description: 'user signup with JWT',
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SignupAuthShema"
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/SignupAuthShema',
               },
-              "example": {
-                "firstName": "eddy",
-                "lastName": "leftie",
-                "username": "leftie",
-                "phoneNumber": "0785632478",
-                "role": "requester",
-                "gender": "male",
-                "email": "uwambajeddy@gmail.com",
-                "password": "leftie",
-                "repeat_password": "leftie"
-              }
-            }
-          }
+              example: {
+                firstName: 'eddy',
+                lastName: 'leftie',
+                username: 'leftie',
+                phoneNumber: '0785632478',
+                role: 'requester',
+                gender: 'male',
+                email: 'uwambajeddy@gmail.com',
+                password: 'leftie',
+                repeat_password: 'leftie',
+              },
+            },
+          },
         },
         responses: {
           200: {
             description: 'success status',
-          }
+          },
         },
       },
     },
@@ -236,12 +235,12 @@ const options = {
                 $ref: '#/components/schemas/tripRequest',
               },
               example: {
-                "leavingFrom": "kigali",
-                "goingTo": 1,
-                "travelDate": "2022-10-5",
-                "returnDate": "2022-10-10",
-                "travelReason": "marketing",
-                "accomodationId": 5
+                leavingFrom: 'kigali',
+                goingTo: 1,
+                travelDate: '2022-10-5',
+                returnDate: '2022-10-10',
+                travelReason: 'marketing',
+                accomodationId: 1,
               },
             },
           },
@@ -252,8 +251,8 @@ const options = {
             description: 'success status',
           },
           401: {
-            description: 'Unauthorized'
-          }
+            description: 'Unauthorized',
+          },
         },
       },
     },
@@ -268,7 +267,7 @@ const options = {
             description: 'successfully',
           },
           500: {
-            description: 'Internal Server Error'
+            description: 'Internal Server Error',
           },
         },
       },
@@ -286,14 +285,14 @@ const options = {
             schema: {
               type: 'string',
             },
-          }
+          },
         ],
         responses: {
           200: {
             description: 'successfully',
           },
           500: {
-            description: 'Internal Server Error'
+            description: 'Internal Server Error',
           },
         },
       },
@@ -303,7 +302,6 @@ const options = {
         tags: ['Trip Request'],
         description: 'update trip request',
         parameters: [
-
           {
             name: 'id',
             in: 'path',
@@ -312,7 +310,7 @@ const options = {
             schema: {
               type: 'string',
             },
-          }
+          },
         ],
         requestBody: {
           content: {
@@ -321,12 +319,11 @@ const options = {
                 $ref: '#/components/schemas/tripRequest',
               },
               example: {
-                "leavingFrom": "kigali",
-                "goingTo": 5,
-                "travelDate": "2022-10-5",
-                "returnDate": "2022-10-10",
-                "travelReason": "leasure",
-                "accomodationId": 9
+                leavingFrom: 'kigali',
+                goingTo: 5,
+                travelDate: '2022-10-5',
+                returnDate: '2022-10-10',
+                travelReason: 'leasure',
               },
             },
           },
@@ -337,8 +334,8 @@ const options = {
             description: 'success status',
           },
           401: {
-            description: 'Unauthorized'
-          }
+            description: 'Unauthorized',
+          },
         },
       },
     },
@@ -364,18 +361,17 @@ const options = {
             description: 'success status',
           },
           401: {
-            description: 'Unauthorized'
-          }
+            description: 'Unauthorized',
+          },
         },
       },
     },
-
   },
 
   components: {
     schemas: {
       userRole: {
-        type: "object",
+        type: 'object',
         properties: {
           email: {
             type: 'string',
@@ -385,35 +381,35 @@ const options = {
             type: 'string',
             description: 'new role to set to user',
           },
-        }
+        },
       },
-      "SignupAuthShema": {
-        "type": "object",
-        "properties": {
-          "username": {
-            "type": "string"
+      SignupAuthShema: {
+        type: 'object',
+        properties: {
+          username: {
+            type: 'string',
           },
-          "firstName": {
-            "type": "string"
+          firstName: {
+            type: 'string',
           },
-          "lastName": {
-            "type": "string"
+          lastName: {
+            type: 'string',
           },
-          "phoneNumber": {
-            "type": "string"
+          phoneNumber: {
+            type: 'string',
           },
-          "password": {
-            "type": "string"
+          password: {
+            type: 'string',
           },
-          "repeat_password": {
-            "type": "string"
+          repeat_password: {
+            type: 'string',
           },
-          "email": {
-            "type": "string"
-          }
-        }
+          email: {
+            type: 'string',
+          },
+        },
       },
-      "User": {
+      User: {
         type: 'object',
 
         properties: {
@@ -428,32 +424,39 @@ const options = {
           email: {
             type: 'string',
             description: "User's email",
-          }, phoneNumber: {
+          },
+          phoneNumber: {
             type: 'string',
             description: "User's phone number",
-          }, image: {
+          },
+          image: {
             type: 'string',
             description: "User's image url",
-            format: 'binary'
-          }, gender: {
+            format: 'binary',
+          },
+          gender: {
             type: 'string',
-            description: "User's gender"
-          }, preferredLanguage: {
+            description: "User's gender",
+          },
+          preferredLanguage: {
             type: 'string',
-            description: "User's preferred language"
-          }, preferredCurrency: {
+            description: "User's preferred language",
+          },
+          preferredCurrency: {
             type: 'string',
-            description: "User's preferred currency"
-          }, department: {
+            description: "User's preferred currency",
+          },
+          department: {
             type: 'string',
-            description: "User's department"
-          }, lineManager: {
+            description: "User's department",
+          },
+          lineManager: {
             type: 'string',
-            description: "User's line manager"
-          }
+            description: "User's line manager",
+          },
         },
       },
-      "tripRequest": {
+      tripRequest: {
         type: 'object',
 
         properties: {
@@ -463,25 +466,24 @@ const options = {
           },
           goingTo: {
             type: 'string',
-            description: 'destination'
+            description: 'destination',
           },
           travelDate: {
             type: 'string',
-            description: 'start date of trip'
+            description: 'start date of trip',
           },
           returnDate: {
             type: 'string',
-            description: 'end date of trip'
+            description: 'end date of trip',
           },
           travelReason: {
             type: 'string',
-
           },
           accomodationId: {
-            type: 'integer'
-          }
-        }
-      }
+            type: 'integer',
+          },
+        },
+      },
     },
     securitySchemes: {
       bearerAuth: {
@@ -490,9 +492,8 @@ const options = {
         bearerFormat: 'JWT',
       },
     },
-  }
-}
-
+  },
+};
 
 docrouter.use('/', serve, setup(options));
 

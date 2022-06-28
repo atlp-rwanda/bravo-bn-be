@@ -170,11 +170,10 @@ describe('perform CRUD operations on trip request', () => {
       goingTo: 2,
       travelDate: '2022-10-5',
       travelReason: 'leisure',
-      accomodationId: 1,
     };
 
     api
-      .patch(`/api/v1/user/trip/${requestId}/update`)
+      .patch(`/api/v1/user/trip/${requestId}`)
       .set('Authorization', `Bearer ${requesterToken}`)
       .send(tripRequest)
       .end((err, res) => {
@@ -192,11 +191,10 @@ describe('perform CRUD operations on trip request', () => {
       goingTo: 2,
       travelDate: '2022-10-5',
       travelReason: 'leisure',
-      accomodationId: 1,
     };
 
     api
-      .patch(`/api/v1/user/trip/${requestId}/update`)
+      .patch(`/api/v1/user/trip/${requestId}`)
       .set('Authorization', `Bearer ${managerToken}`)
       .send(tripRequest)
       .end((err, res) => {
