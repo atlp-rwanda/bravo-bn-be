@@ -32,7 +32,9 @@ jobs:
       GOOGLE_AUTH_ID: ${{secrets.GOOGLE_AUTH_ID}}
       GOOGLE_AUTH_SECRET: ${{secrets.GOOGLE_AUTH_SECRET}}
       GOOGLE_AUTH_CALLBACK_URL: ${{secrets.GOOGLE_AUTH_CALLBACK_URL}}
-      
+      CLOUDINARY_API_KEY: ${{secrets.CLOUDINARY_API_KEY}}
+      CLOUDINARY_API_SECRET: ${{secrets.CLOUDINARY_API_SECRET}}
+      CLOUDINARY_USER_NAME: ${{secrets.CLOUDINARY_USER_NAME}}
     steps:
       - uses: actions/checkout@v3
       - name: 'Use Node.js ${{ matrix.node-version }}'

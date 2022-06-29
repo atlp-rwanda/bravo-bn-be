@@ -12,12 +12,17 @@ const config = require('../config/config.js')[env];
 
 const db = {};
 
-const sequelize = new Sequelize(config.database, config.username, config.password, config);
-
+const sequelize = new Sequelize(
+  config.database,
+  config.username,
+  config.password,
+  config,
+);
 
 readdirSync(__dirname)
   .filter((file) => {
-    const isTrue = (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
+    const isTrue =
+      file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js';
     return isTrue;
   })
   .forEach((file) => {
@@ -25,9 +30,8 @@ readdirSync(__dirname)
     db[model.name] = model;
   });
 
-
 Object.keys(db).forEach((modelName) => {
-  db[modelName].associate(db); 
+  db[modelName].associate(db);
 });
 
 db.sequelize = sequelize;

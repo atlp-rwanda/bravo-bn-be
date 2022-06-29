@@ -68,7 +68,7 @@ describe('perform CRUD operations on trip request', () => {
   it('It should create trip request and return 201', (done) => {
     const tripRequest = {
       leavingFrom: 'musanze',
-      goingTo: 2,
+      goingTo: 1,
       travelDate: '2022-10-5',
       returnDate: '2022-11-6',
       travelReason: 'picnic',
