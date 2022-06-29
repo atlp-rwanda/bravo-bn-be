@@ -1,18 +1,28 @@
 'use strict';
-module.exports = (sequelize, DataTypes) => {
-  const locations = sequelize.define(
-    'locations',
+import { Model } from 'sequelize';
+export default (sequelize, DataTypes) => {
+  class Location extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate({ accomodation }) {
+      this.hasMany(accomodation, {
+        foreignKey: 'locationId',
+        as: 'accomodation',
+      });
+    }
+  }
+  Location.init(
     {
       locationName: DataTypes.STRING,
-      description: DataTypes.STRING,
     },
     {
       sequelize,
-      modelName: 'locations',
+      tableName: 'locations',
+      modelName: 'Location',
     },
   );
-  locations.associate = function (models) {
-    // associations can be defined here
-  };
-  return locations;
+  return Location;
 };

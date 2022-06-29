@@ -16,9 +16,15 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      location: {
-        type: Sequelize.STRING,
+      locationId: {
+        type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          model: 'locations',
+          key: 'id',
+        },
+        onDelete: 'RESTRICT',
+        onUpdate: 'CASCADE',
       },
       image: {
         type: Sequelize.STRING,
@@ -34,7 +40,7 @@ module.exports = {
       },
       amenitiesList: {
         type: Sequelize.ARRAY(Sequelize.STRING),
-        defaultValue: []
+        defaultValue: [],
       },
       createdAt: {
         allowNull: false,
@@ -48,5 +54,5 @@ module.exports = {
   },
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable('accomodations');
-  }
+  },
 };

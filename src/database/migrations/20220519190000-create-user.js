@@ -94,3 +94,4 @@ export default {
     await queryInterface.dropTable('users');
   },
 };
+20220519190400;

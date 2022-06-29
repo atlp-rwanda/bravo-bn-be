@@ -17,11 +17,11 @@ module.exports = (sequelize, DataTypes) => {
     tripRequest.belongsTo(models.users, {
       foreignKey: 'requesterId',
     });
-    tripRequest.belongsTo(models.accomodations, {
+    tripRequest.belongsTo(models.accomodation, {
       foreignKey: 'accomodationId',
     });
 
-    tripRequest.belongsTo(models.locations, {
+    tripRequest.belongsTo(models.Location, {
       foreignKey: 'goingTo',
     });
     // associations can be defined here

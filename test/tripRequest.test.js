@@ -8,7 +8,7 @@ const tripRequests = db['tripRequests'];
 chai.should();
 chai.use(chaiHTTP);
 const api = chai.request(app).keepOpen();
-let requesterToken, managerToken, requestId, wrongId;
+let requesterToken, managerToken, requestId, wrongId, otherToken;
 wrongId = 2000000000;
 
 const { expect } = chai;
@@ -32,6 +32,16 @@ const manager = {
   repeat_password: 'samuel',
   phoneNumber: '0785058050',
   role: 'manager',
+};
+const otherUser = {
+  firstName: 'Mupenzi',
+  lastName: 'Sylvain',
+  username: 'sylvain',
+  email: 'mupenzi@gmail.com',
+  password: 'sylvain',
+  repeat_password: 'sylvain',
+  phoneNumber: '0785058050',
+  role: 'super user',
 };
 
 // sign up to create requester or manager and get token
@@ -61,6 +71,19 @@ describe('User signUp ', () => {
         done();
       });
   });
+
+  it('Should signup as super user and return 201', (done) => {
+    api
+      .post('/api/v1/user/auth/signup')
+      .send(otherUser)
+      .end((err, res) => {
+        const { message } = res.body;
+        otherToken = res.body.token;
+        expect(res.status).to.equal(201);
+        expect(message);
+        done();
+      });
+  });
 });
 
 describe('perform CRUD operations on trip request', () => {
@@ -68,7 +91,7 @@ describe('perform CRUD operations on trip request', () => {
   it('It should create trip request and return 201', (done) => {
     const tripRequest = {
       leavingFrom: 'musanze',
-      goingTo: 2,
+      goingTo: 1,
       travelDate: '2022-10-5',
       returnDate: '2022-11-6',
       travelReason: 'picnic',
@@ -109,29 +132,6 @@ describe('perform CRUD operations on trip request', () => {
         done();
       });
   });
-
-  /* test association with location
-  it('It should return 404', (done) => {
-    const tripRequest = {
-      leavingFrom: 'musanze',
-      goingTo: 20000000000,
-      travelDate: '2022-10-5',
-      returnDate: '2022-11-6',
-      travelReason: 'picnic',
-      accomodationId: 1,
-    };
-
-    api
-      .post('/api/v1/user/trip')
-      .set('Authorization', `Bearer ${requesterToken}`)
-      .send(tripRequest)
-      .end((err, res) => {
-        const { message } = res.body;
-        expect(res.status).to.equal(404);
-        expect(message);
-        done();
-      });
-  });*/
 
   // manager should not create trip request
   it('It should not create trip and  return 403', (done) => {
@@ -183,6 +183,18 @@ describe('perform CRUD operations on trip request', () => {
         done();
       });
   });
+  // other users not allowed to retrieve all trip request
+  it('Manager should get all trip requests and return 403', (done) => {
+    api
+      .get('/api/v1/user/trip/get')
+      .set('Authorization', `Bearer ${otherToken}`)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(403);
+        expect(message);
+        done();
+      });
+  });
 
   //requester should retrive single trip request by its id
   it('Requester should get single trip request return 200', (done) => {
@@ -218,6 +230,19 @@ describe('perform CRUD operations on trip request', () => {
       .end((err, res) => {
         const { message } = res.body;
         expect(res.status).to.equal(200);
+        expect(message);
+        done();
+      });
+  });
+
+  // test when trip request not found
+  it('it should return 404', (done) => {
+    api
+      .get(`/api/v1/user/trip/get/${wrongId}`)
+      .set('Authorization', `Bearer ${managerToken}`)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(404);
         expect(message);
         done();
       });

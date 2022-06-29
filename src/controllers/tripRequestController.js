@@ -4,14 +4,16 @@ import {
   tripRequestUpdateSchema,
 } from '../helpers/validation_schema';
 const tripRequests = db['tripRequest'];
-const accomodations = db['accomodations'];
-const locations = db['locations'];
+const accomodations = db['accomodation'];
+const locations = db['Location'];
 
 // create a 'Trip Request' as requester
 export const createTripRequest = async (req, res) => {
   try {
     if (req.user.role !== 'requester') {
-      return res.status(403).json({ message: 'Unauthorized' });
+      return res
+        .status(403)
+        .json({ message: 'Unauthorized to create trip request' });
     }
     await tripRequestSchema.validateAsync(req.body);
 
@@ -99,17 +101,20 @@ export const getSingleTripRequest = async (req, res) => {
       });
 
       if (!trip) {
-        return res
-          .status(404)
-          .json({
-            status: 'fail',
-            message: ` Trip Request with id= ${requestId} Not Found`,
-          });
+        return res.status(404).json({
+          status: 'fail',
+          message: ` Trip Request with id= ${requestId} Not Found`,
+        });
       } else {
         return res.status(200).json({ status: 'success', data: trip });
       }
     } else {
-      return res.status(403).json({ status: 'fail', message: 'UnAuthorized' });
+      return res
+        .status(403)
+        .json({
+          status: 'fail',
+          message: 'UnAuthorized to retrieve trip requests',
+        });
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -160,7 +165,9 @@ export const getAllTripRequest = async (req, res) => {
         return res.status(200).json({ status: 'success', data: trips });
       }
     } else {
-      return res.status(403).json({ message: 'Unauthorized' });
+      return res
+        .status(403)
+        .json({ message: 'Unauthorized to retrive trip request' });
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -170,7 +177,9 @@ export const getAllTripRequest = async (req, res) => {
 export const updateTripRequest = async (req, res) => {
   try {
     if (req.user.role !== 'requester') {
-      return res.status(403).json({ message: 'Unauthorized' });
+      return res
+        .status(403)
+        .json({ message: 'Unauthorized to update trip request' });
     }
     const requestId = req.params.id;
     const userId = req.user.id;
@@ -180,12 +189,10 @@ export const updateTripRequest = async (req, res) => {
     });
 
     if (!tripRequest) {
-      return res
-        .status(404)
-        .json({
-          status: 'fail',
-          message: `Trip Request with id = ${requestId} Not Found!`,
-        });
+      return res.status(404).json({
+        status: 'fail',
+        message: `Trip Request with id = ${requestId} Not Found!`,
+      });
     }
 
     if (tripRequest.status == 'pending') {
@@ -209,11 +216,9 @@ export const updateTripRequest = async (req, res) => {
         .update(updatedTrip, { where: { id: requestId, requesterId: userId } })
         .then((num) => {
           if (num == 1) {
-            res
-              .status(201)
-              .send({
-                message: `Trip request with id= ${requestId} Updated Successfully`,
-              });
+            res.status(201).send({
+              message: `Trip request with id= ${requestId} Updated Successfully`,
+            });
           } else {
             res.send({
               message: `Trip request with id= ${requestId} Not Updated.`,
@@ -221,11 +226,9 @@ export const updateTripRequest = async (req, res) => {
           }
         });
     } else {
-      return res
-        .status(404)
-        .json({
-          message: `Trip Request with id = ${requestId} is approved or rejected`,
-        });
+      return res.status(404).json({
+        message: `Trip Request with id = ${requestId} is approved or rejected`,
+      });
     }
   } catch (error) {
     return res.status(500).json({ error: error.message });
@@ -235,7 +238,9 @@ export const updateTripRequest = async (req, res) => {
 export const deleteTripRequest = async (req, res) => {
   try {
     if (req.user.role !== 'requester') {
-      return res.status(403).json({ message: 'Unauthorized' });
+      return res
+        .status(403)
+        .json({ message: 'Unauthorized to delete trip request' });
     }
     const requestId = req.params.id;
     const userId = req.user.id;
@@ -256,11 +261,9 @@ export const deleteTripRequest = async (req, res) => {
       });
       res.status(200).json({ message: 'Trip Request Deleted successfully' });
     } else {
-      return res
-        .status(404)
-        .json({
-          message: `Trip Request with id = ${requestId} is approved or rejected`,
-        });
+      return res.status(404).json({
+        message: `Trip Request with id = ${requestId} is approved or rejected`,
+      });
     }
   } catch (error) {
     return res.status(500).json(error.message);
