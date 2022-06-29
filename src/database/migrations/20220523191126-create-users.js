@@ -1,83 +1,90 @@
-'use strict';
+"use strict";
 export default {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('users', {
+    await queryInterface.createTable("users", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       firstName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       lastName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       email: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       password: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       username: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       phoneNumber: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       image: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       passwordChangedAt: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       passwordResetExpires: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       passwordResetToken: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       socialMediaId: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       provider: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       isVerified: {
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
       },
       gender: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       preferredLanguage: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       preferredCurrency: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       department: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       lineManager: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       role: {
         type: Sequelize.ENUM,
-        values: ['super user', 'super admin', 'travel admin', 'travel team member',
-          'manager', 'requester', 'accommodation supplier']
+        values: [
+          "super user",
+          "super admin",
+          "travel admin",
+          "travel team member",
+          "manager",
+          "requester",
+          "accommodation supplier",
+        ],
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('users');
-  }
+    await queryInterface.dropTable("users");
+  },
 };
