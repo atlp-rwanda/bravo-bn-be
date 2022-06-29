@@ -5,12 +5,13 @@ chai.use(chaiHttp);
 const api = chai.request(server).keepOpen();
 const { expect } = chai;
 import server from '../src/app.js';
+const unProcessableEntity = 422;
+const conflict = 409;
+const created = 201;
+const unAuthorized = 401;
+const success = 200;
 
 describe('User sign up', () => {
-  const unProcessableEntity = 422;
-  const conflict = 409;
-  const created = 201;
-
   it('Should return 422 for the password is greater than 8 long', (done) => {
     const user = {
       firstName: 'Eddy',
@@ -27,7 +28,7 @@ describe('User sign up', () => {
       .send(user)
       .end((err, res) => {
         const { message } = res.body;
-        // console.log(message);
+        console.log(message);
         expect(res.status).to.equal(unProcessableEntity);
         expect(message);
         done();
@@ -50,7 +51,7 @@ describe('User sign up', () => {
       .send(user)
       .end((err, res) => {
         const { message } = res.body;
-        //console.log(res.body);
+        console.log(res.body);
         expect(res.status).to.equal(unProcessableEntity);
         expect(message);
         done();
@@ -125,9 +126,6 @@ describe('User sign up', () => {
   });
 });
 describe('User login', () => {
-  const unProcessableEntity = 422;
-  const conflict = 401;
-  const success = 200;
   it('Should login user', (done) => {
     const user = {
       email: 'uwambaqje1@gmail.com',
@@ -153,7 +151,7 @@ describe('User login', () => {
       .send(user)
       .end((err, res) => {
         const { message } = res.body;
-        expect(res.status).to.equal(conflict);
+        expect(res.status).to.equal(unAuthorized);
         expect(message);
         done();
       });
@@ -171,12 +169,10 @@ describe('User login', () => {
       });
   });
 });
-describe('logout the user', () => {
-  const success = 200;
 
+describe('logout the user', () => {
   it('Should logout the user', (done) => {
     api.post('/api/v1/user/logout').end((err, res) => {
-      const { message } = res.body;
       expect(res.status).to.equal(success);
       done();
     });

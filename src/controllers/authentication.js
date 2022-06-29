@@ -8,11 +8,12 @@ import crypto from 'crypto';
 import db from '../database/models/index.js';
 import { signupAuthSchema } from '../helpers/validation_schema';
 import { Op } from 'sequelize';
+import createNotification from '../services/notification.service';
 
 const { randomBytes, createHash } = crypto;
 
 const User = db['users'];
-const { compare } = bcryptjs;
+const { hash, compare } = bcryptjs;
 
 const { sign, verify } = jsonwebtoken;
 
@@ -97,6 +98,11 @@ export const signup = catchAsync(async (req, res, next) => {
   }
 
   createSendToken(createUser, 201, res);
+  createNotification(
+    createUser.id,
+    'welcome to Barefoot nomad',
+    'Your safety is our high priority, so please verify your email',
+  );
 });
 
 export const verifyEmail = catchAsync(async (req, res) => {
