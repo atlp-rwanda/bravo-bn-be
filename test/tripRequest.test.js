@@ -67,7 +67,7 @@ describe('perform CRUD operations on trip request', () => {
   it('It should create trip request and return 201', (done) => {
     const tripRequest = {
       leavingFrom: 'musanze',
-      goingTo: 2,
+      goingTo: 1,
       travelDate: '2022-10-5',
       returnDate: '2022-11-6',
       travelReason: 'picnic',
@@ -90,7 +90,7 @@ describe('perform CRUD operations on trip request', () => {
   it('It should not create trip and  return 403', (done) => {
     const tripRequest = {
       leavingFrom: 'musanze',
-      goingTo: 2,
+      goingTo: 1,
       travelDate: '2022-10-5',
       returnDate: '2022-11-6',
       travelReason: 'picnic',
@@ -167,13 +167,12 @@ describe('perform CRUD operations on trip request', () => {
   it('Requester should update trip request and return 201', (done) => {
     const tripRequest = {
       leavingFrom: 'kgl',
-      goingTo: 2,
       travelDate: '2022-10-5',
       travelReason: 'leisure',
     };
 
     api
-      .patch(`/api/v1/user/trip/${requestId}`)
+      .patch(`/api/v1/user/trip/update/${requestId}`)
       .set('Authorization', `Bearer ${requesterToken}`)
       .send(tripRequest)
       .end((err, res) => {
@@ -188,13 +187,13 @@ describe('perform CRUD operations on trip request', () => {
   it('Manger should not update and return 403', (done) => {
     const tripRequest = {
       leavingFrom: 'kgl',
-      goingTo: 2,
+      goingTo: 1,
       travelDate: '2022-10-5',
       travelReason: 'leisure',
     };
 
     api
-      .patch(`/api/v1/user/trip/${requestId}`)
+      .patch(`/api/v1/user/trip/update/${requestId}`)
       .set('Authorization', `Bearer ${managerToken}`)
       .send(tripRequest)
       .end((err, res) => {

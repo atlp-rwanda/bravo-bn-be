@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 export default {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("users", {
+    await queryInterface.createTable('users', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -65,13 +65,13 @@ export default {
       role: {
         type: Sequelize.ENUM,
         values: [
-          "super user",
-          "super admin",
-          "travel admin",
-          "travel team member",
-          "manager",
-          "requester",
-          "accommodation supplier",
+          'super user',
+          'super admin',
+          'travel admin',
+          'travel team member',
+          'manager',
+          'requester',
+          'accommodation supplier',
         ],
       },
       createdAt: {
@@ -85,6 +85,6 @@ export default {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("users");
+    await queryInterface.dropTable('users');
   },
 };

@@ -26,7 +26,7 @@ const options = {
     { name: 'Admin', description: 'update user role' },
   ],
   paths: {
-    '/api/v1/testSwagger': {
+    '/api/v1/doc': {
       get: {
         tags: ['setup swagger'],
         description: 'testing swagger setup',
@@ -222,6 +222,400 @@ const options = {
         },
       },
     },
+    '/api/v1/user/login': {
+      post: {
+        tags: ['User'],
+        description: 'login user',
+        security: [],
+        parameters: [],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/User',
+              },
+              example: {
+                email: 'john@gmail.com',
+                password: '123456',
+              },
+            },
+          },
+          required: true,
+        },
+        responses: {
+          200: {
+            description: 'successfully',
+          },
+          400: {
+            description: 'Invalid credation',
+          },
+          500: {
+            description: 'Internal Server Error',
+          },
+        },
+      },
+    },
+    '/api/v1/accomodation': {
+      post: {
+        tags: ['Accomodation'],
+        summary: 'Adding accomodation facility',
+        description: 'accomodation management of facility operation',
+        operationId: 'ADD_ACCOMODATION',
+        consumes: ['multipart/form-data'],
+        parameters: [],
+        requestBody: {
+          content: {
+            'multipart/form-data': {
+              schema: {
+                $ref: '#/components/schemas/accomodation',
+              },
+            },
+          },
+          required: true,
+        },
+        responses: {
+          200: {
+            description: 'New Accomodation have been created',
+          },
+        },
+      },
+      get: {
+        tags: ['Accomodation'],
+        summary: 'Get all accomodation',
+        description: 'list of all accomodation',
+        OperationId: 'List of all accomodation',
+        responses: {
+          200: {
+            description: 'Retrieved',
+          },
+        },
+      },
+    },
+
+    '/api/v1/accomodation/{id}': {
+      get: {
+        tags: ['Accomodation'],
+        summary: 'Fetch single accomodation',
+        description: 'Fetch single accomodation',
+        operationId: 'Fetch accomodation',
+        produces: ['application/json'],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            type: 'string',
+            description: 'accomodation Id',
+            required: true,
+          },
+        ],
+        responses: {
+          200: {
+            description: 'a single accomodation received successfully',
+          },
+        },
+      },
+      put: {
+        tags: ['Accomodation'],
+        summary: 'update accomodation',
+        description: 'update accomodation',
+        operationId: 'update accomodation',
+
+        produces: ['application/json'],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            type: 'string',
+            description: 'Accomodation Id',
+            required: true,
+          },
+        ],
+        requestBody: {
+          content: {
+            'multipart/form-data': {
+              schema: {
+                $ref: '#/components/schemas/accomodation',
+              },
+            },
+          },
+          required: true,
+        },
+        responses: {
+          201: {
+            description: 'Accomodation Updated Successfully',
+          },
+        },
+      },
+      delete: {
+        tags: ['Accomodation'],
+        summary: 'Delete an Accomodation',
+        description: 'Delete an Accomodation',
+        OperationId: 'Delete an Accomodation',
+
+        produces: ['application/json'],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            type: 'string',
+            description: 'Accomodation Id',
+            required: true,
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Accomodation deleted successful',
+          },
+          404: {
+            description: 'Not Found',
+          },
+        },
+      },
+    },
+
+    '/api/v1/rooms/{accomodationId}': {
+      post: {
+        tags: ['room'],
+        summary: 'Creating user using Accomodation id',
+        description:
+          'You have to create a room according to the facility you have where you use accomodation id',
+        parameters: [
+          {
+            name: 'accomodationId',
+            in: 'path',
+            type: 'string',
+            description: 'Accomodation Id',
+            required: true,
+          },
+        ],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/rooms',
+              },
+            },
+          },
+          required: true,
+        },
+
+        responses: {
+          200: {
+            description: 'Room was successfully created',
+          },
+        },
+      },
+    },
+    '/api/v1/rooms': {
+      get: {
+        tags: ['room'],
+        summary: 'Get all rooms',
+        description: 'list of all rooms',
+        OperationId: 'List of all rooms',
+        responses: {
+          200: {
+            description: 'received all rooms',
+          },
+        },
+      },
+    },
+    '/api/v1/rooms/{id}': {
+      get: {
+        tags: ['room'],
+        summary: 'Fetch a single room',
+        description: 'Fetch a single room',
+        operationId: 'Fetch a single room',
+        produces: ['application/json'],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            type: 'string',
+            description: 'room id',
+            required: true,
+          },
+        ],
+        responses: {
+          200: {
+            description: 'a single room received successfully',
+          },
+        },
+      },
+      put: {
+        tags: ['room'],
+        summary: 'update room with room id',
+        description: 'update room found',
+        operationId: 'update accomodation ',
+
+        produces: ['application/json'],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            type: 'string',
+            description: 'room Id',
+            required: true,
+          },
+        ],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/rooms',
+              },
+            },
+          },
+          required: true,
+        },
+        responses: {
+          201: {
+            description: 'Room Updated Successfully',
+          },
+        },
+      },
+      delete: {
+        tags: ['room'],
+        summary: 'Delete a room',
+        description: 'Delete an room',
+        OperationId: 'Delete an room',
+
+        produces: ['application/json'],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            type: 'string',
+            description: 'Room ID',
+            required: true,
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Room deleted successful',
+          },
+          404: {
+            description: 'Not Found',
+          },
+        },
+      },
+    },
+    '/api/v1/location/create': {
+      post: {
+        tags: ['locations'],
+        summary: 'Creating user location',
+        description: 'You have to create a location that will be accessed ',
+        parameters: [],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/locations',
+              },
+            },
+          },
+          required: true,
+        },
+
+        responses: {
+          200: {
+            description: 'location was successfully created',
+          },
+        },
+      },
+    },
+    '/api/v1/location': {
+      get: {
+        tags: ['locations'],
+        summary: 'Get all locations',
+        description: 'list of all locations',
+        OperationId: 'List of all locations',
+        responses: {
+          200: {
+            description: 'received all locations',
+          },
+        },
+      },
+    },
+    '/api/v1/location/{id}': {
+      get: {
+        tags: ['locations'],
+        summary: 'Fetch a single location',
+        description: 'Fetch a single location',
+        operationId: 'Fetch a single location',
+        produces: ['application/json'],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            type: 'string',
+            description: 'location id',
+            required: true,
+          },
+        ],
+        responses: {
+          200: {
+            description: 'a single location received successfully',
+          },
+        },
+      },
+      put: {
+        tags: ['locations'],
+        summary: 'update location with room id',
+        description: 'update location  found',
+        operationId: 'update locationId ',
+
+        produces: ['application/json'],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            type: 'string',
+            description: 'location Id',
+            required: true,
+          },
+        ],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/locations',
+              },
+            },
+          },
+          required: true,
+        },
+        responses: {
+          201: {
+            description: 'Location Updated Successfully',
+          },
+        },
+      },
+      delete: {
+        tags: ['locations'],
+        summary: 'Delete a location',
+        description: 'Delete an location',
+        OperationId: 'Delete an location',
+
+        produces: ['application/json'],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            type: 'string',
+            description: 'Location ID',
+            required: true,
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Location deleted successful',
+          },
+          404: {
+            description: 'Not Found',
+          },
+        },
+      },
+    },
     '/api/v1/user/trip': {
       post: {
         tags: ['Trip Request'],
@@ -237,8 +631,10 @@ const options = {
               example: {
                 leavingFrom: 'kigali',
                 goingTo: 1,
-                travelDate: '2022-10-5',
-                returnDate: '2022-10-10',
+                travelDate:
+                  'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
+                returnDate:
+                  'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
                 travelReason: 'marketing',
                 accomodationId: 1,
               },
@@ -252,6 +648,15 @@ const options = {
           },
           401: {
             description: 'Unauthorized',
+          },
+          403: {
+            description: 'Unauthorized',
+          },
+          500: {
+            description: 'Server Error',
+          },
+          404: {
+            description: 'Not Found',
           },
         },
       },
@@ -297,7 +702,7 @@ const options = {
         },
       },
     },
-    '/api/v1/user/trip/{id}/update': {
+    '/api/v1/user/trip/update/{id}': {
       patch: {
         tags: ['Trip Request'],
         description: 'update trip request',
@@ -320,9 +725,10 @@ const options = {
               },
               example: {
                 leavingFrom: 'kigali',
-                goingTo: 5,
-                travelDate: '2022-10-5',
-                returnDate: '2022-10-10',
+                travelDate:
+                  'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
+                returnDate:
+                  'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
                 travelReason: 'leasure',
               },
             },
@@ -456,6 +862,74 @@ const options = {
           },
         },
       },
+      rooms: {
+        type: 'object',
+        properties: {
+          bedType: {
+            type: 'string',
+          },
+          bedCost: {
+            type: 'string',
+          },
+          bedDescription: {
+            type: 'string',
+          },
+        },
+      },
+
+      accomodation: {
+        type: 'object',
+        content: 'multipart/form-data',
+        properties: {
+          name: {
+            name: 'name',
+            in: 'formData',
+            type: 'string',
+          },
+          description: {
+            name: 'description',
+            in: 'formData',
+            type: 'string',
+          },
+          locationId: {
+            name: 'locationId',
+            in: 'formData',
+            type: 'string',
+          },
+          image: {
+            name: 'image',
+            in: 'formData',
+            type: 'file',
+          },
+          geoLocation: {
+            name: 'geoLocation',
+            in: 'formData',
+            type: 'string',
+          },
+          highlight: {
+            name: 'highlight',
+            in: 'formData',
+            type: 'string',
+          },
+          amenitiesList: {
+            name: 'amenitiesList',
+            in: 'formData',
+            type: 'array',
+            items: {
+              type: 'string',
+            },
+          },
+        },
+      },
+
+      locations: {
+        type: 'object',
+        properties: {
+          locationName: {
+            type: 'string',
+          },
+        },
+      },
       tripRequest: {
         type: 'object',
 
@@ -494,7 +968,5 @@ const options = {
     },
   },
 };
-
 docrouter.use('/', serve, setup(options));
-
 export default docrouter;

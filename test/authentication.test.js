@@ -13,15 +13,15 @@ describe('User sign up', () => {
 
   it('Should return 422 for the password is greater than 8 long', (done) => {
     const user = {
-      firstName: "Eddy",
-      lastName: "Uwambaje",
-      username: "Eddy",
-      email: "uwambaqje1@gmail.com",
-      password: "uwambajeee",
-      repeat_password: "uwambajeee",
-      phoneNumber: "0785058050",
-      role: "requester"
-    }
+      firstName: 'Eddy',
+      lastName: 'Uwambaje',
+      username: 'Eddy',
+      email: 'uwambaqje1@gmail.com',
+      password: 'uwambajeee',
+      repeat_password: 'uwambajeee',
+      phoneNumber: '0785058050',
+      role: 'requester',
+    };
     api
       .post('/api/v1/user/auth/signup')
       .send(user)
@@ -34,15 +34,15 @@ describe('User sign up', () => {
   });
   it('Should return 422 for the email is invalid', (done) => {
     const user = {
-      firstName: "Eddy",
-      lastName: "Uwambaje",
-      username: "Eddy",
-      email: "uwambaqjegmailcom",
-      password: "uwambaje",
-      repeat_password: "uwambaje",
-      phoneNumber: "0785058050",
-      role: "requester"
-    }
+      firstName: 'Eddy',
+      lastName: 'Uwambaje',
+      username: 'Eddy',
+      email: 'uwambaqjegmailcom',
+      password: 'uwambaje',
+      repeat_password: 'uwambaje',
+      phoneNumber: '0785058050',
+      role: 'requester',
+    };
     api
       .post('/api/v1/user/auth/signup')
       .send(user)
@@ -56,15 +56,15 @@ describe('User sign up', () => {
   });
   it('Should return 422 for the password is alphanumeric', (done) => {
     const user = {
-      firstName: "Eddy",
-      lastName: "Uwambaje",
-      username: "Eddy",
-      email: "uwambaqje@gmail.com",
-      password: "uwa1baje",
-      repeat_password: "uwa1baje",
-      phoneNumber: "0785058050",
-      role: "requester"
-    }
+      firstName: 'Eddy',
+      lastName: 'Uwambaje',
+      username: 'Eddy',
+      email: 'uwambaqje@gmail.com',
+      password: 'uwa1baje',
+      repeat_password: 'uwa1baje',
+      phoneNumber: '0785058050',
+      role: 'requester',
+    };
     api
       .post('/api/v1/user/auth/signup')
       .send(user)
@@ -79,153 +79,104 @@ describe('User sign up', () => {
 
   it('Should return 201', (done) => {
     const user = {
-      firstName: "Eddy",
-      lastName: "Uwambaje",
-      username: "Eddy",
-      email: "uwambaqje1@gmail.com",
-      password: "uwambaje",
-      repeat_password: "uwambaje",
-      phoneNumber: "0785058050",
-      role: "requester"
-    }
+      firstName: 'Eddy',
+      lastName: 'Uwambaje',
+      username: 'Eddy',
+      email: 'uwambaqje1@gmail.com',
+      password: 'uwambaje',
+      repeat_password: 'uwambaje',
+      phoneNumber: '0785058050',
+      role: 'requester',
+    };
 
     api
       .post('/api/v1/user/auth/signup')
       .send(user)
       .end((err, res) => {
-        const { message } = res.body;
+        const { token } = res.body;
         expect(res.status).to.equal(created);
-        expect(message);
+        expect(token);
         done();
       });
   });
-  it('Should return 422 for the email is invalid', (done) => {
+
+  it('Should return 409 for the provided email or username exist', (done) => {
     const user = {
-      firstName: "Eddy",
-      lastName: "Uwambaje",
-      username: "Eddy",
-      email: "uwambaqjegmailcom",
-      password: "uwambaje",
-      repeat_password: "uwambaje",
-      phoneNumber: "0785058050",
-      role: "requester"
-    }
+      firstName: 'Eddy',
+      lastName: 'Uwambaje',
+      username: 'Eddy',
+      email: 'uwambaqje1@gmail.com',
+      password: 'uwambaje',
+      repeat_password: 'uwambaje',
+      phoneNumber: '0785058050',
+      role: 'requester',
+    };
     api
       .post('/api/v1/user/auth/signup')
       .send(user)
       .end((err, res) => {
         const { message } = res.body;
-        expect(res.status).to.equal(unProcessableEntity);
-        expect(message);
+        expect(res.status).to.equal(conflict);
+        expect(message).to.equal('Email already taken!');
         done();
       });
   });
-  it('Should return 422 for the password is alphanumeric', (done) => {
+});
+describe('User login', () => {
+  const unProcessableEntity = 422;
+  const conflict = 401;
+  const success = 200;
+  it('Should login user', (done) => {
     const user = {
-      firstName: "Eddy",
-      lastName: "Uwambaje",
-      username: "Eddy",
-      email: "uwambaqje@gmail.com",
-      password: "uwa1baje",
-      repeat_password: "uwa1baje",
-      phoneNumber: "0785058050",
-      role: "requester"
-    }
+      email: 'uwambaqje1@gmail.com',
+      password: 'uwambaje',
+    };
     api
-      .post('/api/v1/user/auth/signup')
-      .send(user)
+      .post('/api/v1/user/login')
       .send(user)
       .end((err, res) => {
         const { message } = res.body;
-        expect(res.status).to.equal(unProcessableEntity);
+        expect(res.status).to.equal(success);
         expect(message);
         done();
       });
   });
-
-  it('Should return 201', (done) => {
+  it('Should return 401 for the provided worng email or password ', (done) => {
     const user = {
-      firstName: "Eddy",
-      lastName: "Uwambaje",
-      username: "Eddy",
-      email: "uwambaqje1@gmail.com",
-      password: "uwambaje",
-      repeat_password: "uwambaje",
-      phoneNumber: "0785058050",
-      role: "requester"
-    }
-
-    it('Should return 409 for the provided email or username exist', (done) => {
-      const user = {
-        firstName: "Eddy",
-        lastName: "Uwambaje",
-        username: "Eddy",
-        email: "uwambaqje1@gmail.com",
-        password: "uwambaje",
-        repeat_password: "uwambaje",
-        phoneNumber: "0785058050",
-        role: "requester"
-      }
-      api
-        .post('/api/v1/user/auth/signup')
-        .send(user)
-        .end((err, res) => {
-          const { message } = res.body;
-          expect(res.status).to.equal(conflict);
-          expect(message).to.equal('Email already taken!');
-          done();
-        });
-    });
-    done();
+      email: 'wrong@gmail.com',
+      password: 'wrong',
+    };
+    api
+      .post('/api/v1/user/login')
+      .send(user)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(conflict);
+        expect(message);
+        done();
+      });
   });
-  describe('User login', () => {
-    const unProcessableEntity = 422;
-    const conflict = 401;
-    const success = 200;
-    it("Should login user", (done) => {
-      const user = {
+  it('Should return 400 for the provided empty fields!', (done) => {
+    const user = {};
+    api
+      .post('/api/v1/user/login')
+      .send(user)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(400);
+        expect(message);
+        done();
+      });
+  });
+});
+describe('logout the user', () => {
+  const success = 200;
 
-        email: "uwambaqje1@gmail.com",
-        password: "uwambaje",
-      }
-      api
-        .post('/api/v1/user/login')
-        .send(user)
-        .end((err, res) => {
-          const { message } = res.body;
-          expect(res.status).to.equal(success);
-          expect(message);
-          done();
-        });
-    });
-    it("Should return 401 for the provided worng email or password ", (done) => {
-      const user = {
-
-        email: "wrong@gmail.com",
-        password: "wrong",
-      }
-      api
-        .post('/api/v1/user/login')
-        .send(user)
-        .end((err, res) => {
-          const { message } = res.body;
-          expect(res.status).to.equal(conflict);
-          expect(message);
-          done();
-        });
-    });
-    it("Should return 400 for the provided empty fields!", (done) => {
-      const user = {
-      }
-      api
-        .post('/api/v1/user/login')
-        .send(user)
-        .end((err, res) => {
-          const { message } = res.body;
-          expect(res.status).to.equal(400);
-          expect(message);
-          done();
-        });
+  it('Should logout the user', (done) => {
+    api.post('/api/v1/user/logout').end((err, res) => {
+      const { message } = res.body;
+      expect(res.status).to.equal(success);
+      done();
     });
   });
 });
