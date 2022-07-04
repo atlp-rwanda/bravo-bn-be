@@ -1,7 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 export default (sequelize, DataTypes) => {
   class Notification extends Model {
     /**
@@ -13,16 +11,20 @@ export default (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Notification.init({
-    title: DataTypes.STRING,
-    description: DataTypes.STRING,
-    url: DataTypes.STRING,
-    userId: DataTypes.INTEGER,
-    read: DataTypes.BOOLEAN
-  }, {
-    sequelize,
-    modelName: 'Notifications',
-  });
+  Notification.init(
+    {
+      title: DataTypes.STRING,
+      description: DataTypes.STRING,
+      url: DataTypes.STRING,
+      userId: DataTypes.INTEGER,
+      tripId: DataTypes.INTEGER,
+      read: DataTypes.BOOLEAN,
+    },
+    {
+      sequelize,
+      modelName: 'Notifications',
+    },
+  );
 
   return Notification;
 };
