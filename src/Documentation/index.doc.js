@@ -189,6 +189,52 @@ const options = {
         },
       },
     },
+    '/api/v1/user/notification/get': {
+      get: {
+        tags: ['Notification'],
+        description: 'Get all notifications',
+        parameters: [],
+        responses: {
+          200: {
+            description: 'success',
+          },
+        },
+      },
+    },
+    '/api/v1/user/notification/read': {
+      put: {
+        tags: ['Notification'],
+        description: 'Read all notifications',
+        parameters: [],
+        responses: {
+          200: {
+            description: 'success',
+          },
+        },
+      },
+    },
+    '/api/v1/user/notification/{id}': {
+      patch: {
+        tags: ['Notification'],
+        description: 'Read notification',
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            description: 'notification id',
+            required: true,
+            schema: {
+              type: 'string',
+            },
+          },
+        ],
+        responses: {
+          200: {
+            description: 'success',
+          },
+        },
+      },
+    },
     '/api/v1/user/auth/signup': {
       post: {
         security: [],

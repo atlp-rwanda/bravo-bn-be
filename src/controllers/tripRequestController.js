@@ -17,7 +17,7 @@ export const createTripRequest = async (req, res) => {
     }
     await tripRequestSchema.validateAsync(req.body);
 
-    //check if accomodation chosen is available
+    //check if location and accomodation chosen are available
     const accomodation = await accomodations.findOne({
       where: { id: req.body.accomodationId },
     });
@@ -25,13 +25,11 @@ export const createTripRequest = async (req, res) => {
     const location = await locations.findOne({
       where: { id: req.body.goingTo },
     });
-    if (!location) {
+    if (!location || !accomodation) {
       return res
         .status(404)
-        .json({ message: `Location with id= ${req.body.goingTo} Not Found` });
-    }
-
-    if (accomodation) {
+        .json({ message: `Location or Accomodation Not Found` });
+    } else {
       const type = req.body.returnDate == null ? 'One way trip' : 'Round trip';
       const status = 'pending';
       const trip = {
@@ -45,15 +43,10 @@ export const createTripRequest = async (req, res) => {
         requesterId: req.user.id,
         accomodationId: req.body.accomodationId,
       };
-
       await tripRequests.create(trip);
       trip.accomodationId = undefined;
       trip.accomodation = accomodation;
       return res.status(201).json({ status: 'success', data: trip });
-    } else {
-      return res.status(404).json({
-        message: `accomodation with id= ${req.body.accomodationId} Not Found`,
-      });
     }
   } catch (error) {
     return res.status(500).json({ error: error.message });
@@ -66,48 +59,42 @@ export const getSingleTripRequest = async (req, res) => {
     const userId = req.user.id;
     const requestId = req.params.id;
 
-    if (req.user.role == 'requester') {
-      const trip = await tripRequests.findOne({
-        where: { id: requestId, requesterId: userId },
-        include: [
-          {
-            model: accomodations,
-            as: 'accomodation',
-            attributes: { exclude: ['createdAt', 'updatedAt'] },
-          },
-        ],
-        attributes: { exclude: ['createdAt', 'updatedAt', 'accomodationId'] },
-      });
+    if (req.user.role == 'requester' || req.user.role == 'manager') {
+      let response;
+      req.user.role == 'requester'
+        ? (response = await tripRequests.findOne({
+            where: { id: requestId, requesterId: userId },
+            include: [
+              {
+                model: accomodations,
+                as: 'accomodation',
+                attributes: { exclude: ['createdAt', 'updatedAt'] },
+              },
+            ],
+            attributes: {
+              exclude: ['createdAt', 'updatedAt', 'accomodationId'],
+            },
+          }))
+        : (response = await tripRequests.findOne({
+            where: { id: requestId },
+            include: [
+              {
+                model: accomodations,
+                as: 'accomodation',
+                attributes: { exclude: ['createdAt', 'updatedAt'] },
+              },
+            ],
+            attributes: {
+              exclude: ['createdAt', 'updatedAt', 'accomodationId'],
+            },
+          }));
 
-      if (!trip) {
-        return res.status(404).json({
-          success: false,
-          message: `Trip Requests  with id=  ${requestId} Not Found!`,
-        });
-      } else {
-        return res.status(200).json({ status: 'success', data: trip });
-      }
-    } else if (req.user.role == 'manager') {
-      const trip = await tripRequests.findOne({
-        where: { id: requestId },
-        include: [
-          {
-            model: accomodations,
-            as: 'accomodation',
-            attributes: { exclude: ['createdAt', 'updatedAt'] },
-          },
-        ],
-        attributes: { exclude: ['createdAt', 'updatedAt', 'accomodationId'] },
-      });
-
-      if (!trip) {
-        return res.status(404).json({
-          status: 'fail',
-          message: ` Trip Request with id= ${requestId} Not Found`,
-        });
-      } else {
-        return res.status(200).json({ status: 'success', data: trip });
-      }
+      response
+        ? res.status(200).json({ status: 'success', data: response })
+        : res.status(404).json({
+            success: false,
+            message: `Trip Request  Not Found!`,
+          });
     } else {
       return res.status(403).json({
         status: 'fail',
@@ -122,50 +109,46 @@ export const getSingleTripRequest = async (req, res) => {
 export const getAllTripRequest = async (req, res) => {
   try {
     const userId = req.user.id;
+    if (req.user.role == 'requester' || req.user.role == 'manager') {
+      let response;
+      req.user.role == 'requester'
+        ? (response = await tripRequests.findAll({
+            where: { requesterId: userId },
+            include: [
+              {
+                model: accomodations,
+                as: 'accomodation',
+                attributes: { exclude: ['createdAt', 'updatedAt'] },
+              },
+            ],
+            attributes: {
+              exclude: ['createdAt', 'updatedAt', 'accomodationId'],
+            },
+          }))
+        : (response = await tripRequests.findAll({
+            include: [
+              {
+                model: accomodations,
+                as: 'accomodation',
+                attributes: { exclude: ['createdAt', 'updatedAt'] },
+              },
+            ],
+            attributes: {
+              exclude: ['createdAt', 'updatedAt', 'accomodationId'],
+            },
+          }));
 
-    if (req.user.role == 'requester') {
-      const trips = await tripRequests.findAll({
-        where: { requesterId: userId },
-        include: [
-          {
-            model: accomodations,
-            as: 'accomodation',
-            attributes: { exclude: ['createdAt', 'updatedAt'] },
-          },
-        ],
-        attributes: { exclude: ['createdAt', 'updatedAt', 'accomodationId'] },
-      });
-
-      if (!trips) {
-        return res.status(404).json({
-          message: `there are no Trip Requests assigned to ${userId}`,
-        });
-      } else {
-        return res.status(200).json({ status: 'success', data: trips });
-      }
-    } else if (req.user.role == 'manager') {
-      const trips = await tripRequests.findAll({
-        include: [
-          {
-            model: accomodations,
-            as: 'accomodation',
-            attributes: { exclude: ['createdAt', 'updatedAt'] },
-          },
-        ],
-        attributes: { exclude: ['createdAt', 'updatedAt', 'accomodationId'] },
-      });
-
-      if (!trips) {
-        return res
-          .status(404)
-          .json({ status: 'fail', message: `No Trip Requests found` });
-      } else {
-        return res.status(200).json({ status: 'success', data: trips });
-      }
+      response
+        ? res.status(200).json({ status: 'success', data: response })
+        : res.status(404).json({
+            success: false,
+            message: `Trip Request  Not Found!`,
+          });
     } else {
-      return res
-        .status(403)
-        .json({ message: 'Unauthorized to retrive trip request' });
+      return res.status(403).json({
+        status: 'fail',
+        message: 'UnAuthorized to retrieve trip requests',
+      });
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -186,14 +169,12 @@ export const updateTripRequest = async (req, res) => {
       where: { id: requestId },
     });
 
-    if (!tripRequest) {
+    if (!tripRequest || tripRequest.status !== 'pending') {
       return res.status(404).json({
         status: 'fail',
-        message: `Trip Request with id = ${requestId} Not Found!`,
+        message: `Trip Request is Not in pending status or Not Exist!`,
       });
-    }
-
-    if (tripRequest.status == 'pending') {
+    } else {
       await tripRequestUpdateSchema.validateAsync(req.body);
 
       const status = 'pending';
@@ -215,18 +196,14 @@ export const updateTripRequest = async (req, res) => {
         .then((num) => {
           if (num == 1) {
             res.status(201).send({
-              message: `Trip request with id= ${requestId} Updated Successfully`,
+              message: `Trip request  Updated Successfully`,
             });
           } else {
             res.send({
-              message: `Trip request with id= ${requestId} Not Updated.`,
+              message: `Trip request  Not Updated.`,
             });
           }
         });
-    } else {
-      return res.status(404).json({
-        message: `Trip Request with id = ${requestId} is approved or rejected`,
-      });
     }
   } catch (error) {
     return res.status(500).json({ error: error.message });
@@ -247,21 +224,15 @@ export const deleteTripRequest = async (req, res) => {
       where: { id: requestId, requesterId: userId },
     });
 
-    if (!tripRequest) {
-      return res
-        .status(404)
-        .json({ message: `Trip Request with id = ${requestId} Not Found!` });
-    }
-
-    if (tripRequest.status == 'pending') {
+    if (!tripRequest || tripRequest.status !== 'pending') {
+      return res.status(404).json({
+        message: `Trip Request is Not in pending status or Not Exist!`,
+      });
+    } else {
       await tripRequests.destroy({
         where: { id: requestId, requesterId: userId },
       });
       res.status(200).json({ message: 'Trip Request Deleted successfully' });
-    } else {
-      return res.status(404).json({
-        message: `Trip Request with id = ${requestId} is approved or rejected`,
-      });
     }
   } catch (error) {
     return res.status(500).json(error.message);
