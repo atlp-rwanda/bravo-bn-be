@@ -8,8 +8,14 @@ import server from '../src/app.js';
 
 describe('User Profile', () => {
   const user = {
-    email: 'uwambaqje1@gmail.com',
+    firstName: 'Eddy',
+    lastName: 'Uwambaje',
+    username: 'Eddy543',
+    email: 'uwambaqje543@gmail.com',
     password: 'uwambaje',
+    repeat_password: 'uwambaje',
+    phoneNumber: '0785058050',
+    role: 'requester',
   };
   const updateUser = {
     firstName: 'Samuel',
@@ -27,7 +33,7 @@ describe('User Profile', () => {
   it('Should return 200 on successful update user profile', (done) => {
     let token;
     api
-      .post('/api/v1/user/login')
+      .post('/api/v1/user/auth/signup')
       .send(user)
       .end((err, res) => {
         token = res.body.token;
@@ -37,6 +43,9 @@ describe('User Profile', () => {
           .set('Authorization', `Bearer ${token}`)
           .end((err, res) => {
             expect(res.status).to.equal(200);
+            expect(res.body).to.be.a('object');
+            expect(res.body).to.have.property('message');
+            expect(res.body.message).to.equal('user Profile updated well done');
             done();
           });
       });
@@ -47,6 +56,11 @@ describe('User Profile', () => {
       .send(updateUser)
       .end((err, res) => {
         expect(res.status).to.equal(401);
+        expect(res.body).to.be.a('object');
+        expect(res.body).to.have.property('message');
+        expect(res.body.message).to.equal(
+          'You are not logged in! please login to get access',
+        );
         done();
       });
   });

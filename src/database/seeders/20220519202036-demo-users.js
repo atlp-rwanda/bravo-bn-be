@@ -15,6 +15,7 @@ export default {
           email: 'test1@gmail.com',
           password: await hash('test1', 12),
           role: 'requester',
+          isVerified: true,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
