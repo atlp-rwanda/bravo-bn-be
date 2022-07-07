@@ -25,7 +25,7 @@ describe("GET API /api/v1/user/forgotpassword", () => {
 	});
 
 	it("Should return not user found", (done) => {
-		const fakeemail = "h@gmail.com"
+		const fakeemail = "hish@gmail.com"
 		chai
 			api
 			.post("/api/v1/user/forgotpassword")
@@ -38,21 +38,3 @@ describe("GET API /api/v1/user/forgotpassword", () => {
 			});
 	});
 });
-
-describe("PUT API /api/v1/user/resetpassword/", () => {
-	const userData = {
-		email: "xldivin@gmail.com",
-		password: "1111",
-	};
-    const userData2 = {
-		email: "xldivin@gmail.com",
-		password: "1111",
-		confirmPassword: "1112"
-	};
-    const userData3 = {
-		email: "h@gmail.com",
-		password: "1111",
-		confirmPassword: "1111"
-	};
-   
-}) 
