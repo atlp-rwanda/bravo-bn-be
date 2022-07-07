@@ -77,6 +77,7 @@ describe('POST api/v1/accomodations/', () => {
       phoneNumber: '0785058050',
       role: 'requester',
     };
+    
 
     api
       .post('/api/v1/user/auth/signup')
