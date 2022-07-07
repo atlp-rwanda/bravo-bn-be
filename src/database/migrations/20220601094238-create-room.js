@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 export async function up(queryInterface, DataTypes) {
-  await queryInterface.createTable("rooms", {
+  await queryInterface.createTable('rooms', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -31,5 +31,5 @@ export async function up(queryInterface, DataTypes) {
   });
 }
 export async function down(queryInterface, DataTypes) {
-  await queryInterface.dropTable("rooms");
+  await queryInterface.dropTable('rooms');
 }

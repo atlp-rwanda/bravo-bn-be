@@ -26,7 +26,7 @@ const options = {
     { name: 'Admin', description: 'update user role' },
   ],
   paths: {
-    '/api/v1/testSwagger': {
+    '/api/v1/docs': {
       get: {
         tags: ['setup swagger'],
         description: 'testing swagger setup',
@@ -662,6 +662,162 @@ const options = {
         },
       },
     },
+    '/api/v1/user/trip': {
+      post: {
+        tags: ['Trip Request'],
+        description: 'Create Trip Request',
+
+        parameters: [],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/tripRequest',
+              },
+              example: {
+                leavingFrom: 'kigali',
+                goingTo: 1,
+                travelDate:
+                  'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
+                returnDate:
+                  'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
+                travelReason: 'marketing',
+                accomodationId: 1,
+              },
+            },
+          },
+          required: true,
+        },
+        responses: {
+          201: {
+            description: 'success status',
+          },
+          401: {
+            description: 'Unauthorized',
+          },
+          403: {
+            description: 'Unauthorized',
+          },
+          500: {
+            description: 'Server Error',
+          },
+          404: {
+            description: 'Not Found',
+          },
+        },
+      },
+    },
+
+    '/api/v1/user/trip/get': {
+      get: {
+        tags: ['Trip Request'],
+        description: 'get all trip requests',
+        parameters: [],
+        responses: {
+          200: {
+            description: 'successfully',
+          },
+          500: {
+            description: 'Internal Server Error',
+          },
+        },
+      },
+    },
+    '/api/v1/user/trip/get/{id}': {
+      get: {
+        tags: ['Trip Request'],
+        description: 'get single trip request',
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            description: 'requester id',
+            required: true,
+            schema: {
+              type: 'string',
+            },
+          },
+        ],
+        responses: {
+          200: {
+            description: 'successfully',
+          },
+          500: {
+            description: 'Internal Server Error',
+          },
+        },
+      },
+    },
+    '/api/v1/user/trip/update/{id}': {
+      patch: {
+        tags: ['Trip Request'],
+        description: 'update trip request',
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            description: 'requester id',
+            required: true,
+            schema: {
+              type: 'string',
+            },
+          },
+        ],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/tripRequest',
+              },
+              example: {
+                leavingFrom: 'kigali',
+                travelDate:
+                  'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
+                returnDate:
+                  'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
+                travelReason: 'leasure',
+              },
+            },
+          },
+          required: true,
+        },
+        responses: {
+          200: {
+            description: 'success status',
+          },
+          401: {
+            description: 'Unauthorized',
+          },
+        },
+      },
+    },
+
+    '/api/v1/user/trip/{id}': {
+      delete: {
+        tags: ['Trip Request'],
+        description: 'update trip request',
+
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            description: 'requester id',
+            required: true,
+            schema: {
+              type: 'string',
+            },
+          },
+        ],
+        responses: {
+          202: {
+            description: 'success status',
+          },
+          401: {
+            description: 'Unauthorized',
+          },
+        },
+      },
+    },
   },
 
   components: {
@@ -811,11 +967,40 @@ const options = {
           },
         },
       },
+
       locations: {
         type: 'object',
         properties: {
           locationName: {
             type: 'string',
+          },
+        },
+      },
+      tripRequest: {
+        type: 'object',
+
+        properties: {
+          leavingFrom: {
+            type: 'string',
+            description: 'current location',
+          },
+          goingTo: {
+            type: 'string',
+            description: 'destination',
+          },
+          travelDate: {
+            type: 'string',
+            description: 'start date of trip',
+          },
+          returnDate: {
+            type: 'string',
+            description: 'end date of trip',
+          },
+          travelReason: {
+            type: 'string',
+          },
+          accomodationId: {
+            type: 'integer',
           },
         },
       },
@@ -829,7 +1014,5 @@ const options = {
     },
   },
 };
-
 docrouter.use('/', serve, setup(options));
-
 export default docrouter;

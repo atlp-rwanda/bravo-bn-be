@@ -1,4 +1,4 @@
-import Joi from "joi";
+import Joi from 'joi';
 
 export default async (req, res, next) => {
   try {
@@ -9,14 +9,14 @@ export default async (req, res, next) => {
           .min(3)
           .max(30)
           .required()
-          .valid("super admin", "travel admin", "manager", "requester"),
+          .valid('super admin', 'travel admin', 'manager', 'requester'),
       })
       .messages({
-        "string.base": "Role should be a type of text",
-        "string.empty": "This field cannot be an empty",
-        "string.min": "Role  should have a minimum length {#limit}",
-        "string.max": "Role should have a maximum length of {#limit}",
-        "any.required": "This is a required field",
+        'string.base': 'Role should be a type of text',
+        'string.empty': 'This field cannot be an empty',
+        'string.min': 'Role  should have a minimum length {#limit}',
+        'string.max': 'Role should have a maximum length of {#limit}',
+        'any.required': 'This is a required field',
       });
 
     const { error } = schema.validate({ role }, { abortEarly: false });
