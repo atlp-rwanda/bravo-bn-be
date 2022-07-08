@@ -1,6 +1,8 @@
 import express from 'express';
 import {
   login,
+  forgotPassword,
+  resetPassword,
   logout,
   protect,
   signup,
@@ -32,13 +34,18 @@ const uploads = multer({ storage, fileFilter });
 
 const userRouter = express.Router();
 
-userRouter.post('/signup',signup);
-userRouter.post('/login',login);
-userRouter.patch('/update',protect,uploads.single("image"),updateUserProfile);
-userRouter.get('/',getAllUsers)
-userRouter.post('/forgotpassword',forgotPassword)
-userRouter.patch('/resetpassword/:token',resetPassword)
-userRouter.get('/:id',protect,getUserData)
+userRouter.post('/signup', signup);
+userRouter.post('/login', login);
+userRouter.patch(
+  '/update',
+  protect,
+  uploads.single('image'),
+  updateUserProfile,
+);
+userRouter.get('/', getAllUsers);
+userRouter.post('/forgotpassword', forgotPassword);
+userRouter.patch('/resetpassword/:token', resetPassword);
+userRouter.get('/:id', protect, getUserData);
 userRouter.put('/roles', isAdmin, isValidRole, updateRole);
 
 export default userRouter;

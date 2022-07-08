@@ -70,6 +70,7 @@
     "cross-env": "^7.0.3",
     "crypto": "^1.0.1",
     "dotenv": "^16.0.1",
+    "eastasianwidth": "^0.2.0",
     "ejs": "^3.1.8",
     "express": "^4.18.1",
     "human-signals": "^4.1.0",
