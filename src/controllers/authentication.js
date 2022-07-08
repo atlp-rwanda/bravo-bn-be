@@ -54,12 +54,14 @@ export const login = catchAsync(async (req, res, next) => {
   }
 
   let currentUser = await User.findOne({ where: { email: req.body.email } });
-  if (!currentUser) return next(new AppError('Wrong email or password!', 401));
+  if (!currentUser) return next(new AppError("User doesn't exist", 401));
 
   const hashedPassword = await compare(req.body.password, currentUser.password);
 
   if (!hashedPassword)
     return next(new AppError('Wrong email or password!', 401));
+  if (!currentUser.isVerified)
+    return next(new AppError('Please verify your email first!', 401));
 
   createSendToken(currentUser, 200, res);
 });
@@ -81,8 +83,8 @@ export const signup = catchAsync(async (req, res, next) => {
   req.body.verificationToken = createHash('sha256')
     .update(verificationToken)
     .digest('hex');
-
   req.body.isVerified = false;
+  req.body.password = await hash(req.body.password, 12);
   const createUser = await User.create(req.body, {
     individualHooks: true,
   });

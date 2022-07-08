@@ -1,7 +1,7 @@
 import { Model } from 'sequelize';
 
 export default (sequelize, DataTypes) => {
-  class UserAccommodation extends Model {
+  class Likes extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,7 +11,7 @@ export default (sequelize, DataTypes) => {
       // define association here
     }
   }
-  UserAccommodation.init(
+  Likes.init(
     {
       like: {
         type: DataTypes.BOOLEAN,
@@ -27,8 +27,8 @@ export default (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'UserAccommodation',
-    }
+      modelName: 'Likes',
+    },
   );
-  return UserAccommodation;
+  return Likes;
 };

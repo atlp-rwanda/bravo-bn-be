@@ -1,6 +1,6 @@
 export default {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('UserAccommodations', {
+    await queryInterface.createTable('Likes', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -41,6 +41,6 @@ export default {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('UserAccommodations');
+    await queryInterface.dropTable('Likes');
   },
 };

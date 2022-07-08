@@ -126,8 +126,8 @@ describe('User sign up', () => {
 describe('User login', () => {
   it('Should login user', (done) => {
     const user = {
-      email: 'uwambaqje1@gmail.com',
-      password: 'uwambaje',
+      email: 'test1@gmail.com',
+      password: 'test1',
     };
     api
       .post('/api/v1/user/login')

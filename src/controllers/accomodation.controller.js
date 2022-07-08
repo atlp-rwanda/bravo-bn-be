@@ -1,7 +1,7 @@
 import db from '../database/models/index.js';
 const accomodations = db['accomodation'];
 const Locations = db['Location'];
-const UserAccommodation = db['UserAccommodation'];
+const Likes = db['Likes'];
 import { fileUpload } from '../helpers/multer';
 const { Op } = require('sequelize');
 
@@ -194,6 +194,12 @@ export const deleteAccomodation = async (req, res) => {
 };
 
 export const updateLike = async (req, res) => {
+  if (req.user.dataValues.role !== 'requester') {
+    return res.status(403).json({
+      status: 'fail',
+      message: 'You are not allowed to do this, only requester can do this',
+    });
+  }
   const userId = req.user.dataValues.id;
   const accommodationId = req.params.id;
   try {
@@ -206,13 +212,13 @@ export const updateLike = async (req, res) => {
       res.status(400).json({ message: 'Accommodation not found' });
     }
 
-    const like = await UserAccommodation.findOne({
+    const like = await Likes.findOne({
       where: { accommodationId, userId },
     });
 
     if (like) {
       if (like.dataValues.like) {
-        await UserAccommodation.update(
+        await Likes.update(
           {
             like: null,
           },
@@ -220,21 +226,19 @@ export const updateLike = async (req, res) => {
             where: { accommodationId, userId },
           },
         );
-        const unlikes = await UserAccommodation.findAndCountAll({
+        const unlikes = await Likes.findAndCountAll({
           where: { accommodationId, like: null },
         });
-        const likes = await UserAccommodation.findAndCountAll({
+        const likes = await Likes.findAndCountAll({
           where: { accommodationId, like: true },
         });
-        res
-          .status(200)
-          .json({
-            message: 'accommodation unliked',
-            Unlikes: unlikes.count,
-            Likes: likes.count,
-          });
+        res.status(200).json({
+          message: 'accommodation unliked',
+          Unlikes: unlikes.count,
+          Likes: likes.count,
+        });
       } else {
-        await UserAccommodation.update(
+        await Likes.update(
           {
             like: true,
           },
@@ -242,39 +246,35 @@ export const updateLike = async (req, res) => {
             where: { accommodationId, userId },
           },
         );
-        const likes = await UserAccommodation.findAndCountAll({
+        const likes = await Likes.findAndCountAll({
           where: { accommodationId, like: true },
         });
-        const unlikes = await UserAccommodation.findAndCountAll({
+        const unlikes = await Likes.findAndCountAll({
           where: { accommodationId, like: null },
         });
-        res
-          .status(200)
-          .json({
-            message: 'accommodation liked',
-            Likes: likes.count,
-            Unlikes: unlikes.count,
-          });
-      }
-    } else {
-      await UserAccommodation.create({
-        accommodationId,
-        userId,
-        like: true,
-      });
-      const likes = await UserAccommodation.findAndCountAll({
-        where: { accommodationId, like: true },
-      });
-      const unlikes = await UserAccommodation.findAndCountAll({
-        where: { accommodationId, like: null },
-      });
-      res
-        .status(200)
-        .json({
+        res.status(200).json({
           message: 'accommodation liked',
           Likes: likes.count,
           Unlikes: unlikes.count,
         });
+      }
+    } else {
+      await Likes.create({
+        accommodationId,
+        userId,
+        like: true,
+      });
+      const likes = await Likes.findAndCountAll({
+        where: { accommodationId, like: true },
+      });
+      const unlikes = await Likes.findAndCountAll({
+        where: { accommodationId, like: null },
+      });
+      res.status(200).json({
+        message: 'accommodation liked',
+        Likes: likes.count,
+        Unlikes: unlikes.count,
+      });
     }
   } catch (error) {
     res.status(500).json(error.message);
@@ -284,10 +284,10 @@ export const updateLike = async (req, res) => {
 export const getLikes = async (req, res) => {
   const accommodationId = req.params.id;
   try {
-    const likes = await UserAccommodation.findAndCountAll({
+    const likes = await Likes.findAndCountAll({
       where: { accommodationId, like: true },
     });
-    const unlikes = await UserAccommodation.findAndCountAll({
+    const unlikes = await Likes.findAndCountAll({
       where: { accommodationId, like: null },
     });
     res.status(200).json({ likes: likes.count, Unlikes: unlikes.count });

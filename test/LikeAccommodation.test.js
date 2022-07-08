@@ -18,6 +18,16 @@ describe('Like/Unlike accommodation', () => {
     phoneNumber: '0785058050',
     role: 'requester',
   };
+  const user2 = {
+    firstName: 'Eddy',
+    lastName: 'Uwambaje',
+    username: 'Eddy914',
+    email: 'uwambaqje914@gmail.com',
+    password: 'uwambaje',
+    repeat_password: 'uwambaje',
+    phoneNumber: '0785058050',
+    role: 'requester',
+  };
 
   it('Should return 200 for success', (done) => {
     api
@@ -37,12 +47,11 @@ describe('Like/Unlike accommodation', () => {
       });
   });
   it('Should return 400 for unavailable accommodation id', (done) => {
-    let token;
     api
-      .post('/api/v1/user/login')
-      .send(user)
+      .post('/api/v1/user/auth/signup')
+      .send(user2)
       .end((err, res) => {
-        token = res.body.token;
+        const { token } = res.body;
         api
           .put('/api/v1/accomodation/like/00')
           .set('Authorization', `Bearer ${token}`)
