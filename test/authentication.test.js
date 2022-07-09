@@ -170,11 +170,11 @@ describe('User login', () => {
   });
 });
 
-describe('logout the user', () => {
-  it('Should logout the user', (done) => {
-    api.post('/api/v1/user/logout').end((err, res) => {
-      expect(res.status).to.equal(success);
-      done();
-    });
-  });
-});
+// describe('logout the user', () => {
+//   it('Should logout the user', (done) => {
+//     api.post('/api/v1/user/auth/logout').end((err, res) => {
+//       expect(res.status).to.equal(success);
+//       done();
+//     });
+//   });
+// });

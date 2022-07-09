@@ -9,6 +9,10 @@ import db from '../database/models/index.js';
 import { signupAuthSchema } from '../helpers/validation_schema';
 import { Op } from 'sequelize';
 import createNotification from '../services/notification.service';
+import { deleteToken, setToken, getToken } from '../helpers/redis.config';
+import redisClient from '../helpers/redis.config';
+
+import { token } from 'morgan';
 
 const { randomBytes, createHash } = crypto;
 
@@ -23,8 +27,9 @@ const signToken = (id) => {
   });
 };
 
-const createSendToken = (user, statusCode, res) => {
+const createSendToken = async (user, statusCode, res) => {
   const token = signToken(user.id);
+  await setToken(token, token);
   const cookieOptions = {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000,
@@ -32,6 +37,7 @@ const createSendToken = (user, statusCode, res) => {
     secure: false,
     httpOnly: true,
   };
+
   res.cookie('jwt', token, cookieOptions);
 
   user.password = undefined;
@@ -210,10 +216,15 @@ export const protect = catchAsync(async (req, res, next) => {
   } else if (req.cookies?.jwt) {
     token = req.cookies.jwt;
   }
+  const foundToken = await getToken(token);
+
   if (!token || token.length === 4 || token === 'loggedout') {
     return next(
       new AppError('You are not logged in! please login to get access', 401),
     );
+  }
+  if (!foundToken) {
+    return next(new AppError('Your token is invalid or expired', 401));
   }
   const decoded = await promisify(verify)(token, process.env.JWT_SECRET);
 
@@ -232,10 +243,31 @@ export const protect = catchAsync(async (req, res, next) => {
   next();
 });
 
-export const logout = (req, res) => {
-  res.cookie('jwt', 'loggedout', {
-    expires: new Date(Date.now() + 10 * 1000),
-    httpOnly: true,
-  });
-  res.status(200).json({ status: 'success', data: null });
+export const logout = async (req, res) => {
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    token = req.headers.authorization.split(' ')[1];
+
+    if (!token) {
+      return res.status(401).json({
+        message: 'Please login first or check the token you are sending.',
+      });
+    }
+    const foundToken = await getToken(token);
+
+    if (!foundToken) {
+      return res.status(401).json({ message: 'token not found!!' });
+    }
+    await deleteToken(token);
+    res.cookie('jwt', 'loggedout', {
+      expires: new Date(Date.now() + 10 * 1000),
+      httpOnly: true,
+    });
+    res.status(200).json({
+      status: 'success',
+      message: 'User logged out successfully',
+    });
+  }
 };

@@ -43,39 +43,7 @@ const options = {
         },
       },
     },
-    '/api/v1/user/login': {
-      post: {
-        tags: ['User'],
-        description: 'login user',
-        security: [],
-        parameters: [],
-        requestBody: {
-          content: {
-            'application/json': {
-              schema: {
-                $ref: '#/components/schemas/User',
-              },
-              example: {
-                email: 'john@gmail.com',
-                password: 'aaaaaaaa',
-              },
-            },
-          },
-          required: true,
-        },
-        responses: {
-          200: {
-            description: 'successfully',
-          },
-          400: {
-            description: 'Invalid credation',
-          },
-          500: {
-            description: 'Internal Server Error',
-          },
-        },
-      },
-    },
+
     '/api/v1/user/': {
       get: {
         tags: ['User'],
