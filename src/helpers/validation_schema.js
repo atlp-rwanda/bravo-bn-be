@@ -54,3 +54,18 @@ export const updateProfileSchema = Joi.object({
   department: Joi.string(),
   lineManager: Joi.string(),
 });
+
+export const tripRequestSchema = Joi.object({
+  leavingFrom: Joi.string().required(),
+  goingTo: Joi.number().required(),
+  travelDate: Joi.string().required(),
+  returnDate: Joi.string(),
+  travelReason: Joi.string().required(),
+  accomodationId: Joi.number().required(),
+});
+export const tripRequestUpdateSchema = Joi.object({
+  leavingFrom: Joi.string().required(),
+  travelDate: Joi.string().required(),
+  returnDate: Joi.string(),
+  travelReason: Joi.string().required(),
+});

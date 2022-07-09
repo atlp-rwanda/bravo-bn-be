@@ -1,8 +1,5 @@
 'use strict';
 const { Model } = require('sequelize');
-const bcryptjs = require('bcryptjs');
-const { hash } = bcryptjs;
-
 export default (sequelize, DataTypes) => {
   class user extends Model {
     /**
@@ -45,9 +42,9 @@ export default (sequelize, DataTypes) => {
       passwordResetToken: DataTypes.STRING,
       socialMediaId: DataTypes.STRING,
       provider: DataTypes.STRING,
-      isVerified: DataTypes.BOOLEAN,
       gender: DataTypes.STRING,
       preferredLanguage: DataTypes.STRING,
+      verificationToken: DataTypes.STRING,
       role: DataTypes.ENUM(
         'manager',
         'super user',
@@ -63,12 +60,6 @@ export default (sequelize, DataTypes) => {
       modelName: 'users',
     },
   );
-
-  user.beforeSave(async (user) => {
-    if (user.password) {
-      user.password = await hash(user.password, 12);
-    }
-  });
 
   return user;
 };

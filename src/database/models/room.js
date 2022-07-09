@@ -1,5 +1,5 @@
-"use strict";
-import { Model } from "sequelize";
+'use strict';
+import { Model } from 'sequelize';
 export default (sequelize, DataTypes) => {
   class Room extends Model {
     /**
@@ -9,8 +9,8 @@ export default (sequelize, DataTypes) => {
      */
     static associate({ accomodation }) {
       this.belongsTo(accomodation, {
-        foreignKey: "accomodationId",
-        as: "accomodation",
+        foreignKey: 'accomodationId',
+        as: 'accomodation',
       });
     }
     toJSON() {
@@ -36,9 +36,9 @@ export default (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      tableName: "rooms",
-      modelName: "Room",
-    }
+      tableName: 'rooms',
+      modelName: 'Room',
+    },
   );
   return Room;
 };

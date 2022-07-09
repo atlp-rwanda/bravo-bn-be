@@ -1,14 +1,14 @@
-"use strict";
+'use strict';
 
-import { readdirSync } from "fs";
-import { basename as _basename, join } from "path";
-import { Sequelize } from "sequelize";
-import dotenv from "dotenv";
+import { readdirSync } from 'fs';
+import { basename as _basename, join } from 'path';
+import { Sequelize } from 'sequelize';
+import dotenv from 'dotenv';
 dotenv.config();
 
 const basename = _basename(__filename);
 const env = process.env.NODE_ENV;
-const config = require("../config/config.js")[env];
+const config = require('../config/config.js')[env];
 
 const db = {};
 
@@ -16,13 +16,13 @@ const sequelize = new Sequelize(
   config.database,
   config.username,
   config.password,
-  config
+  config,
 );
 
 readdirSync(__dirname)
   .filter((file) => {
     const isTrue =
-      file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".js";
+      file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js';
     return isTrue;
   })
   .forEach((file) => {

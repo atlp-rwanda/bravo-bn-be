@@ -1,7 +1,7 @@
-import dotenv from "dotenv";
-import passport from "passport";
-import facebookStrategy from "passport-facebook";
-import strategy from "passport-google-oauth2";
+import dotenv from 'dotenv';
+import passport from 'passport';
+import facebookStrategy from 'passport-facebook';
+import strategy from 'passport-google-oauth2';
 
 dotenv.config();
 
@@ -21,15 +21,15 @@ passport.use(
       callbackURL: process.env.GOOGLE_AUTH_CALLBACK_URL,
       passReqToCallback: true,
       profileFields: [
-        "id",
-        "displayName",
-        "email",
-        "given_name",
-        "family_name",
+        'id',
+        'displayName',
+        'email',
+        'given_name',
+        'family_name',
       ],
     },
-    googleCallBack
-  )
+    googleCallBack,
+  ),
 );
 
 passport.use(
@@ -39,17 +39,17 @@ passport.use(
       clientSecret: process.env.FACEBOOK_AUTH_SECRET,
       callbackURL: process.env.FACEBOOK_AUTH_CALLBACK_URL,
       profileFields: [
-        "id",
-        "displayName",
-        "picture.type(large)",
-        "email",
-        "first_name",
-        "last_name",
-        "gender",
+        'id',
+        'displayName',
+        'picture.type(large)',
+        'email',
+        'first_name',
+        'last_name',
+        'gender',
       ],
     },
-    facebookCallBack
-  )
+    facebookCallBack,
+  ),
 );
 
 passport.serializeUser((user, done) => done(null, user));

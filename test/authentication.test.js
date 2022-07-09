@@ -28,7 +28,6 @@ describe('User sign up', () => {
       .send(user)
       .end((err, res) => {
         const { message } = res.body;
-        console.log(message);
         expect(res.status).to.equal(unProcessableEntity);
         expect(message);
         done();
@@ -51,7 +50,6 @@ describe('User sign up', () => {
       .send(user)
       .end((err, res) => {
         const { message } = res.body;
-        console.log(res.body);
         expect(res.status).to.equal(unProcessableEntity);
         expect(message);
         done();
@@ -128,8 +126,8 @@ describe('User sign up', () => {
 describe('User login', () => {
   it('Should login user', (done) => {
     const user = {
-      email: 'uwambaqje1@gmail.com',
-      password: 'uwambaje',
+      email: 'test1@gmail.com',
+      password: 'test1',
     };
     api
       .post('/api/v1/user/login')
