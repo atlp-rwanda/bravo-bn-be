@@ -1,9 +1,6 @@
 import chai from 'chai';
 import chaiHTTP from 'chai-http';
 import app from '../src/app.js';
-import db from '../src/database/models/index.js';
-
-const tripRequests = db['tripRequests'];
 
 chai.should();
 chai.use(chaiHTTP);
@@ -71,7 +68,8 @@ describe('perform CRUD operations on trip request', () => {
       travelDate: '2022-10-5',
       returnDate: '2022-11-6',
       travelReason: 'picnic',
-      accomodationId: 1,
+      accomodationId: 2,
+      roomId: 3,
     };
 
     api
@@ -95,6 +93,7 @@ describe('perform CRUD operations on trip request', () => {
       returnDate: '2022-11-6',
       travelReason: 'picnic',
       accomodationId: 1,
+      roomId: 1,
     };
 
     api
@@ -129,7 +128,7 @@ describe('perform CRUD operations on trip request', () => {
       .get('/api/v1/user/trip/get')
       .set('Authorization', `Bearer ${managerToken}`)
       .end((err, res) => {
-        //requestId = res.body.data[0].id;
+        requestId = res.body.data[0].id;
         const { message } = res.body;
         expect(res.status).to.equal(200);
         expect(message);

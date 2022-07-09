@@ -17,6 +17,9 @@ module.exports = (sequelize, DataTypes) => {
     tripRequest.belongsTo(models.users, {
       foreignKey: 'requesterId',
     });
+    tripRequest.belongsTo(models.Room, {
+      foreignKey: 'roomId',
+    });
     tripRequest.belongsTo(models.accomodation, {
       foreignKey: 'accomodationId',
     });

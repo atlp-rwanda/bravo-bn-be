@@ -93,7 +93,7 @@ export const updateRoom = async (req, res) => {
         .json({ status: 'fail', message: 'not traveler admin' });
     }
     const id = req.params.id;
-    const { bedType, bedCost, bedDescription } = req.body;
+    const { bedType, bedCost, bedDescription, taken } = req.body;
     const room = await Room.findOne({ where: { id } });
 
     if (!room) {
@@ -105,9 +105,10 @@ export const updateRoom = async (req, res) => {
 
     await Room.update(
       {
-        bedType: bedType,
-        bedCost: bedCost,
-        bedDescription: bedDescription,
+        bedType,
+        bedCost,
+        bedDescription,
+        taken,
       },
       { where: { id } },
     );

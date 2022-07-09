@@ -62,6 +62,7 @@ export const tripRequestSchema = Joi.object({
   returnDate: Joi.string(),
   travelReason: Joi.string().required(),
   accomodationId: Joi.number().required(),
+  roomId: Joi.number().required(),
 });
 export const tripRequestUpdateSchema = Joi.object({
   leavingFrom: Joi.string().required(),

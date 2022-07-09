@@ -6,6 +6,8 @@ import {
 const tripRequests = db['tripRequest'];
 const accomodations = db['accomodation'];
 const locations = db['Location'];
+const Room = db['Room'];
+import { Op } from 'sequelize';
 
 // create a 'Trip Request' as requester
 export const createTripRequest = async (req, res) => {
@@ -25,29 +27,58 @@ export const createTripRequest = async (req, res) => {
     const location = await locations.findOne({
       where: { id: req.body.goingTo },
     });
-    if (!location || !accomodation) {
+    const room = await Room.findOne({
+      where: {
+        id: req.body.roomId,
+        taken: {
+          [Op.and]: [false],
+        },
+        accomodationId: {
+          [Op.and]: [`${req.body.accomodationId}`],
+        },
+      },
+    });
+    if (!location) {
+      return res.status(404).json({ message: `Sorry, Location Not Found` });
+    }
+    if (!accomodation) {
       return res
         .status(404)
-        .json({ message: `Location or Accomodation Not Found` });
-    } else {
-      const type = req.body.returnDate == null ? 'One way trip' : 'Round trip';
-      const status = 'pending';
-      const trip = {
-        leavingFrom: req.body.leavingFrom,
-        goingTo: req.body.goingTo,
-        travelDate: req.body.travelDate,
-        returnDate: req.body.returnDate,
-        travelReason: req.body.travelReason,
-        tripType: type,
-        status: status,
-        requesterId: req.user.id,
-        accomodationId: req.body.accomodationId,
-      };
-      await tripRequests.create(trip);
-      trip.accomodationId = undefined;
-      trip.accomodation = accomodation;
-      return res.status(201).json({ status: 'success', data: trip });
+        .json({ message: ` Sorry, Accomodation Not Found` });
     }
+    if (!room) {
+      return res
+        .status(404)
+        .json({ message: `Sorry, room is taken or not found` });
+    }
+
+    const type = req.body.returnDate == null ? 'One way trip' : 'Round trip';
+    const status = 'pending';
+    const trip = {
+      leavingFrom: req.body.leavingFrom,
+      goingTo: req.body.goingTo,
+      travelDate: req.body.travelDate,
+      returnDate: req.body.returnDate,
+      travelReason: req.body.travelReason,
+      tripType: type,
+      status: status,
+      requesterId: req.user.id,
+      accomodationId: req.body.accomodationId,
+      roomId: req.body.roomId,
+    };
+    await Room.update(
+      {
+        taken: true,
+        userId: req.user.id,
+      },
+      { where: { id: req.body.roomId } },
+    );
+    await tripRequests.create(trip);
+    trip.accomodationId = undefined;
+    trip.accomodation = accomodation;
+    trip.roomId = undefined;
+    trip.room = room;
+    return res.status(201).json({ status: 'success', data: trip });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
@@ -221,7 +252,12 @@ export const deleteTripRequest = async (req, res) => {
     const userId = req.user.id;
 
     const tripRequest = await tripRequests.findOne({
-      where: { id: requestId, requesterId: userId },
+      where: {
+        id: requestId,
+        requesterId: {
+          [Op.and]: [`${userId}`],
+        },
+      },
     });
 
     if (!tripRequest || tripRequest.status !== 'pending') {
@@ -229,6 +265,13 @@ export const deleteTripRequest = async (req, res) => {
         message: `Trip Request is Not in pending status or Not Exist!`,
       });
     } else {
+      await Room.update(
+        {
+          taken: false,
+          userId: null,
+        },
+        { where: { id: tripRequest.roomId } },
+      );
       await tripRequests.destroy({
         where: { id: requestId, requesterId: userId },
       });

@@ -359,6 +359,7 @@ const options = {
             name: 'id',
             in: 'path',
             type: 'string',
+            taken: 'string',
             description: 'Accomodation Id',
             required: true,
           },
@@ -670,6 +671,7 @@ const options = {
                   'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
                 travelReason: 'marketing',
                 accomodationId: 1,
+                roomId: 1,
               },
             },
           },
@@ -911,6 +913,9 @@ const options = {
           bedDescription: {
             type: 'string',
           },
+          taken: {
+            type: 'string',
+          },
         },
       },
 
@@ -991,6 +996,9 @@ const options = {
             type: 'string',
           },
           accomodationId: {
+            type: 'integer',
+          },
+          roomId: {
             type: 'integer',
           },
         },
