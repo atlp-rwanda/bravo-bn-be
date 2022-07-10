@@ -605,3 +605,83 @@ describe('Reject Trip Request', () => {
       });
   });
 });
+
+describe('Get profile information from travel request', () => {
+  let token;
+  it('should update the remember info option', (done) => {
+    const user = {
+      firstName: 'john',
+      lastName: 'doe',
+      username: 'jdoe',
+      email: 'jdoe@gmail.com',
+      password: 'teste',
+      repeat_password: 'teste',
+      phoneNumber: '0788800012',
+      role: 'requester',
+    };
+
+    api
+      .post('/api/v1/user/auth/signup')
+      .send(user)
+      .end((err, res) => {
+        token = res.body.token;
+        api
+          .put('/api/v1/user/remember-info')
+          .set('Authorization', `Bearer ${token}`)
+          .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.have.property('message');
+            expect(res.body.message).to.equal(
+              'remember info option updated successfully',
+            );
+            done();
+          });
+      });
+  });
+
+  it('should get the information from request', (done) => {
+    const request_one = {
+      leavingFrom: 'kigali',
+      goingTo: 1,
+      travelDate: '2022-6-20',
+      returnDate: '2022-6-26',
+      travelReason: 'CHOGM',
+      accomodationId: 1,
+      passportName: 'John Doe',
+      passportNumber: '123XYZ4',
+    };
+
+    const request_two = {
+      leavingFrom: '',
+      goingTo: 1,
+      travelDate: '2024-6-20',
+      returnDate: '2024-6-26',
+      travelReason: 'Something else',
+      accomodationId: 1,
+      passportName: '',
+      passportNumber: '',
+    };
+    api
+      .post('/api/v1/user/trip')
+      .set('Authorization', `Bearer ${token}`)
+      .send(request_one)
+      .end((err, res) => {
+        api
+          .post('/api/v1/user/trip')
+          .set('Authorization', `Bearer ${token}`)
+          .send(request_two)
+          .end((err, res) => {
+            res.should.have.status(201);
+            res.body.should.have.property('data');
+            res.body.data.should.have.property('leavingFrom');
+            res.body.data.should.have.property('passportName');
+            res.body.data.should.have.property('passportNumber');
+            expect(res.body.status).to.equal('success');
+            expect(res.body.data.leavingFrom).to.equal('kigali');
+            expect(res.body.data.passportName).to.equal('John Doe');
+            expect(res.body.data.passportNumber).to.equal('123XYZ4');
+            done();
+          });
+      });
+  });
+});

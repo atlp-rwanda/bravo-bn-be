@@ -10,7 +10,7 @@ import {
   updateUserProfile,
   getAllUsers,
 } from '../../controllers/userController';
-import { updateRole } from '../../controllers/users';
+import { updateRole, updateRememberInfo } from '../../controllers/users';
 import isValidRole from '../../middlewares/isValidRole';
 import isAdmin from '../../middlewares/isAdmin';
 import multer from 'multer';
@@ -58,5 +58,6 @@ userRouter.patch(
 userRouter.get('/', getAllUsers);
 userRouter.get('/:id', protect, getUserData);
 userRouter.put('/roles', isAdmin, isValidRole, updateRole);
+userRouter.put('/remember-info', protect, updateRememberInfo);
 
 export default userRouter;

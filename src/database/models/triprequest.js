@@ -8,7 +8,13 @@ module.exports = (sequelize, DataTypes) => {
       returnDate: DataTypes.STRING,
       travelReason: DataTypes.STRING,
       tripType: DataTypes.STRING,
+<<<<<<< HEAD
       status: DataTypes.ENUM('pending', 'approved', 'rejected'),
+=======
+      status: DataTypes.STRING,
+      passportName: DataTypes.STRING,
+      passportNumber: DataTypes.STRING,
+>>>>>>> remember information from travel request
     },
     {},
   );

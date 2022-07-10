@@ -68,6 +68,8 @@ export const createTripRequest = async (req, res) => {
       requesterId: req.user.id,
       accomodationId: req.body.accomodationId,
       roomId: req.body.roomId,
+      passportName: req.body.passportName,
+      passportNumber: req.body.passportNumber
     };
     await Room.update(
       {
@@ -582,6 +584,8 @@ export const createMultiTripRequest = async (req, res, next) => {
         requesterId: req.user.id,
         accomodationId: trip_.accomodationId,
         roomId: trip_.roomId,
+        passportName: req.body.passportName,
+        passportNumber: req.body.passportNumber,
       };
       await Room.update(
         {

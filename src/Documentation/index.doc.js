@@ -270,7 +270,17 @@ const options = {
         },
       },
     },
-
+    '/api/v1/user/remember-info': {
+      put: {
+        tags: ['User'],
+        description: 'Set autofill option',
+        responses: {
+          200: {
+            description: 'success',
+          },
+        },
+      },
+    },
     '/api/v1/accomodation': {
       post: {
         tags: ['Accomodation'],
@@ -714,6 +724,8 @@ const options = {
                 travelReason: 'marketing',
                 accomodationId: 1,
                 roomId: 1,
+                passportName: 'John Doe',
+                passportNumber: '123XYZ4',
               },
             },
           },
@@ -1317,8 +1329,11 @@ const options = {
           accomodationId: {
             type: 'integer',
           },
-          roomId: {
-            type: 'integer',
+          passportName: {
+            type: 'string',
+          },
+          passportNumber: {
+            type: 'string',
           },
         },
       },
