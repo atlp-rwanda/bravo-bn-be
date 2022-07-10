@@ -20,6 +20,13 @@ export async function up(queryInterface, DataTypes) {
     accomodationId: {
       type: DataTypes.INTEGER,
     },
+    taken: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+    },
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE,
