@@ -68,8 +68,8 @@ describe('perform CRUD operations on trip request', () => {
     const tripRequest = {
       leavingFrom: 'musanze',
       goingTo: 1,
-      travelDate: '2022-10-5',
-      returnDate: '2022-11-6',
+      travelDate: 'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
+      returnDate: 'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
       travelReason: 'picnic',
       accomodationId: 1,
     };
@@ -91,8 +91,8 @@ describe('perform CRUD operations on trip request', () => {
     const tripRequest = {
       leavingFrom: 'musanze',
       goingTo: 1,
-      travelDate: '2022-10-5',
-      returnDate: '2022-11-6',
+      travelDate: 'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
+      returnDate: 'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
       travelReason: 'picnic',
       accomodationId: 1,
     };
@@ -167,7 +167,7 @@ describe('perform CRUD operations on trip request', () => {
   it('Requester should update trip request and return 201', (done) => {
     const tripRequest = {
       leavingFrom: 'kgl',
-      travelDate: '2022-10-5',
+      travelDate: 'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
       travelReason: 'leisure',
     };
 
@@ -188,7 +188,7 @@ describe('perform CRUD operations on trip request', () => {
     const tripRequest = {
       leavingFrom: 'kgl',
       goingTo: 1,
-      travelDate: '2022-10-5',
+      travelDate: 'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
       travelReason: 'leisure',
     };
 
@@ -200,6 +200,91 @@ describe('perform CRUD operations on trip request', () => {
         const { message } = res.body;
         expect(res.status).to.equal(403);
         expect(message);
+        done();
+      });
+  });
+
+  /* it('should get trips status of year, month and day', (done) => {
+    api
+      .get(`/api/v1/user/trip/status/?year=2022&month=jun&day=29`)
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(200);
+       
+        done();
+      });
+  });
+
+  it('should get trips status of year and month', (done) => {
+    api
+      .get(`/api/v1/user/trip/status/?year=2022&month=jun`)
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .end((err, res) => {
+       
+        expect(res.status).to.equal(200);
+       
+        done();
+      });
+  });
+  it('should get trips status of  month and day', (done) => {
+    api
+      .get(`/api/v1/user/trip/status/?month=jun&day=29`)
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .end((err, res) => {
+       
+        expect(res.status).to.equal(200);
+       
+        done();
+      });
+  });
+  it('should get trips status of year and day', (done) => {
+    api
+      .get(`/api/v1/user/trip/status/?year=2022&day=29`)
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(200);
+        done();
+      });
+  }); */
+
+  it('should not get trips status of year, month and day', (done) => {
+    api
+      .get(`/api/v1/user/trip/status/?year=2025&month=jun&day=29`)
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(404);
+
+        done();
+      });
+  });
+
+  it('should not get trips status of year and month', (done) => {
+    api
+      .get(`/api/v1/user/trip/status/?year=2025&month=jun`)
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(404);
+
+        done();
+      });
+  });
+  it('should not get trips status of  month and day', (done) => {
+    api
+      .get(`/api/v1/user/trip/status/?month=jun&day=22`)
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(404);
+
+        done();
+      });
+  });
+  it('should not get trips status of year and day', (done) => {
+    api
+      .get(`/api/v1/user/trip/status/?year=2025&day=29`)
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(404);
+
         done();
       });
   });
