@@ -8,13 +8,22 @@ export const commentOnRequests = async (req, res, next) => {
   try {
     const { comment } = req.body;
     const userId = req.user.id;
+    const user = await users.findByPk(userId);
     const tripRequestId = req.params.tripRequestId;
-    const tripRequest = await tripRequests.findByPk(tripRequestId);
+    const tripRequest = await tripRequests.findOne({
+      where: { requesterId: userId, id: tripRequestId },
+    });
 
     if (!tripRequest) {
       return res.status(400).json({
         error: 'The trip request you are trying to comment on does not exist!',
       });
+    }
+
+    if (userId !== tripRequest.requesterId && user.role !== 'manager') {
+      return res
+        .status(403)
+        .json({ error: 'You are Not Authorized to comment on this request' });
     }
 
     const createComment = await Comment.create({

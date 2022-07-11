@@ -12,14 +12,8 @@ const comment = {
 };
 
 const user = {
-  firstName: 'john',
-  lastName: 'doe',
-  username: 'johndoe',
-  email: 'johndoe@gmail.com',
-  password: 'tester',
-  repeat_password: 'tester',
-  phoneNumber: '0787654321',
-  role: 'requester',
+  email: 'test1@gmail.com',
+  password: 'test1',
 };
 
 describe('comment on trip requests', () => {
@@ -41,9 +35,10 @@ describe('comment on trip requests', () => {
   let token;
   it('should return 201 on a successful comment on travel request', (done) => {
     // The travel request we'll comment on exists in the seed files, if you're wondering haha!
+    // And the user we are logging in exists in the seed files too, if you're wondering again haha!
     chai
       .request(app)
-      .post('/api/v1/user/auth/signup')
+      .post('/api/v1/user/login')
       .send(user)
       .end((err, res) => {
         token = res.body.token;
