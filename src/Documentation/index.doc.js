@@ -846,7 +846,7 @@ const options = {
             in: 'path',
             required: true,
             description:
-              'token that was sent to your email adress in password reset link',
+              'token that was sent to your email address in password reset link',
           },
           {
             name: 'new password',
