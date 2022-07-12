@@ -8,6 +8,7 @@ import { signupAuthSchema } from '../helpers/validation_schema';
 import { Op } from 'sequelize';
 import crypto from 'crypto';
 import Email from '../utils/email';
+import user from '../database/models/user';
 
 const User = db['users'];
 const { compare } = bcryptjs;
@@ -242,22 +243,18 @@ export const resetPassword = catchAsync(async (req, res, next) => {
     .update(req.params.token)
     .digest('hex');
 
-  try {
-    let userExist = await User.findOne({
-      where: {
-        passwordResetToken: hashedToken,
-      },
-    });
-    await userExist.update({
-      password: req.body.password,
-      passwordResetToken: '',
-      passwordResetExpires: '',
-    });
-    await userExist.save();
-
-    createSendToken(userExist, 200, res);
-  } catch (err) {
-    console.log(err);
+  let userExist = await User.findOne({
+    where: {
+      passwordResetToken: hashedToken,
+    },
+  });
+  if (!userExist)
     return next(new AppError('Token is invalid or has expired', 409));
-  }
+  await userExist.update({
+    password: req.body.password,
+    passwordResetToken: '',
+    passwordResetExpires: '',
+  });
+
+  createSendToken(userExist, 200, res);
 });

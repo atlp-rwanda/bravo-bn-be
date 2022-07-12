@@ -30,10 +30,10 @@ export default {
         type: Sequelize.STRING,
       },
       passwordChangedAt: {
-        type: Sequelize.DATE,
+        type: Sequelize.STRING,
       },
       passwordResetExpires: {
-        type: Sequelize.DATE,
+        type: Sequelize.STRING,
       },
       birthDate: {
         type: Sequelize.DATE,
