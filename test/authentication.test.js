@@ -1,5 +1,8 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
+import db from '../src/database/models/index.js';
+
+const User = db['users'];
 
 chai.use(chaiHttp);
 const api = chai.request(server).keepOpen();
@@ -167,12 +170,49 @@ describe('User login', () => {
       });
   });
 });
+describe('User logout', () => {
+  const user = {
+    firstName: 'Rose',
+    lastName: 'Reine',
+    username: 'Rose31',
+    email: 'mwisemarierose@gmail.com',
+    password: 'mwisenez',
+    repeat_password: 'mwisenez',
+    phoneNumber: '0780850683',
+    role: 'requester',
+  };
 
-// describe('logout the user', () => {
-//   it('Should logout the user', (done) => {
-//     api.post('/api/v1/user/auth/logout').end((err, res) => {
-//       expect(res.status).to.equal(success);
-//       done();
-//     });
-//   });
-// });
+  it('Should return 201 on successful logout', (done) => {
+    let token;
+    api
+      .post('/api/v1/user/auth/signup')
+      .send(user)
+      .end((err, res) => {
+        const id = res.body.data.user.id;
+        User.update(
+          {
+            isVerified: true,
+          },
+          { where: { id } },
+        ).then((res) => {
+          api
+            .post('/api/v1/user/login')
+            .send({ email: user.email, password: user.password })
+            .end((err, res) => {
+              const { token } = res.body;
+              api
+                .post('/api/v1/user/auth/logout')
+                .set('Authorization', `Bearer ${token}`)
+                .end((err, res) => {
+                  expect(res.status).to.equal(200);
+                  expect(res.body).to.have.property('message');
+                  expect(res.body.message).to.equal(
+                    'User logged out successfully',
+                  );
+                  done();
+                });
+            });
+        });
+      });
+  });
+});
