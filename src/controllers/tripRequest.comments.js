@@ -10,15 +10,21 @@ export const commentOnRequests = async (req, res, next) => {
     const userId = req.user.id;
     const user = await users.findByPk(userId);
     const tripRequestId = req.params.tripRequestId;
-    const tripRequest = await tripRequests.findOne({
+    let tripRequest = await tripRequests.findOne({
       where: { requesterId: userId, id: tripRequestId },
     });
+
+    if (user.role === 'manager') {
+      tripRequest = await tripRequests.findByPk(tripRequestId);
+    }
 
     if (!tripRequest) {
       return res.status(400).json({
         error: 'The trip request you are trying to comment on does not exist!',
       });
     }
+
+    console.log(userId !== tripRequest.requesterId || user.role !== 'manager');
 
     if (userId !== tripRequest.requesterId && user.role !== 'manager') {
       return res
