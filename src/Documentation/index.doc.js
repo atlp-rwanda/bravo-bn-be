@@ -324,73 +324,6 @@ const options = {
         },
       },
     },
-'/api/v1/user/forgotpassword': {
-  post: {
-    tags: ['Reset Password'],
-    description: 'Reset password',
-    security: [],
-    parameters: [],
-    requestBody: {
-      content: {
-        'application/json': {
-          schema: {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string"
-                }
-            },
-          },
-          example: {
-            email: 'hishamunda221015883@gmail.com',
-          },
-        },
-      },
-      required: true,
-    },
-    responses: {
-      200: {
-        description: 'successfully',
-      }
-    },
-  }, 
-  },
-  '/api/v1/user/resetpassword/{token}': {
-    patch: {
-      tags: [
-        'Reseting Password',
-      ],
-      summary: 'reseting the password',
-      parameters: [
-        {
-          name: 'token',
-          in: 'path',
-          required: true,
-          description: 'token that was sent to your email adress in password reset link',
-        }, {
-          name: 'new password',
-          in: 'body',
-          required: true,
-          description: 'new password you want to keep',
-          schema: {
-            example: {
-              password: 'NewPassword',
-            },
-          },
-        },
-      ],
-      consumes: [
-        'application/json',
-      ],
-      responses: {
-        200: {
-          description: 'password reset successfully',
-        },
-      },
-    },
-  },
-},
-
     '/api/v1/accomodation/{id}': {
       get: {
         tags: ['Accomodation'],
@@ -870,206 +803,270 @@ const options = {
           },
         },
       },
-    
+    },
 
-  components: {
-    schemas: {
-      userRole: {
-        type: 'object',
-        properties: {
-          email: {
-            type: 'string',
-            description: 'user email',
+    '/api/v1/user/forgotpassword': {
+      post: {
+        tags: ['Reset Password'],
+        description: 'Reset password',
+        security: [],
+        parameters: [],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  email: {
+                    type: 'string',
+                  },
+                },
+              },
+              example: {
+                email: 'hishamunda221015883@gmail.com',
+              },
+            },
           },
-          role: {
-            type: 'string',
-            description: 'new role to set to user',
+          required: true,
+        },
+        responses: {
+          200: {
+            description: 'successfully',
           },
         },
       },
-      SignupAuthShema: {
-        type: 'object',
-        properties: {
-          username: {
-            type: 'string',
+    },
+    '/api/v1/user/resetpassword/{token}': {
+      patch: {
+        tags: ['Reseting Password'],
+        summary: 'reseting the password',
+        parameters: [
+          {
+            name: 'token',
+            in: 'path',
+            required: true,
+            description:
+              'token that was sent to your email adress in password reset link',
           },
-          firstName: {
-            type: 'string',
+          {
+            name: 'new password',
+            in: 'body',
+            required: true,
+            description: 'new password you want to keep',
+            schema: {
+              example: {
+                password: 'NewPassword',
+              },
+            },
           },
-          lastName: {
-            type: 'string',
-          },
-          phoneNumber: {
-            type: 'string',
-          },
-          password: {
-            type: 'string',
-          },
-          repeat_password: {
-            type: 'string',
-          },
-          email: {
-            type: 'string',
+        ],
+        consumes: ['application/json'],
+        responses: {
+          200: {
+            description: 'password reset successfully',
           },
         },
       },
-      User: {
-        type: 'object',
+    },
 
-        properties: {
-          firstName: {
-            type: 'string',
-            description: 'new role to set to user',
-          },
-          lastName: {
-            type: 'string',
-            description: "User's fullname",
-          },
-          username: {
-            type: 'string',
-            description: "User's fullname",
-          },
-          email: {
-            type: 'string',
-            description: "User's email",
-          },
-          phoneNumber: {
-            type: 'string',
-            description: "User's phone number",
-          },
-          image: {
-            type: 'string',
-            description: "User's image url",
-            format: 'binary',
-          },
-          gender: {
-            type: 'string',
-            description: "User's gender",
-          },
-          preferredLanguage: {
-            type: 'string',
-            description: "User's preferred language",
-          },
-          preferredCurrency: {
-            type: 'string',
-            description: "User's preferred currency",
-          },
-          department: {
-            type: 'string',
-            description: "User's department",
-          },
-          lineManager: {
-            type: 'string',
-            description: "User's line manager",
+    components: {
+      schemas: {
+        userRole: {
+          type: 'object',
+          properties: {
+            email: {
+              type: 'string',
+              description: 'user email',
+            },
+            role: {
+              type: 'string',
+              description: 'new role to set to user',
+            },
           },
         },
-      },
-      rooms: {
-        type: 'object',
-        properties: {
-          bedType: {
-            type: 'string',
-          },
-          bedCost: {
-            type: 'string',
-          },
-          bedDescription: {
-            type: 'string',
-          },
-        },
-      },
-
-      accomodation: {
-        type: 'object',
-        content: 'multipart/form-data',
-        properties: {
-          name: {
-            name: 'name',
-            in: 'formData',
-            type: 'string',
-          },
-          description: {
-            name: 'description',
-            in: 'formData',
-            type: 'string',
-          },
-          locationId: {
-            name: 'locationId',
-            in: 'formData',
-            type: 'string',
-          },
-          image: {
-            name: 'image',
-            in: 'formData',
-            type: 'file',
-          },
-          geoLocation: {
-            name: 'geoLocation',
-            in: 'formData',
-            type: 'string',
-          },
-          highlight: {
-            name: 'highlight',
-            in: 'formData',
-            type: 'string',
-          },
-          amenitiesList: {
-            name: 'amenitiesList',
-            in: 'formData',
-            type: 'array',
-            items: {
+        SignupAuthShema: {
+          type: 'object',
+          properties: {
+            username: {
+              type: 'string',
+            },
+            firstName: {
+              type: 'string',
+            },
+            lastName: {
+              type: 'string',
+            },
+            phoneNumber: {
+              type: 'string',
+            },
+            password: {
+              type: 'string',
+            },
+            repeat_password: {
+              type: 'string',
+            },
+            email: {
               type: 'string',
             },
           },
         },
-      },
+        User: {
+          type: 'object',
 
-      locations: {
-        type: 'object',
-        properties: {
-          locationName: {
-            type: 'string',
+          properties: {
+            firstName: {
+              type: 'string',
+              description: 'new role to set to user',
+            },
+            lastName: {
+              type: 'string',
+              description: "User's fullname",
+            },
+            username: {
+              type: 'string',
+              description: "User's fullname",
+            },
+            email: {
+              type: 'string',
+              description: "User's email",
+            },
+            phoneNumber: {
+              type: 'string',
+              description: "User's phone number",
+            },
+            image: {
+              type: 'string',
+              description: "User's image url",
+              format: 'binary',
+            },
+            gender: {
+              type: 'string',
+              description: "User's gender",
+            },
+            preferredLanguage: {
+              type: 'string',
+              description: "User's preferred language",
+            },
+            preferredCurrency: {
+              type: 'string',
+              description: "User's preferred currency",
+            },
+            department: {
+              type: 'string',
+              description: "User's department",
+            },
+            lineManager: {
+              type: 'string',
+              description: "User's line manager",
+            },
+          },
+        },
+        rooms: {
+          type: 'object',
+          properties: {
+            bedType: {
+              type: 'string',
+            },
+            bedCost: {
+              type: 'string',
+            },
+            bedDescription: {
+              type: 'string',
+            },
+          },
+        },
+
+        accomodation: {
+          type: 'object',
+          content: 'multipart/form-data',
+          properties: {
+            name: {
+              name: 'name',
+              in: 'formData',
+              type: 'string',
+            },
+            description: {
+              name: 'description',
+              in: 'formData',
+              type: 'string',
+            },
+            locationId: {
+              name: 'locationId',
+              in: 'formData',
+              type: 'string',
+            },
+            image: {
+              name: 'image',
+              in: 'formData',
+              type: 'file',
+            },
+            geoLocation: {
+              name: 'geoLocation',
+              in: 'formData',
+              type: 'string',
+            },
+            highlight: {
+              name: 'highlight',
+              in: 'formData',
+              type: 'string',
+            },
+            amenitiesList: {
+              name: 'amenitiesList',
+              in: 'formData',
+              type: 'array',
+              items: {
+                type: 'string',
+              },
+            },
+          },
+        },
+
+        locations: {
+          type: 'object',
+          properties: {
+            locationName: {
+              type: 'string',
+            },
+          },
+        },
+        tripRequest: {
+          type: 'object',
+
+          properties: {
+            leavingFrom: {
+              type: 'string',
+              description: 'current location',
+            },
+            goingTo: {
+              type: 'string',
+              description: 'destination',
+            },
+            travelDate: {
+              type: 'string',
+              description: 'start date of trip',
+            },
+            returnDate: {
+              type: 'string',
+              description: 'end date of trip',
+            },
+            travelReason: {
+              type: 'string',
+            },
+            accomodationId: {
+              type: 'integer',
+            },
           },
         },
       },
-      tripRequest: {
-        type: 'object',
-
-        properties: {
-          leavingFrom: {
-            type: 'string',
-            description: 'current location',
-          },
-          goingTo: {
-            type: 'string',
-            description: 'destination',
-          },
-          travelDate: {
-            type: 'string',
-            description: 'start date of trip',
-          },
-          returnDate: {
-            type: 'string',
-            description: 'end date of trip',
-          },
-          travelReason: {
-            type: 'string',
-          },
-          accomodationId: {
-            type: 'integer',
-          },
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
         },
-      },
-    },
-    securitySchemes: {
-      bearerAuth: {
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT',
       },
     },
   },
-    }
-  }
+};
 docrouter.use('/', serve, setup(options));
 export default docrouter;
