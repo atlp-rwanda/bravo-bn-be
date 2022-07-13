@@ -256,6 +256,7 @@ const options = {
         },
       },
     },
+
     '/api/v1/accomodation': {
       post: {
         tags: ['Accomodation'],
