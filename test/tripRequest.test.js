@@ -229,12 +229,21 @@ describe('perform CRUD operations on trip request', () => {
         done();
       });
   });
-  it('It should return 200 for most travelled destinations', (done) => {
+  /*   it('It should return 200 for most travelled destinations', (done) => {
     api
       .get(`/api/v1/user/trip//most-travelled-destinations`)
       .set('Authorization', `Bearer ${managerToken}`)
       .end((err, res) => {
         expect(res.status).to.equal(200);
+        done();
+      });
+  }); */
+  it('It should return 404 for most travelled destinations will not be found', (done) => {
+    api
+      .get(`/api/v1/user/trip//most-travelled-destinations`)
+      .set('Authorization', `Bearer ${managerToken}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(404);
         done();
       });
   });

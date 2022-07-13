@@ -1,4 +1,5 @@
 import db from '../database/models/index';
+import Sequelize from 'sequelize';
 import {
   tripRequestSchema,
   tripRequestUpdateSchema,
@@ -241,42 +242,32 @@ export const deleteTripRequest = async (req, res) => {
 };
 
 export const mostTavelledDestinations = catchAsync(async (req, res, next) => {
-  let allLocationsId = [];
-  let allLocationsIdOccurrence = [];
-  let returnedData = [];
-
-  let trips = await tripRequests.findAll({ where: { status: 'approved' } });
-  trips.map((trip) => allLocationsId.push(trip.goingTo));
-
-  let uniqueArray = allLocationsId.filter(function (item, pos) {
-    return allLocationsId.indexOf(item) == pos;
-  });
-
-  function getOccurrence(array, value) {
-    return array.filter((v) => v === value).length;
-  }
-
-  uniqueArray.sort().map((location) => {
-    allLocationsIdOccurrence.push({
-      locationId: location,
-      locationOccurrence: getOccurrence(allLocationsId, location),
-    });
-  });
-  let mostTravelledDest = allLocationsIdOccurrence.sort((a, b) =>
-    a.locationOccurrence < b.locationOccurrence ? 1 : -1,
-  );
-
-  const mtd = mostTravelledDest.map(async (dest) => {
-    const location = await locations.findOne({
-      where: { id: dest.locationId },
-      attributes: {
-        exclude: ['createdAt', 'updatedAt'],
+  let allLocations = await locations.findAll({
+    attributes: {
+      include: [
+        [
+          Sequelize.fn('COUNT', Sequelize.col('tripRequest.id')),
+          'locationCount',
+        ],
+      ],
+    },
+    include: [
+      {
+        model: tripRequests,
+        where: { status: 'approved' },
+        attributes: [],
+        as: 'tripRequest',
       },
-    });
-    location.dataValues.occurance = dest.locationOccurrence;
-    returnedData.push(location.dataValues);
+    ],
+    group: ['Location.id'],
   });
-
-  await Promise.all(mtd);
-  return res.status(200).json({ status: 'success', data: returnedData });
+  if (allLocations.length === 0)
+    return res.status(404).json({
+      status: 'fail',
+      message: 'Sorry, no most recent location found.',
+    });
+  allLocations.sort((a, b) =>
+    a.dataValues.locationCount < b.dataValues.locationCount ? 1 : -1,
+  );
+  return res.status(200).json({ status: 'success', data: allLocations });
 });
