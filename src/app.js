@@ -5,9 +5,11 @@ import morgan from 'morgan';
 import globalErrorHandler from './controllers/error';
 import AppError from './utils/appError';
 import allRoutes from './routers/index';
+import path from 'path';
 
 const app = express();
 
+app.use('/chat', express.static(path.join(__dirname, './public/chat')));
 app.use(cors());
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
