@@ -83,6 +83,16 @@ export const createTripRequest = async (req, res) => {
     trip.accomodation = accomodation;
     trip.roomId = undefined;
     trip.room = room;
+    res.cookie('passportName', req.body.passportName, {
+      secure: true,
+      httpOnly: true,
+      sameSite: 'lax',
+    });
+    res.cookie('passportNumber', req.body.passportNumber, {
+      secure: true,
+      httpOnly: true,
+      sameSite: 'lax',
+    });
     return res.status(201).json({ status: 'success', data: trip });
   } catch (error) {
     return res.status(500).json({ error: error.message });

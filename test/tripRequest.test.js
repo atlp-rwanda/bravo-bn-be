@@ -652,7 +652,7 @@ describe('Get profile information from travel request', () => {
     };
 
     const request_two = {
-      leavingFrom: '',
+      leavingFrom: 'kigali',
       goingTo: 1,
       travelDate: '2024-6-20',
       returnDate: '2024-6-26',
@@ -669,15 +669,14 @@ describe('Get profile information from travel request', () => {
         api
           .post('/api/v1/user/trip')
           .set('Authorization', `Bearer ${token}`)
+          .set('Cookie', 'passportNumber=123XYZ4;passportName=John Doe')
           .send(request_two)
           .end((err, res) => {
             res.should.have.status(201);
             res.body.should.have.property('data');
-            res.body.data.should.have.property('leavingFrom');
             res.body.data.should.have.property('passportName');
             res.body.data.should.have.property('passportNumber');
             expect(res.body.status).to.equal('success');
-            expect(res.body.data.leavingFrom).to.equal('kigali');
             expect(res.body.data.passportName).to.equal('John Doe');
             expect(res.body.data.passportNumber).to.equal('123XYZ4');
             done();
