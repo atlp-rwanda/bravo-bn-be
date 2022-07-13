@@ -3,6 +3,7 @@ import {
   tripRequestSchema,
   tripRequestUpdateSchema,
 } from '../helpers/validation_schema';
+import catchAsync from '../utils/catchAsync';
 const tripRequests = db['tripRequest'];
 const accomodations = db['accomodation'];
 const locations = db['Location'];
@@ -238,3 +239,44 @@ export const deleteTripRequest = async (req, res) => {
     return res.status(500).json(error.message);
   }
 };
+
+export const mostTavelledDestinations = catchAsync(async (req, res, next) => {
+  let allLocationsId = [];
+  let allLocationsIdOccurrence = [];
+  let returnedData = [];
+
+  let trips = await tripRequests.findAll({ where: { status: 'approved' } });
+  trips.map((trip) => allLocationsId.push(trip.goingTo));
+
+  let uniqueArray = allLocationsId.filter(function (item, pos) {
+    return allLocationsId.indexOf(item) == pos;
+  });
+
+  function getOccurrence(array, value) {
+    return array.filter((v) => v === value).length;
+  }
+
+  uniqueArray.sort().map((location) => {
+    allLocationsIdOccurrence.push({
+      locationId: location,
+      locationOccurrence: getOccurrence(allLocationsId, location),
+    });
+  });
+  let mostTravelledDest = allLocationsIdOccurrence.sort((a, b) =>
+    a.locationOccurrence < b.locationOccurrence ? 1 : -1,
+  );
+
+  const mtd = mostTravelledDest.map(async (dest) => {
+    const location = await locations.findOne({
+      where: { id: dest.locationId },
+      attributes: {
+        exclude: ['createdAt', 'updatedAt'],
+      },
+    });
+    location.dataValues.occurance = dest.locationOccurrence;
+    returnedData.push(location.dataValues);
+  });
+
+  await Promise.all(mtd);
+  return res.status(200).json({ status: 'success', data: returnedData });
+});
