@@ -9,7 +9,6 @@ import { Op } from 'sequelize';
 import crypto from 'crypto';
 import Email from '../utils/email';
 import createNotification from '../services/notification.service';
-
 const { randomBytes, createHash } = crypto;
 
 const User = db['users'];
@@ -247,17 +246,15 @@ export const forgotPassword = catchAsync(async (req, res, next) => {
   if (!verifiedUser) {
     return next(new AppError('There is no user with email address.', 404));
   }
-  const resetToken = randomBytes(32).toString('hex');
-
-  const passwordResetToken = createHash('sha256')
-    .update(resetToken)
-    .digest('hex');
-
+  console.log(verifiedUser.id, signToken);
+  const token = signToken(verifiedUser.id);
+  const resetToken = token;
   const passwordResetExpires = Date.now() + 10 * 60 * 1000;
-
-  await verifiedUser.update({ passwordResetToken, passwordResetExpires });
+  await verifiedUser.update({
+    passwordResetToken: token,
+    passwordResetExpires,
+  });
   await verifiedUser.save();
-
   const resetURL = `${req.protocol}://${req.get(
     'host',
   )}/api/v1/user/resetpassword/${resetToken}`;
@@ -269,7 +266,7 @@ export const forgotPassword = catchAsync(async (req, res, next) => {
       message: 'Password Reset sent to your Email',
     });
   } catch (err) {
-    console.log(err);
+    (error) => throwFailed(error, '');
     await verifiedUser.update({
       passwordResetToken: '',
       passwordResetExpires: '',
@@ -283,22 +280,40 @@ export const forgotPassword = catchAsync(async (req, res, next) => {
 });
 
 export const resetPassword = catchAsync(async (req, res, next) => {
-  const hashedToken = createHash('sha256')
-    .update(req.params.token)
-    .digest('hex');
+  // const hashedToken = createHash('sha256')
+  //   .update(req.params.token)
+  //   .digest('hex');
+  try {
+    const decoded = await promisify(verify)(
+      req.params.token,
+      process.env.JWT_SECRET,
+    );
 
-  let userExist = await User.findOne({
-    where: {
-      passwordResetToken: hashedToken,
-    },
-  });
-  if (!userExist)
-    return next(new AppError('Token is invalid or has expired', 409));
-  await userExist.update({
-    password: await hash(req.body.password, 12),
-    passwordResetToken: '',
-    passwordResetExpires: '',
-  });
-
-  createSendToken(userExist, 200, res);
+    if (!decoded) {
+      return next(
+        new AppError(
+          'The user belonging to this token does no longer exist',
+          401,
+        ),
+      );
+    }
+    let userExist = await User.findOne({
+      where: {
+        passwordResetToken: req.params.token,
+      },
+    });
+    console.log(req.body, 12);
+    if (!userExist)
+      return next(new AppError('Token is invalid or has expired', 409));
+    else {
+      await userExist.update({
+        password: await hash(req.body.password, 12),
+        passwordResetToken: '',
+        passwordResetExpires: '',
+      });
+    }
+    createSendToken(userExist, 200, res);
+  } catch (error) {
+    console.log(error.message);
+  }
 });
