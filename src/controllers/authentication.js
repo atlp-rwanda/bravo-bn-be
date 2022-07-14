@@ -302,7 +302,6 @@ export const resetPassword = catchAsync(async (req, res, next) => {
         passwordResetToken: req.params.token,
       },
     });
-    console.log(req.body, 12);
     if (!userExist)
       return next(new AppError('Token is invalid or has expired', 409));
     else {
@@ -314,6 +313,5 @@ export const resetPassword = catchAsync(async (req, res, next) => {
     }
     createSendToken(userExist, 200, res);
   } catch (error) {
-    console.log(error.message);
   }
 });
