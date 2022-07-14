@@ -2,6 +2,8 @@ import express from 'express';
 import {
   facebookLogin,
   googleLogin,
+  logout,
+  protect,
   signup,
   verifyEmail,
 } from '../../controllers/authentication';
@@ -10,6 +12,7 @@ import { authenticate } from 'passport';
 const authRouter = express.Router();
 
 authRouter.post('/signup', signup);
+authRouter.get('/logout', protect, logout);
 authRouter.get('/verify-email/:token', verifyEmail);
 authRouter.get('/facebook', passport.authenticate('facebook'));
 authRouter.get(

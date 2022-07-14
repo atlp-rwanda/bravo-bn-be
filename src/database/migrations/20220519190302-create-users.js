@@ -47,6 +47,9 @@ export default {
       isVerified: {
         type: Sequelize.BOOLEAN,
       },
+      verificationToken: {
+        type: Sequelize.STRING,
+      },
       gender: {
         type: Sequelize.STRING,
       },
