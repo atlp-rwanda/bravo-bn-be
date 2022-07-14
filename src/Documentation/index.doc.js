@@ -257,6 +257,18 @@ const options = {
       },
     },
 
+     '/api/v1/user/auth/logout': {
+      get: {
+        tags: ['authentication'],
+        description: 'logout user',
+        responses: {
+          200: {
+            description: 'successfully',
+          },
+        },
+      },
+    },
+    
     '/api/v1/accomodation': {
       post: {
         tags: ['Accomodation'],
