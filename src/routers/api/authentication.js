@@ -12,7 +12,7 @@ import { authenticate } from 'passport';
 const authRouter = express.Router();
 
 authRouter.post('/signup', signup);
-authRouter.post('/logout', protect, logout);
+authRouter.get('/logout', protect, logout);
 authRouter.get('/verify-email/:token', verifyEmail);
 authRouter.get('/facebook', passport.authenticate('facebook'));
 authRouter.get(
