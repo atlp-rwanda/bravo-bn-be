@@ -43,8 +43,9 @@ export const createTripRequest = async (req, res) => {
         requesterId: req.user.id,
         accomodationId: req.body.accomodationId,
       };
-      await tripRequests.create(trip);
+      const { id } = await tripRequests.create(trip);
       trip.accomodationId = undefined;
+      trip.id = id;
       trip.accomodation = accomodation;
       return res.status(201).json({ status: 'success', data: trip });
     }
