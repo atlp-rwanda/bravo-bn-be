@@ -6,7 +6,6 @@ export const checkRememberInfo = async (req, res, next) => {
   const requester = await users.findOne({ where: { id: userId } });
 
   if (requester.remember_info === true && req.cookies) {
-    console.log(req.cookies);
     if (req.body.passportName === '') {
       req.body.passportName = req.cookies.passportName;
     }
