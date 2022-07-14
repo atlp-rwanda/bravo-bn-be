@@ -201,7 +201,7 @@ describe('User logout', () => {
             .end((err, res) => {
               const { token } = res.body;
               api
-                .post('/api/v1/user/auth/logout')
+                .get('/api/v1/user/auth/logout')
                 .set('Authorization', `Bearer ${token}`)
                 .end((err, res) => {
                   expect(res.status).to.equal(200);
