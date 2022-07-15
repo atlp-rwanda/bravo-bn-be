@@ -1,19 +1,18 @@
-"on":
+'on':
   push:
     branches:
-      - "*"
+      - '*'
   pull_request:
     branches:
       - develop
 jobs:
   build:
-    runs-on: "${{ matrix.os }}"
+    runs-on: '${{ matrix.os }}'
     strategy:
       matrix:
         node-version:
           - 16.x
-        redis-version:
-          [6]
+        redis-version: [6]
         os:
           - ubuntu-latest
     env:
@@ -37,11 +36,11 @@ jobs:
       CLOUDINARY_API_KEY: ${{secrets.CLOUDINARY_API_KEY}}
       CLOUDINARY_API_SECRET: ${{secrets.CLOUDINARY_API_SECRET}}
       CLOUDINARY_USER_NAME: ${{secrets.CLOUDINARY_USER_NAME}}
-      REDIS_URL : ${{secrets.REDIS_URL}}
-      REDIS_PWD : ${{secrets.REDIS_PWD}}
+      REDIS_URL: ${{secrets.REDIS_URL}}
+      REDIS_PWD: ${{secrets.REDIS_PWD}}
     steps:
       - uses: actions/checkout@v3
-      - name: "Use Node.js ${{ matrix.node-version }}"
+      - name: 'Use Node.js ${{ matrix.node-version }}'
         uses: actions/setup-node@v3
         with:
           node-version: '${{ matrix.node-version }}'

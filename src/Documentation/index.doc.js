@@ -340,6 +340,7 @@ const options = {
             name: 'id',
             in: 'path',
             type: 'string',
+            taken: 'string',
             description: 'Accomodation Id',
             required: true,
           },
@@ -651,6 +652,7 @@ const options = {
                   'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
                 travelReason: 'marketing',
                 accomodationId: 1,
+                roomId: 1,
               },
             },
           },
@@ -797,6 +799,55 @@ const options = {
         },
       },
     },
+    '/api/v1/user/trip/multi': {
+      post: {
+        tags: ['Multi city trip Request'],
+        description: 'Create multi city trip request',
+        consumes: ['application/json'],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/multiTripRequest',
+              },
+              example: [
+                {
+                  leavingFrom: 'kigali',
+                  goingTo: 1,
+                  travelDate:
+                    'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
+                  returnDate:
+                    'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
+                  travelReason: 'marketing',
+                  accomodationId: 1,
+                  roomId: 3,
+                },
+                {
+                  leavingFrom: 'kigali',
+                  goingTo: 3,
+                  travelDate:
+                    'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
+                  returnDate:
+                    'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
+                  travelReason: 'marketing',
+                  accomodationId: 2,
+                  roomId: 4,
+                },
+              ],
+            },
+          },
+          required: true,
+        },
+        responses: {
+          201: {
+            description: 'success status',
+          },
+          401: {
+            description: 'Unauthorized',
+          },
+        },
+      },
+    },
     '/api/v1//user/trip/approve/{id}': {
       put: {
         tags: ['Manager'],
@@ -908,6 +959,36 @@ const options = {
           },
         },
       },
+      multiTripRequest: {
+        type: 'object',
+        properties: {
+          leavingFrom: {
+            type: 'string',
+            description: 'current location',
+          },
+          goingTo: {
+            type: 'string',
+            description: 'destination',
+          },
+          travelDate: {
+            type: 'string',
+            description: 'start date of trip',
+          },
+          returnDate: {
+            type: 'string',
+            description: 'end date of trip',
+          },
+          travelReason: {
+            type: 'string',
+          },
+          accomodationId: {
+            type: 'integer',
+          },
+          roomId: {
+            type: 'integer',
+          },
+        },
+      },
       User: {
         type: 'object',
 
@@ -969,6 +1050,9 @@ const options = {
             type: 'string',
           },
           bedDescription: {
+            type: 'string',
+          },
+          taken: {
             type: 'string',
           },
         },
@@ -1051,6 +1135,9 @@ const options = {
             type: 'string',
           },
           accomodationId: {
+            type: 'integer',
+          },
+          roomId: {
             type: 'integer',
           },
         },

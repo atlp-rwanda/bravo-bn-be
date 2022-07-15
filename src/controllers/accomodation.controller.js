@@ -2,7 +2,6 @@ import db from '../database/models/index.js';
 const accomodations = db['accomodation'];
 const Locations = db['Location'];
 import { fileUpload } from '../helpers/multer';
-const { Op } = require('sequelize');
 
 export const createAccomodation = async (req, res) => {
   try {
