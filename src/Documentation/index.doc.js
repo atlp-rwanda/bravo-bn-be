@@ -43,39 +43,7 @@ const options = {
         },
       },
     },
-    '/api/v1/user/login': {
-      post: {
-        tags: ['User'],
-        description: 'login user',
-        security: [],
-        parameters: [],
-        requestBody: {
-          content: {
-            'application/json': {
-              schema: {
-                $ref: '#/components/schemas/User',
-              },
-              example: {
-                email: 'john@gmail.com',
-                password: 'aaaaaaaa',
-              },
-            },
-          },
-          required: true,
-        },
-        responses: {
-          200: {
-            description: 'successfully',
-          },
-          400: {
-            description: 'Invalid credation',
-          },
-          500: {
-            description: 'Internal Server Error',
-          },
-        },
-      },
-    },
+
     '/api/v1/user/': {
       get: {
         tags: ['User'],
@@ -288,6 +256,19 @@ const options = {
         },
       },
     },
+
+    '/api/v1/user/auth/logout': {
+      get: {
+        tags: ['authentication'],
+        description: 'logout user',
+        responses: {
+          200: {
+            description: 'successfully',
+          },
+        },
+      },
+    },
+
     '/api/v1/accomodation': {
       post: {
         tags: ['Accomodation'],
@@ -833,12 +814,76 @@ const options = {
             },
           },
         ],
+      },
+    },
+    '/api/v1//user/trip/approve/{id}': {
+      put: {
+        tags: ['Manager'],
+        description: 'approve trip request',
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            description: 'trip request id',
+            required: true,
+            schema: {
+              type: 'string',
+            },
+          },
+        ],
         responses: {
           200: {
             description: 'success status',
           },
           401: {
             description: 'Unauthorized',
+            description: 'successfully',
+          },
+          400: {
+            description: 'Trip request is already approved or rejected',
+          },
+          401: {
+            description: 'You are not authorized to approve this trip request',
+          },
+          404: {
+            description: 'Not found',
+          },
+          500: {
+            description: 'Internal Server Error',
+          },
+        },
+      },
+    },
+    '/api/v1//user/trip/reject/{id}': {
+      put: {
+        tags: ['Manager'],
+        description: 'reject trip request',
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            description: 'trip request id',
+            required: true,
+            schema: {
+              type: 'string',
+            },
+          },
+        ],
+        responses: {
+          200: {
+            description: 'successfully',
+          },
+          400: {
+            description: 'Trip request is already approved or rejected',
+          },
+          401: {
+            description: 'You are not authorized to reject this trip request',
+          },
+          404: {
+            description: 'Not found',
+          },
+          500: {
+            description: 'Internal Server Error',
           },
         },
       },

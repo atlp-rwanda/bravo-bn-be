@@ -460,3 +460,71 @@ export const getTripRequestStat = catchAsync(async (req, res, next) => {
 
   return next(new AppError(`Trip Request not found!`, 404));
 });
+
+export const approveTripRequest = catchAsync(async (req, res, next) => {
+  if (req.user.dataValues.role === 'manager') {
+    const tripRequest = await tripRequests.findByPk(req.params.id);
+    if (!tripRequest) {
+      return next(new AppError('Trip request not found', 404));
+    }
+    if (tripRequest.status !== 'pending') {
+      return next(
+        new AppError('Trip request is already approved or rejected', 400),
+      );
+    }
+    const updatedTripRequest = await tripRequests.update(
+      {
+        status: 'approved',
+      },
+      {
+        where: {
+          id: tripRequest.id,
+        },
+      },
+    );
+    if (updatedTripRequest) {
+      return res.status(200).json({
+        status: true,
+        message: 'Trip request approved successfully',
+      });
+    }
+  } else {
+    return next(
+      new AppError('You are not authorized to approve this trip request', 401),
+    );
+  }
+});
+
+export const rejectTripRequest = catchAsync(async (req, res, next) => {
+  if (req.user.dataValues.role === 'manager') {
+    const tripRequest = await tripRequests.findByPk(req.params.id);
+    if (!tripRequest) {
+      return next(new AppError('Trip request not found', 404));
+    }
+    if (tripRequest.status !== 'pending') {
+      return next(
+        new AppError('Trip request is already approved or rejected', 400),
+      );
+    }
+    const updatedTripRequest = await tripRequests.update(
+      {
+        status: 'rejected',
+      },
+      {
+        where: {
+          id: tripRequest.id,
+        },
+      },
+    );
+    if (updatedTripRequest) {
+      return res.status(200).json({
+        status: true,
+        message: 'Trip request rejected successfully',
+      });
+    }
+  } else {
+    return next(
+      new AppError('You are not authorized to reject this trip request', 401),
+    );
+  }
+});

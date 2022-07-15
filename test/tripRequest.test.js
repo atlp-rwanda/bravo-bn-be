@@ -4,6 +4,7 @@ import app from '../src/app.js';
 import db from '../src/database/models/index.js';
 
 const tripRequests = db['tripRequests'];
+const User = db['User'];
 
 chai.should();
 chai.use(chaiHTTP);
@@ -204,49 +205,6 @@ describe('perform CRUD operations on trip request', () => {
       });
   });
 
-  /* it('should get trips status of year, month and day', (done) => {
-    api
-      .get(`/api/v1/user/trip/status/?year=2022&month=jun&day=29`)
-      .set('Authorization', `Bearer ${requesterToken}`)
-      .end((err, res) => {
-        expect(res.status).to.equal(200);
-       
-        done();
-      });
-  });
-
-  it('should get trips status of year and month', (done) => {
-    api
-      .get(`/api/v1/user/trip/status/?year=2022&month=jun`)
-      .set('Authorization', `Bearer ${requesterToken}`)
-      .end((err, res) => {
-       
-        expect(res.status).to.equal(200);
-       
-        done();
-      });
-  });
-  it('should get trips status of  month and day', (done) => {
-    api
-      .get(`/api/v1/user/trip/status/?month=jun&day=29`)
-      .set('Authorization', `Bearer ${requesterToken}`)
-      .end((err, res) => {
-       
-        expect(res.status).to.equal(200);
-       
-        done();
-      });
-  });
-  it('should get trips status of year and day', (done) => {
-    api
-      .get(`/api/v1/user/trip/status/?year=2022&day=29`)
-      .set('Authorization', `Bearer ${requesterToken}`)
-      .end((err, res) => {
-        expect(res.status).to.equal(200);
-        done();
-      });
-  }); */
-
   it('should not get trips status of year, month and day', (done) => {
     api
       .get(`/api/v1/user/trip/status/?year=2025&month=jun&day=29`)
@@ -311,6 +269,202 @@ describe('perform CRUD operations on trip request', () => {
         const { message } = res.body;
         expect(res.status).to.equal(403);
         expect(message);
+        done();
+      });
+  });
+});
+
+const user2 = {
+  firstName: 'tester',
+  lastName: 'manager',
+  username: 'testerManager2',
+  email: 'testerManager2@gmail.com',
+  password: 'testerma',
+  repeat_password: 'testerma',
+  phoneNumber: '0705058050',
+  role: 'manager',
+};
+describe('Approve Trip Request', () => {
+  it('Should return 200 for success ', (done) => {
+    const tripRequest = {
+      leavingFrom: 'musanze',
+      goingTo: 1,
+      travelDate: 'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
+      returnDate: 'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
+      travelReason: 'picnic',
+      accomodationId: 1,
+    };
+    api
+      .post('/api/v1/user/trip')
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .send(tripRequest)
+      .end((err, res) => {
+        api
+          .get('/api/v1/user/trip/get')
+          .set('Authorization', `Bearer ${requesterToken}`)
+          .send(tripRequest)
+          .end((err, res) => {
+            requestId = res.body.data[0].id;
+            api
+              .put(`/api/v1/user/trip/approve/${requestId}`)
+              .set('Authorization', `Bearer ${managerToken}`)
+              .end((err, res) => {
+                const { message } = res.body;
+                expect(res.status).to.equal(200);
+                expect(message).to.equal('Trip request approved successfully');
+                done();
+              });
+          });
+      });
+  });
+  it('should get trips status of year, month and day', (done) => {
+    api
+      .get(`/api/v1/user/trip/status/?year=2022&month=jun&day=29`)
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(200);
+
+        done();
+      });
+  });
+
+  it('should get trips status of year and month', (done) => {
+    api
+      .get(`/api/v1/user/trip/status/?year=2022&month=jun`)
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(200);
+
+        done();
+      });
+  });
+  it('should get trips status of  month and day', (done) => {
+    api
+      .get(`/api/v1/user/trip/status/?month=jun&day=29`)
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(200);
+
+        done();
+      });
+  });
+  it('should get trips status of year and day', (done) => {
+    api
+      .get(`/api/v1/user/trip/status/?year=2022&day=29`)
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(200);
+        done();
+      });
+  });
+  it('Should return 404 for invalid trip request id', (done) => {
+    api
+      .put('/api/v1/user/trip/approve/0000')
+      .set('Authorization', `Bearer ${managerToken}`)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(404);
+        expect(message).to.equal('Trip request not found');
+        done();
+      });
+  });
+
+  it('Should return 401 for invalid token', (done) => {
+    const token = 'res.body';
+    api
+      .put(`/api/v1/user/trip/approve/${requestId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(401);
+        expect(message).to.equal('Your token is invalid or expired');
+        done();
+      });
+  });
+  it('should return 400 for Trip request is already approved or rejected ', (done) => {
+    api
+      .put(`/api/v1/user/trip/approve/${requestId}`)
+      .set('Authorization', `Bearer ${managerToken}`)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(400);
+        expect(message).to.equal(
+          'Trip request is already approved or rejected',
+        );
+        done();
+      });
+  });
+});
+
+describe('Reject Trip Request', () => {
+  it('it should create new trip request and return 201', (done) => {
+    const tripRequest = {
+      leavingFrom: 'musanze',
+      goingTo: 1,
+      travelDate: 'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
+      returnDate: 'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
+      travelReason: 'picnic',
+      accomodationId: 1,
+    };
+    api
+      .post('/api/v1/user/trip')
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .send(tripRequest)
+      .end((err, res) => {
+        api
+          .get('/api/v1/user/trip/get')
+          .set('Authorization', `Bearer ${requesterToken}`)
+          .send(tripRequest)
+          .end((err, res) => {
+            requestId = res.body.data[0].id;
+            done();
+          });
+      });
+    it('Should return 200 for success ', (done) => {
+      api
+        .put(`/api/v1/user/trip/reject/${requestId}`)
+        .set('Authorization', `Bearer ${managerToken}`)
+        .end((err, res) => {
+          const { message } = res.body;
+          expect(res.status).to.equal(200);
+          expect(message).to.equal('Trip request rejected successfully');
+          done();
+        });
+    });
+  });
+  it('Should return 404 for invalid trip request id', (done) => {
+    api
+      .put('/api/v1/user/trip/reject/0000')
+      .set('Authorization', `Bearer ${managerToken}`)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(404);
+        expect(message).to.equal('Trip request not found');
+        done();
+      });
+  });
+  it('Should return 401 for invalid token', (done) => {
+    const token = 'res.body';
+    api
+      .put(`/api/v1/user/trip/reject/${requestId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(401);
+        expect(message).to.equal('Your token is invalid or expired');
+        done();
+      });
+  });
+  it('should return 400 for Trip request is already approved or rejected ', (done) => {
+    api
+      .put(`/api/v1/user/trip/reject/${requestId}`)
+      .set('Authorization', `Bearer ${managerToken}`)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(400);
+        expect(message).to.equal(
+          'Trip request is already approved or rejected',
+        );
         done();
       });
   });
