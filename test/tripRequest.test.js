@@ -4,6 +4,7 @@ import app from '../src/app.js';
 import db from '../src/database/models/index.js';
 
 const tripRequests = db['tripRequests'];
+const User = db['User'];
 
 chai.should();
 chai.use(chaiHTTP);
@@ -229,7 +230,52 @@ describe('perform CRUD operations on trip request', () => {
         done();
       });
   });
-  /*   it('It should return 200 for most travelled destinations', (done) => {
+
+  it('It should return 404 for most travelled destinations will not be found', (done) => {
+    api
+      .get(`/api/v1/user/trip//most-travelled-destinations`)
+      .set('Authorization', `Bearer ${managerToken}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(404);
+        done();
+      });
+  });
+});
+
+describe('Approve Trip Request', () => {
+  it('Should return 200 for success ', (done) => {
+    const tripRequest = {
+      leavingFrom: 'musanze',
+      goingTo: 1,
+      travelDate: '2022-10-5',
+      returnDate: '2022-11-6',
+      travelReason: 'picnic',
+      accomodationId: 1,
+    };
+    api
+      .post('/api/v1/user/trip')
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .send(tripRequest)
+      .end((err, res) => {
+        api
+          .get('/api/v1/user/trip/get')
+          .set('Authorization', `Bearer ${requesterToken}`)
+          .send(tripRequest)
+          .end((err, res) => {
+            requestId = res.body.data[0].id;
+            api
+              .put(`/api/v1/user/trip/approve/${requestId}`)
+              .set('Authorization', `Bearer ${managerToken}`)
+              .end((err, res) => {
+                const { message } = res.body;
+                expect(res.status).to.equal(200);
+                expect(message).to.equal('Trip request approved successfully');
+                done();
+              });
+          });
+      });
+  });
+  it('It should return 200 for most travelled destinations', (done) => {
     api
       .get(`/api/v1/user/trip//most-travelled-destinations`)
       .set('Authorization', `Bearer ${managerToken}`)
@@ -237,13 +283,115 @@ describe('perform CRUD operations on trip request', () => {
         expect(res.status).to.equal(200);
         done();
       });
-  }); */
-  it('It should return 404 for most travelled destinations will not be found', (done) => {
+  });
+  it('Should return 404 for invalid trip request id', (done) => {
     api
-      .get(`/api/v1/user/trip//most-travelled-destinations`)
+      .put('/api/v1/user/trip/approve/0000')
       .set('Authorization', `Bearer ${managerToken}`)
       .end((err, res) => {
+        const { message } = res.body;
         expect(res.status).to.equal(404);
+        expect(message).to.equal('Trip request not found');
+        done();
+      });
+  });
+
+  it('Should return 401 for invalid token', (done) => {
+    const token = 'res.body';
+    api
+      .put(`/api/v1/user/trip/approve/${requestId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(401);
+        expect(message).to.equal('Your token is invalid or expired');
+        done();
+      });
+  });
+  it('should return 400 for Trip request is already approved or rejected ', (done) => {
+    api
+      .put(`/api/v1/user/trip/approve/${requestId}`)
+      .set('Authorization', `Bearer ${managerToken}`)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(400);
+        expect(message).to.equal(
+          'Trip request is already approved or rejected',
+        );
+        done();
+      });
+  });
+});
+
+describe('Reject Trip Request', () => {
+  it('it should create new trip request and return 201', (done) => {
+    const tripRequest = {
+      leavingFrom: 'musanze',
+      goingTo: 1,
+      travelDate: '2022-10-5',
+      returnDate: '2022-11-6',
+      travelReason: 'picnic',
+      accomodationId: 1,
+    };
+    api
+      .post('/api/v1/user/trip')
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .send(tripRequest)
+      .end((err, res) => {
+        api
+          .get('/api/v1/user/trip/get')
+          .set('Authorization', `Bearer ${requesterToken}`)
+          .send(tripRequest)
+          .end((err, res) => {
+            requestId = res.body.data[0].id;
+            done();
+          });
+      });
+    it('Should return 200 for success ', (done) => {
+      api
+        .put(`/api/v1/user/trip/reject/${requestId}`)
+        .set('Authorization', `Bearer ${managerToken}`)
+        .end((err, res) => {
+          const { message } = res.body;
+          expect(res.status).to.equal(200);
+          expect(message).to.equal('Trip request rejected successfully');
+          done();
+        });
+    });
+  });
+  it('Should return 404 for invalid trip request id', (done) => {
+    api
+      .put('/api/v1/user/trip/reject/0000')
+      .set('Authorization', `Bearer ${managerToken}`)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(404);
+        expect(message).to.equal('Trip request not found');
+        done();
+      });
+  });
+  it('Should return 401 for invalid token', (done) => {
+    const token = 'res.body';
+    api
+      .put(`/api/v1/user/trip/reject/${requestId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(401);
+        expect(message).to.equal('Your token is invalid or expired');
+        done();
+      });
+  });
+  it('should return 400 for Trip request is already approved or rejected ', (done) => {
+    api
+      .put(`/api/v1/user/trip/reject/${requestId}`)
+      .set('Authorization', `Bearer ${managerToken}`)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(400);
+        expect(message).to.equal(
+          'Trip request is already approved or rejected',
+        );
         done();
       });
   });
