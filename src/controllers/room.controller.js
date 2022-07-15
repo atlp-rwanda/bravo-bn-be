@@ -13,7 +13,7 @@ export const createRoom = async (req, res) => {
       return res.status(403).json({ message: 'not traveler admin' });
     }
     const accomodationId = req.params.accomodationId;
-    const { bedType, bedCost, bedDescription } = req.body;
+    const { roomType, roomCost, roomDescription } = req.body;
 
     /**
      * check if accomodation is there
@@ -31,9 +31,9 @@ export const createRoom = async (req, res) => {
     }
 
     const newRoom = await Room.create({
-      bedType,
-      bedCost,
-      bedDescription,
+      roomType,
+      roomCost,
+      roomDescription,
       accomodationId: accomodation.id,
     });
     return res.status(201).json({
@@ -93,7 +93,7 @@ export const updateRoom = async (req, res) => {
         .json({ status: 'fail', message: 'not traveler admin' });
     }
     const id = req.params.id;
-    const { bedType, bedCost, bedDescription, taken } = req.body;
+    const { roomType, roomCost, roomDescription, taken } = req.body;
     const room = await Room.findOne({ where: { id } });
 
     if (!room) {
@@ -105,9 +105,9 @@ export const updateRoom = async (req, res) => {
 
     await Room.update(
       {
-        bedType,
-        bedCost,
-        bedDescription,
+        roomType,
+        roomCost,
+        roomDescription,
         taken,
       },
       { where: { id } },

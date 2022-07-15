@@ -11,14 +11,14 @@ const { expect } = chai;
 
 describe('POST api/v1/rooms/accomodationId', () => {
   const room = {
-    bedType: 'twin',
-    bedCost: '100$',
-    bedDescription: 'lorem Ipsum',
+    roomType: 'twin',
+    roomCost: '100$',
+    roomDescription: 'lorem Ipsum',
   };
   const roomUpdate = {
-    bedType: 'twin1',
-    bedCost: '1000$',
-    bedDescription: 'lorem Ipsum1',
+    roomType: 'twin1',
+    roomCost: '1000$',
+    roomDescription: 'lorem Ipsum1',
   };
   let newToken;
   const accomodationId = 2;
