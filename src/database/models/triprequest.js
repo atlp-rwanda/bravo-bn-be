@@ -1,4 +1,3 @@
-'use strict';
 module.exports = (sequelize, DataTypes) => {
   const tripRequest = sequelize.define(
     'tripRequest',
@@ -9,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       returnDate: DataTypes.STRING,
       travelReason: DataTypes.STRING,
       tripType: DataTypes.STRING,
-      status: DataTypes.STRING,
+      status: DataTypes.ENUM('pending', 'approved', 'rejected'),
     },
     {},
   );

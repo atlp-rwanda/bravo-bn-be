@@ -43,39 +43,7 @@ const options = {
         },
       },
     },
-    '/api/v1/user/login': {
-      post: {
-        tags: ['User'],
-        description: 'login user',
-        security: [],
-        parameters: [],
-        requestBody: {
-          content: {
-            'application/json': {
-              schema: {
-                $ref: '#/components/schemas/User',
-              },
-              example: {
-                email: 'john@gmail.com',
-                password: 'aaaaaaaa',
-              },
-            },
-          },
-          required: true,
-        },
-        responses: {
-          200: {
-            description: 'successfully',
-          },
-          400: {
-            description: 'Invalid credation',
-          },
-          500: {
-            description: 'Internal Server Error',
-          },
-        },
-      },
-    },
+
     '/api/v1/user/': {
       get: {
         tags: ['User'],
@@ -288,6 +256,19 @@ const options = {
         },
       },
     },
+
+    '/api/v1/user/auth/logout': {
+      get: {
+        tags: ['authentication'],
+        description: 'logout user',
+        responses: {
+          200: {
+            description: 'successfully',
+          },
+        },
+      },
+    },
+
     '/api/v1/accomodation': {
       post: {
         tags: ['Accomodation'],
@@ -807,6 +788,123 @@ const options = {
         },
       },
     },
+    '/api/v1/user/trip/multi': {
+      post: {
+        tags: ['Multi city trip Request'],
+        description: 'Create multi city trip request',
+        consumes: ['application/json'],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/multiTripRequest',
+              },
+              example: [
+                {
+                  leavingFrom: 'kigali',
+                  goingTo: 1,
+                  travelDate:
+                    'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
+                  returnDate:
+                    'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
+                  travelReason: 'marketing',
+                  accomodationId: 1,
+                  roomId: 3,
+                },
+                {
+                  leavingFrom: 'kigali',
+                  goingTo: 3,
+                  travelDate:
+                    'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
+                  returnDate:
+                    'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
+                  travelReason: 'marketing',
+                  accomodationId: 2,
+                  roomId: 4,
+                },
+              ],
+            },
+          },
+          required: true,
+        },
+        responses: {
+          201: {
+            description: 'success status',
+          },
+          401: {
+            description: 'Unauthorized',
+          },
+        },
+      },
+    },
+    '/api/v1//user/trip/approve/{id}': {
+      put: {
+        tags: ['Manager'],
+        description: 'approve trip request',
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            description: 'trip request id',
+            required: true,
+            schema: {
+              type: 'string',
+            },
+          },
+        ],
+        responses: {
+          200: {
+            description: 'successfully',
+          },
+          400: {
+            description: 'Trip request is already approved or rejected',
+          },
+          401: {
+            description: 'You are not authorized to approve this trip request',
+          },
+          404: {
+            description: 'Not found',
+          },
+          500: {
+            description: 'Internal Server Error',
+          },
+        },
+      },
+    },
+    '/api/v1//user/trip/reject/{id}': {
+      put: {
+        tags: ['Manager'],
+        description: 'reject trip request',
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            description: 'trip request id',
+            required: true,
+            schema: {
+              type: 'string',
+            },
+          },
+        ],
+        responses: {
+          200: {
+            description: 'successfully',
+          },
+          400: {
+            description: 'Trip request is already approved or rejected',
+          },
+          401: {
+            description: 'You are not authorized to reject this trip request',
+          },
+          404: {
+            description: 'Not found',
+          },
+          500: {
+            description: 'Internal Server Error',
+          },
+        },
+      },
+    },
   },
 
   components: {
@@ -847,6 +945,36 @@ const options = {
           },
           email: {
             type: 'string',
+          },
+        },
+      },
+      multiTripRequest: {
+        type: 'object',
+        properties: {
+          leavingFrom: {
+            type: 'string',
+            description: 'current location',
+          },
+          goingTo: {
+            type: 'string',
+            description: 'destination',
+          },
+          travelDate: {
+            type: 'string',
+            description: 'start date of trip',
+          },
+          returnDate: {
+            type: 'string',
+            description: 'end date of trip',
+          },
+          travelReason: {
+            type: 'string',
+          },
+          accomodationId: {
+            type: 'integer',
+          },
+          roomId: {
+            type: 'integer',
           },
         },
       },

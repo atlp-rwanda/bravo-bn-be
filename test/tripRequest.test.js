@@ -1,7 +1,6 @@
 import chai from 'chai';
 import chaiHTTP from 'chai-http';
 import app from '../src/app.js';
-
 chai.should();
 chai.use(chaiHTTP);
 const api = chai.request(app).keepOpen();
@@ -77,6 +76,7 @@ describe('perform CRUD operations on trip request', () => {
       .set('Authorization', `Bearer ${requesterToken}`)
       .send(tripRequest)
       .end((err, res) => {
+        console.log(res.body);
         const { message } = res.body;
         expect(res.status).to.equal(201);
         expect(message);
@@ -84,7 +84,6 @@ describe('perform CRUD operations on trip request', () => {
       });
   });
 
-  // manager should not create trip request
   it('It should not create trip and  return 403', (done) => {
     const tripRequest = {
       leavingFrom: 'musanze',
@@ -225,6 +224,286 @@ describe('perform CRUD operations on trip request', () => {
         const { message } = res.body;
         expect(res.status).to.equal(403);
         expect(message);
+        done();
+      });
+  });
+
+  it('It should not create multi trip request and return 404', (done) => {
+    const tripRequest = [
+      {
+        leavingFrom: 'musanze',
+        goingTo: 20,
+        travelDate: '2022-10-5',
+        returnDate: '2022-11-6',
+        travelReason: 'picnic',
+        accomodationId: 2,
+        roomId: 3,
+      },
+    ];
+
+    api
+      .post('/api/v1/user/trip/multi')
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .send(tripRequest)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(404);
+        expect(message);
+        done();
+      });
+  });
+  it('It should not create multi trip request and return 404', (done) => {
+    const tripRequest = [
+      {
+        leavingFrom: 'musanze',
+        goingTo: 1,
+        travelDate: '2022-10-5',
+        returnDate: '2022-11-6',
+        travelReason: 'picnic',
+        accomodationId: 20,
+        roomId: 3,
+      },
+    ];
+
+    api
+      .post('/api/v1/user/trip/multi')
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .send(tripRequest)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(404);
+        expect(message);
+        done();
+      });
+  });
+  it('It should not create multi trip request and return 404', (done) => {
+    const tripRequest = [
+      {
+        leavingFrom: 'musanze',
+        goingTo: 1,
+        travelDate: '2022-10-5',
+        returnDate: '2022-11-6',
+        travelReason: 'picnic',
+        accomodationId: 2,
+        roomId: 34,
+      },
+    ];
+
+    api
+      .post('/api/v1/user/trip/multi')
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .send(tripRequest)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(404);
+        expect(message);
+        done();
+      });
+  });
+
+  it('It should create multi trip request and return 201', (done) => {
+    const tripRequest = [
+      {
+        leavingFrom: 'musanze',
+        goingTo: 1,
+        travelDate: '2022-10-5',
+        returnDate: '2022-11-6',
+        travelReason: 'picnic',
+        accomodationId: 2,
+        roomId: 3,
+      },
+    ];
+
+    api
+      .post('/api/v1/user/trip/multi')
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .send(tripRequest)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(201);
+        expect(message);
+        done();
+      });
+  });
+
+  // manager should not create trip request
+  it('It should not multi create trip and  return 403', (done) => {
+    const tripRequest = [
+      {
+        leavingFrom: 'musanze',
+        goingTo: 1,
+        travelDate: '2022-10-5',
+        returnDate: '2022-11-6',
+        travelReason: 'picnic',
+        accomodationId: 1,
+        roomId: 1,
+      },
+    ];
+
+    api
+      .post('/api/v1/user/trip/multi')
+      .set('Authorization', `Bearer ${managerToken}`)
+      .send(tripRequest)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(403);
+        expect(message);
+        done();
+      });
+  });
+});
+
+const user2 = {
+  firstName: 'tester',
+  lastName: 'manager',
+  username: 'testerManager2',
+  email: 'testerManager2@gmail.com',
+  password: 'testerma',
+  repeat_password: 'testerma',
+  phoneNumber: '0705058050',
+  role: 'manager',
+};
+describe('Approve Trip Request', () => {
+  it('Should return 200 for success ', (done) => {
+    const tripRequest = {
+      leavingFrom: 'musanze',
+      goingTo: 1,
+      travelDate: '2022-10-5',
+      returnDate: '2022-11-6',
+      travelReason: 'picnic',
+      accomodationId: 1,
+    };
+    api
+      .post('/api/v1/user/trip')
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .send(tripRequest)
+      .end((err, res) => {
+        api
+          .get('/api/v1/user/trip/get')
+          .set('Authorization', `Bearer ${requesterToken}`)
+          .send(tripRequest)
+          .end((err, res) => {
+            requestId = res.body.data[0].id;
+            api
+              .put(`/api/v1/user/trip/approve/${requestId}`)
+              .set('Authorization', `Bearer ${managerToken}`)
+              .end((err, res) => {
+                const { message } = res.body;
+                expect(res.status).to.equal(200);
+                expect(message).to.equal('Trip request approved successfully');
+                done();
+              });
+          });
+      });
+  });
+  it('Should return 404 for invalid trip request id', (done) => {
+    api
+      .put('/api/v1/user/trip/approve/0000')
+      .set('Authorization', `Bearer ${managerToken}`)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(404);
+        expect(message).to.equal('Trip request not found');
+        done();
+      });
+  });
+
+  it('Should return 401 for invalid token', (done) => {
+    const token = 'res.body';
+    api
+      .put(`/api/v1/user/trip/approve/${requestId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(401);
+        expect(message).to.equal('Your token is invalid or expired');
+        done();
+      });
+  });
+  it('should return 400 for Trip request is already approved or rejected ', (done) => {
+    api
+      .put(`/api/v1/user/trip/approve/${requestId}`)
+      .set('Authorization', `Bearer ${managerToken}`)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(400);
+        expect(message).to.equal(
+          'Trip request is already approved or rejected',
+        );
+        done();
+      });
+  });
+});
+
+describe('Reject Trip Request', () => {
+  it('it should create new trip request and return 201', (done) => {
+    const tripRequest = {
+      leavingFrom: 'musanze',
+      goingTo: 1,
+      travelDate: '2022-10-5',
+      returnDate: '2022-11-6',
+      travelReason: 'picnic',
+      accomodationId: 1,
+    };
+    api
+      .post('/api/v1/user/trip')
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .send(tripRequest)
+      .end((err, res) => {
+        api
+          .get('/api/v1/user/trip/get')
+          .set('Authorization', `Bearer ${requesterToken}`)
+          .send(tripRequest)
+          .end((err, res) => {
+            requestId = res.body.data[0].id;
+            done();
+          });
+      });
+    it('Should return 200 for success ', (done) => {
+      api
+        .put(`/api/v1/user/trip/reject/${requestId}`)
+        .set('Authorization', `Bearer ${managerToken}`)
+        .end((err, res) => {
+          const { message } = res.body;
+          expect(res.status).to.equal(200);
+          expect(message).to.equal('Trip request rejected successfully');
+          done();
+        });
+    });
+  });
+  it('Should return 404 for invalid trip request id', (done) => {
+    api
+      .put('/api/v1/user/trip/reject/0000')
+      .set('Authorization', `Bearer ${managerToken}`)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(404);
+        expect(message).to.equal('Trip request not found');
+        done();
+      });
+  });
+  it('Should return 401 for invalid token', (done) => {
+    const token = 'res.body';
+    api
+      .put(`/api/v1/user/trip/reject/${requestId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(401);
+        expect(message).to.equal('Your token is invalid or expired');
+        done();
+      });
+  });
+  it('should return 400 for Trip request is already approved or rejected ', (done) => {
+    api
+      .put(`/api/v1/user/trip/reject/${requestId}`)
+      .set('Authorization', `Bearer ${managerToken}`)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(400);
+        expect(message).to.equal(
+          'Trip request is already approved or rejected',
+        );
         done();
       });
   });
