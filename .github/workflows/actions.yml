@@ -44,18 +44,11 @@ jobs:
       - name: "Use Node.js ${{ matrix.node-version }}"
         uses: actions/setup-node@v3
         with:
-<<<<<<< HEAD
           node-version: '${{ matrix.node-version }}'
       - name: Start Redis
         uses: supercharge/redis-github-action@1.4.0
         with:
-          redis-version: ${{ matrix.redis-version }}
-          
-          
-=======
-          node-version: "${{ matrix.node-version }}"
-
->>>>>>> 803f23a... Update and rename actions.yml to actions.yaml (#27)
+          redis-version: ${{ matrix.redis-version }}        
       - run: npm install
       - run: npm run test
       - run: npm run coverage
