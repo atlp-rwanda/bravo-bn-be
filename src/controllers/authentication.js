@@ -280,9 +280,6 @@ export const forgotPassword = catchAsync(async (req, res, next) => {
 });
 
 export const resetPassword = catchAsync(async (req, res, next) => {
-  // const hashedToken = createHash('sha256')
-  //   .update(req.params.token)
-  //   .digest('hex');
   try {
     const decoded = await promisify(verify)(
       req.params.token,
@@ -312,6 +309,5 @@ export const resetPassword = catchAsync(async (req, res, next) => {
       });
     }
     createSendToken(userExist, 200, res);
-  } catch (error) {
-  }
+  } catch (error) {}
 });
