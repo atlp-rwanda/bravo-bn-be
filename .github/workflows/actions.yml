@@ -1,13 +1,13 @@
-'on':
+"on":
   push:
     branches:
-      - '*'
+      - "*"
   pull_request:
     branches:
       - develop
 jobs:
   build:
-    runs-on: '${{ matrix.os }}'
+    runs-on: "${{ matrix.os }}"
     strategy:
       matrix:
         node-version:
@@ -41,9 +41,10 @@ jobs:
       REDIS_PWD : ${{secrets.REDIS_PWD}}
     steps:
       - uses: actions/checkout@v3
-      - name: 'Use Node.js ${{ matrix.node-version }}'
+      - name: "Use Node.js ${{ matrix.node-version }}"
         uses: actions/setup-node@v3
         with:
+<<<<<<< HEAD
           node-version: '${{ matrix.node-version }}'
       - name: Start Redis
         uses: supercharge/redis-github-action@1.4.0
@@ -51,8 +52,11 @@ jobs:
           redis-version: ${{ matrix.redis-version }}
           
           
+=======
+          node-version: "${{ matrix.node-version }}"
+
+>>>>>>> 803f23a... Update and rename actions.yml to actions.yaml (#27)
       - run: npm install
       - run: npm run test
       - run: npm run coverage
       - run: npm run down
-      
