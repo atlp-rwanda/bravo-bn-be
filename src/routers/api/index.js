@@ -10,6 +10,5 @@ apiRouter.use('/user', userRouter);
 apiRouter.use('/user/auth', authRouter);
 apiRouter.use('/docs', swaggerRouter);
 apiRouter.use('/user/trip', tripRequestRouter);
-// apiRouter.use('/trip-request',tripRequest);
 
 export default apiRouter;
