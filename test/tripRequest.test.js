@@ -361,18 +361,6 @@ describe('Reject Trip Request', () => {
         done();
       });
   });
-  it('Should return 401 for invalid token', (done) => {
-    const token = 'res.body';
-    api
-      .put(`/api/v1/user/trip/reject/${requestId}`)
-      .set('Authorization', `Bearer ${token}`)
-      .end((err, res) => {
-        const { message } = res.body;
-        expect(res.status).to.equal(401);
-        expect(message).to.equal('Your token is invalid or expired');
-        done();
-      });
-  });
   it('should return 400 for Trip request is already approved or rejected ', (done) => {
     api
       .put(`/api/v1/user/trip/reject/${requestId}`)
