@@ -72,7 +72,8 @@ describe('perform CRUD operations on trip request', () => {
       travelDate: 'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
       returnDate: 'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
       travelReason: 'picnic',
-      accomodationId: 1,
+      accomodationId: 2,
+      roomId: 3,
     };
 
     api
@@ -80,6 +81,7 @@ describe('perform CRUD operations on trip request', () => {
       .set('Authorization', `Bearer ${requesterToken}`)
       .send(tripRequest)
       .end((err, res) => {
+        console.log(res.body);
         const { message } = res.body;
         expect(res.status).to.equal(201);
         expect(message);
@@ -87,7 +89,6 @@ describe('perform CRUD operations on trip request', () => {
       });
   });
 
-  // manager should not create trip request
   it('It should not create trip and  return 403', (done) => {
     const tripRequest = {
       leavingFrom: 'musanze',
@@ -96,6 +97,7 @@ describe('perform CRUD operations on trip request', () => {
       returnDate: 'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
       travelReason: 'picnic',
       accomodationId: 1,
+      roomId: 1,
     };
 
     api
@@ -130,7 +132,7 @@ describe('perform CRUD operations on trip request', () => {
       .get('/api/v1/user/trip/get')
       .set('Authorization', `Bearer ${managerToken}`)
       .end((err, res) => {
-        //requestId = res.body.data[0].id;
+        requestId = res.body.data[0].id;
         const { message } = res.body;
         expect(res.status).to.equal(200);
         expect(message);
@@ -265,6 +267,130 @@ describe('perform CRUD operations on trip request', () => {
     api
       .delete(`/api/v1/user/trip/${requestId}`)
       .set('Authorization', `Bearer ${managerToken}`)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(403);
+        expect(message);
+        done();
+      });
+  });
+
+  it('It should not create multi trip request and return 404', (done) => {
+    const tripRequest = [
+      {
+        leavingFrom: 'musanze',
+        goingTo: 20,
+        travelDate: '2022-10-5',
+        returnDate: '2022-11-6',
+        travelReason: 'picnic',
+        accomodationId: 2,
+        roomId: 3,
+      },
+    ];
+
+    api
+      .post('/api/v1/user/trip/multi')
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .send(tripRequest)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(404);
+        expect(message);
+        done();
+      });
+  });
+  it('It should not create multi trip request and return 404', (done) => {
+    const tripRequest = [
+      {
+        leavingFrom: 'musanze',
+        goingTo: 1,
+        travelDate: '2022-10-5',
+        returnDate: '2022-11-6',
+        travelReason: 'picnic',
+        accomodationId: 20,
+        roomId: 3,
+      },
+    ];
+
+    api
+      .post('/api/v1/user/trip/multi')
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .send(tripRequest)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(404);
+        expect(message);
+        done();
+      });
+  });
+  it('It should not create multi trip request and return 404', (done) => {
+    const tripRequest = [
+      {
+        leavingFrom: 'musanze',
+        goingTo: 1,
+        travelDate: '2022-10-5',
+        returnDate: '2022-11-6',
+        travelReason: 'picnic',
+        accomodationId: 2,
+        roomId: 34,
+      },
+    ];
+
+    api
+      .post('/api/v1/user/trip/multi')
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .send(tripRequest)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(404);
+        expect(message);
+        done();
+      });
+  });
+
+  it('It should create multi trip request and return 201', (done) => {
+    const tripRequest = [
+      {
+        leavingFrom: 'musanze',
+        goingTo: 1,
+        travelDate: '2022-10-5',
+        returnDate: '2022-11-6',
+        travelReason: 'picnic',
+        accomodationId: 2,
+        roomId: 3,
+      },
+    ];
+
+    api
+      .post('/api/v1/user/trip/multi')
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .send(tripRequest)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(201);
+        expect(message);
+        done();
+      });
+  });
+
+  // manager should not create trip request
+  it('It should not multi create trip and  return 403', (done) => {
+    const tripRequest = [
+      {
+        leavingFrom: 'musanze',
+        goingTo: 1,
+        travelDate: '2022-10-5',
+        returnDate: '2022-11-6',
+        travelReason: 'picnic',
+        accomodationId: 1,
+        roomId: 1,
+      },
+    ];
+
+    api
+      .post('/api/v1/user/trip/multi')
+      .set('Authorization', `Bearer ${managerToken}`)
+      .send(tripRequest)
       .end((err, res) => {
         const { message } = res.body;
         expect(res.status).to.equal(403);

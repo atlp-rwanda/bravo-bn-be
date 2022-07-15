@@ -6,6 +6,7 @@ import {
   updateTripRequest,
   deleteTripRequest,
   getTripRequestStat,
+  createMultiTripRequest,
   approveTripRequest,
   rejectTripRequest,
 } from '../../controllers/tripRequestController';
@@ -14,6 +15,7 @@ import { protect } from '../../controllers/authentication';
 const router = express.Router();
 
 router.post('', protect, createTripRequest);
+router.post('/multi', protect, createMultiTripRequest);
 router.get('/get', protect, getAllTripRequest);
 router.get('/get/:id', protect, getSingleTripRequest);
 router.patch('/update/:id', protect, updateTripRequest);

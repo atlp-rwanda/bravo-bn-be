@@ -7,17 +7,19 @@ export default (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate({ accomodation }) {
+    static associate({ accomodation, users }) {
       this.belongsTo(accomodation, {
         foreignKey: 'accomodationId',
         as: 'accomodation',
       });
+      this.belongsTo(users, { foreignKey: 'userId', as: 'user' });
     }
     toJSON() {
       return {
         ...this.get(),
         id: undefined,
         accomodationId: undefined,
+        userId: undefined,
       };
     }
   }
@@ -30,6 +32,11 @@ export default (sequelize, DataTypes) => {
       bedType: DataTypes.STRING,
       bedCost: DataTypes.STRING,
       bedDescription: DataTypes.STRING,
+      taken: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      userId: DataTypes.INTEGER,
       accomodationId: {
         type: DataTypes.INTEGER,
       },

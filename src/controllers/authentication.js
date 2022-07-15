@@ -10,9 +10,6 @@ import { signupAuthSchema } from '../helpers/validation_schema';
 import { Op } from 'sequelize';
 import createNotification from '../services/notification.service';
 import { deleteToken, setToken, getToken } from '../helpers/redis.config';
-import redisClient from '../helpers/redis.config';
-
-import { token } from 'morgan';
 
 const { randomBytes, createHash } = crypto;
 

@@ -3,11 +3,12 @@ import {
   tripRequestSchema,
   tripRequestUpdateSchema,
 } from '../helpers/validation_schema';
-import AppError from '../utils/appError';
 import catchAsync from '../utils/catchAsync';
+import AppError from '../utils/appError';
 const tripRequests = db['tripRequest'];
 const accomodations = db['accomodation'];
 const locations = db['Location'];
+const Room = db['Room'];
 import { Op } from 'sequelize';
 
 // create a 'Trip Request' as requester
@@ -28,29 +29,58 @@ export const createTripRequest = async (req, res) => {
     const location = await locations.findOne({
       where: { id: req.body.goingTo },
     });
-    if (!location || !accomodation) {
+    const room = await Room.findOne({
+      where: {
+        id: req.body.roomId,
+        taken: {
+          [Op.and]: [false],
+        },
+        accomodationId: {
+          [Op.and]: [`${req.body.accomodationId}`],
+        },
+      },
+    });
+    if (!location) {
+      return res.status(404).json({ message: `Sorry, Location Not Found` });
+    }
+    if (!accomodation) {
       return res
         .status(404)
-        .json({ message: `Location or Accomodation Not found` });
-    } else {
-      const type = req.body.returnDate == null ? 'One way trip' : 'Round trip';
-      const status = 'pending';
-      const trip = {
-        leavingFrom: req.body.leavingFrom,
-        goingTo: req.body.goingTo,
-        travelDate: req.body.travelDate,
-        returnDate: req.body.returnDate,
-        travelReason: req.body.travelReason,
-        tripType: type,
-        status: status,
-        requesterId: req.user.id,
-        accomodationId: req.body.accomodationId,
-      };
-      await tripRequests.create(trip);
-      trip.accomodationId = undefined;
-      trip.accomodation = accomodation;
-      return res.status(201).json({ status: 'success', data: trip });
+        .json({ message: ` Sorry, Accomodation Not Found` });
     }
+    if (!room) {
+      return res
+        .status(404)
+        .json({ message: `Sorry, room is taken or not found` });
+    }
+
+    const type = req.body.returnDate == null ? 'One way trip' : 'Round trip';
+    const status = 'pending';
+    const trip = {
+      leavingFrom: req.body.leavingFrom,
+      goingTo: req.body.goingTo,
+      travelDate: req.body.travelDate,
+      returnDate: req.body.returnDate,
+      travelReason: req.body.travelReason,
+      tripType: type,
+      status: status,
+      requesterId: req.user.id,
+      accomodationId: req.body.accomodationId,
+      roomId: req.body.roomId,
+    };
+    await Room.update(
+      {
+        taken: true,
+        userId: req.user.id,
+      },
+      { where: { id: req.body.roomId } },
+    );
+    await tripRequests.create(trip);
+    trip.accomodationId = undefined;
+    trip.accomodation = accomodation;
+    trip.roomId = undefined;
+    trip.room = room;
+    return res.status(201).json({ status: 'success', data: trip });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
@@ -224,7 +254,12 @@ export const deleteTripRequest = async (req, res) => {
     const userId = req.user.id;
 
     const tripRequest = await tripRequests.findOne({
-      where: { id: requestId, requesterId: userId },
+      where: {
+        id: requestId,
+        requesterId: {
+          [Op.and]: [`${userId}`],
+        },
+      },
     });
 
     if (!tripRequest || tripRequest.status !== 'pending') {
@@ -232,6 +267,13 @@ export const deleteTripRequest = async (req, res) => {
         message: `Trip Request is Not in pending status or Not Exist!`,
       });
     } else {
+      await Room.update(
+        {
+          taken: false,
+          userId: null,
+        },
+        { where: { id: tripRequest.roomId } },
+      );
       await tripRequests.destroy({
         where: { id: requestId, requesterId: userId },
       });
@@ -461,6 +503,82 @@ export const getTripRequestStat = catchAsync(async (req, res, next) => {
   return next(new AppError(`Trip Request not found!`, 404));
 });
 
+export const createMultiTripRequest = async (req, res, next) => {
+  if (req.user.role !== 'requester') {
+    return res
+      .status(403)
+      .json({ message: 'Unauthorized to create trip request' });
+  }
+  const trips = req.body;
+
+  let tripError;
+  let tripAppError;
+
+  const createTrips = trips.map(async (trip_) => {
+    try {
+      const accomodation = await accomodations.findOne({
+        where: { id: trip_.accomodationId },
+      });
+
+      const location = await locations.findOne({
+        where: { id: trip_.goingTo },
+      });
+      const room = await Room.findOne({
+        where: {
+          id: trip_.roomId,
+          taken: {
+            [Op.and]: [false],
+          },
+          accomodationId: {
+            [Op.and]: [`${trip_.accomodationId}`],
+          },
+        },
+      });
+      if (!location) {
+        return (tripError = 'Sorry, some locations can not be found!');
+      }
+      if (!accomodation) {
+        return (tripError = ` Sorry, some accomodations can't be found!`);
+      }
+      if (!room) {
+        return (tripError = `Sorry, some rooms are taken or not found`);
+      }
+
+      const type = trip_.returnDate == null ? 'One way trip' : 'Round trip';
+      const status = 'pending';
+      const trip = {
+        leavingFrom: trip_.leavingFrom,
+        goingTo: trip_.goingTo,
+        travelDate: trip_.travelDate,
+        returnDate: trip_.returnDate,
+        travelReason: trip_.travelReason,
+        tripType: type,
+        status: status,
+        requesterId: req.user.id,
+        accomodationId: trip_.accomodationId,
+        roomId: trip_.roomId,
+      };
+      await Room.update(
+        {
+          taken: true,
+          userId: req.user.id,
+        },
+        { where: { id: trip_.roomId } },
+      );
+      await tripRequests.create(trip);
+    } catch (error) {
+      return (tripAppError = error);
+    }
+  });
+
+  await Promise.all(createTrips);
+  if (tripError) return next(new AppError(tripError, 404));
+  if (tripAppError) return next(tripAppError);
+  return res.status(201).json({
+    status: 'success',
+    message: 'All of your trips were successfully requested.',
+  });
+};
 export const approveTripRequest = catchAsync(async (req, res, next) => {
   if (req.user.dataValues.role === 'manager') {
     const tripRequest = await tripRequests.findByPk(req.params.id);
