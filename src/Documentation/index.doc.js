@@ -1032,13 +1032,13 @@ const options = {
       rooms: {
         type: 'object',
         properties: {
-          bedType: {
+          roomType: {
             type: 'string',
           },
-          bedCost: {
+          roomCost: {
             type: 'string',
           },
-          bedDescription: {
+          roomDescription: {
             type: 'string',
           },
           taken: {
