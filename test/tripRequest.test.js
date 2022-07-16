@@ -646,7 +646,8 @@ describe('Get profile information from travel request', () => {
       travelDate: '2022-6-20',
       returnDate: '2022-6-26',
       travelReason: 'CHOGM',
-      accomodationId: 1,
+      accomodationId: 2,
+      roomId: 4,
       passportName: 'John Doe',
       passportNumber: '123XYZ4',
     };
@@ -657,7 +658,8 @@ describe('Get profile information from travel request', () => {
       travelDate: '2024-6-20',
       returnDate: '2024-6-26',
       travelReason: 'Something else',
-      accomodationId: 1,
+      accomodationId: 2,
+      roomId: 5,
       passportName: '',
       passportNumber: '',
     };
@@ -672,6 +674,7 @@ describe('Get profile information from travel request', () => {
           .set('Cookie', 'passportNumber=123XYZ4;passportName=John Doe')
           .send(request_two)
           .end((err, res) => {
+            console.log(res);
             res.should.have.status(201);
             res.body.should.have.property('data');
             res.body.data.should.have.property('passportName');
