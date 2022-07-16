@@ -105,10 +105,24 @@ describe('comment on trip requests', () => {
   it('should return 200 on a successful delete comment', (done) => {
     chai
       .request(app)
-      .delete('/api/v1/user/trip/comments/1/delete')
+      .post('/api/v1/user/trip/2/comment')
+      .set('authorization', `Bearer ${token}`)
+      .send({
+        id: 24,
+        comment: 'create comment before deleting it!',
+      })
+      .end((err, res) => {
+        expect(res.status).to.equal(201);
+        expect(res.body)
+          .to.have.property('message')
+          .that.equals('comment successfully added');
+      });
+    chai
+      .request(app)
+      .delete('/api/v1/user/trip/comments/24/delete')
       .set('authorization', `Bearer ${token}`)
       .end((err, res) => {
-        console.log(res);
+        console.log(res.body);
         expect(res.status).to.equal(200);
         expect(res.body)
           .to.have.property('message')
