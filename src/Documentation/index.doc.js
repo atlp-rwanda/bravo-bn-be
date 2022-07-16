@@ -762,6 +762,34 @@ const options = {
       },
     },
 
+    '/api/v1/rates/createRates': {
+      post: {
+        tags: ['RATES'],
+        description: 'User rating accomodation',
+
+        parameters: [],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/RATES',
+              },
+              example: {
+                rates: 3,
+                tripRequestId: 1,
+              },
+            },
+          },
+          required: true,
+        },
+        responses: {
+          201: {
+            description: 'Accomodation rated successfully!',
+          },
+        },
+      },
+    },
+
     '/api/v1/user/trip/get': {
       get: {
         tags: ['Trip Requests'],
@@ -1095,7 +1123,6 @@ const options = {
       },
     },
   },
-
   components: {
     schemas: {
       userRole: {
@@ -1246,6 +1273,17 @@ const options = {
           },
           taken: {
             type: 'string',
+          },
+        },
+      },
+      Rates: {
+        type: 'object',
+        properties: {
+          rates: {
+            type: 'integer',
+          },
+          tripRequestId: {
+            type: 'integer',
           },
         },
       },

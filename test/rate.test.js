@@ -1,20 +1,21 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
+import server from '../src/app.js';
 import db from '../src/database/models/index.js';
+
 const User = db['users'];
 const TripRequest = db['tripRequest'];
 
 chai.use(chaiHttp);
 const api = chai.request(server).keepOpen();
 const { expect } = chai;
-import server from '../src/app.js';
 
 describe('User rating accomodation', () => {
   const user = {
     firstName: 'Rose',
     lastName: 'Reine',
-    username: 'Rose31',
-    email: 'mwisemarierose@gmail.com',
+    username: 'Rose',
+    email: 'rosemwiseneza5@gmail.com',
     password: 'mwisenez',
     repeat_password: 'mwisenez',
     phoneNumber: '0780850683',
