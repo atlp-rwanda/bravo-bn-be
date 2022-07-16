@@ -35,7 +35,7 @@ describe('comment on trip requests', () => {
   let token;
   it('should return 201 on a successful comment on travel request', (done) => {
     // The travel request we'll comment on exists in the seed files, if you're wondering haha!
-    // And the user we are logging in exists in the seed files too, if you're wondering again haha!
+    // And the user we are logging in exists in the seed files too, if you're wondering again!
     chai
       .request(app)
       .post('/api/v1/user/login')
@@ -108,6 +108,7 @@ describe('comment on trip requests', () => {
       .delete('/api/v1/user/trip/comments/1/delete')
       .set('authorization', `Bearer ${token}`)
       .end((err, res) => {
+        console.log(res);
         expect(res.status).to.equal(200);
         expect(res.body)
           .to.have.property('message')
