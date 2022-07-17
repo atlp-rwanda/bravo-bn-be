@@ -14,8 +14,8 @@ describe('User rating accomodation', () => {
   const user = {
     firstName: 'Rose',
     lastName: 'Reine',
-    username: 'Rose',
-    email: 'rosemwiseneza5@gmail.com',
+    username: 'Rose56',
+    email: 'gajunadeg@gmail.com',
     password: 'mwisenez',
     repeat_password: 'mwisenez',
     phoneNumber: '0780850683',
@@ -28,6 +28,7 @@ describe('User rating accomodation', () => {
     returnDate: '2022-11-6',
     travelReason: 'picnic',
     accomodationId: 1,
+    roomId: 2,
   };
 
   it('Should return 201 on successfully rated accomodation', (done) => {
@@ -52,8 +53,10 @@ describe('User rating accomodation', () => {
                 .post('/api/v1/user/trip')
                 .set('Authorization', `Bearer ${token}`)
                 .send(tripRequest)
+
                 .end((err, res) => {
-                  const tripId = res.body.data.id;
+                  console.log(res);
+                  const tripId = 5;
                   TripRequest.update(
                     {
                       status: 'approved',

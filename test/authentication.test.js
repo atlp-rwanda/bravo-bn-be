@@ -174,8 +174,8 @@ describe('User logout', () => {
   const user = {
     firstName: 'Rose',
     lastName: 'Reine',
-    username: 'Rose31',
-    email: 'mwisemarierose@gmail.com',
+    username: 'Rose321',
+    email: 'mwisemarierose10@gmail.com',
     password: 'mwisenez',
     repeat_password: 'mwisenez',
     phoneNumber: '0780850683',

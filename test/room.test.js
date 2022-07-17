@@ -27,8 +27,8 @@ describe('POST api/v1/rooms/accomodationId', () => {
     const user = {
       firstName: 'Edd',
       lastName: 'Uwambaje12345',
-      username: 'Edd54321',
-      email: 'uwambaqje123@gmail.com',
+      username: 'Edd543210',
+      email: 'uwambaqje1234@gmail.com',
       password: 'uwambaje',
       repeat_password: 'uwambaje',
       phoneNumber: '0785058050',

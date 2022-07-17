@@ -47,26 +47,7 @@ export const createTripRequest = async (req, res) => {
     if (!accomodation) {
       return res
         .status(404)
-        .json({ message: `Location or Accomodation Not Found` });
-    } else {
-      const type = req.body.returnDate == null ? 'One way trip' : 'Round trip';
-      const status = 'pending';
-      const trip = {
-        leavingFrom: req.body.leavingFrom,
-        goingTo: req.body.goingTo,
-        travelDate: req.body.travelDate,
-        returnDate: req.body.returnDate,
-        travelReason: req.body.travelReason,
-        tripType: type,
-        status: status,
-        requesterId: req.user.id,
-        accomodationId: req.body.accomodationId,
-      };
-      const { id } = await tripRequests.create(trip);
-      trip.accomodationId = undefined;
-      trip.id = id;
-      trip.accomodation = accomodation;
-      return res.status(201).json({ status: 'success', data: trip });
+        .json({ message: ` Sorry, Accomodation Not Found` });
     }
     if (!room) {
       return res

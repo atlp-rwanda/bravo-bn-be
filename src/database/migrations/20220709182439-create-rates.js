@@ -14,6 +14,9 @@ module.exports = {
       accomodationId: {
         type: Sequelize.INTEGER,
       },
+      // ratingId: {
+      //   type: Sequelize.INTEGER,
+      // },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
