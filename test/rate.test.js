@@ -55,7 +55,6 @@ describe('User rating accomodation', () => {
                 .send(tripRequest)
 
                 .end((err, res) => {
-                  console.log(res);
                   const tripId = 5;
                   TripRequest.update(
                     {
