@@ -1,11 +1,6 @@
 import chai from 'chai';
 import chaiHTTP from 'chai-http';
 import app from '../src/app.js';
-import db from '../src/database/models/index.js';
-
-const tripRequests = db['tripRequests'];
-const User = db['User'];
-
 chai.should();
 chai.use(chaiHTTP);
 const api = chai.request(app).keepOpen();

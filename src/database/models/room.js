@@ -25,13 +25,9 @@ export default (sequelize, DataTypes) => {
   }
   Room.init(
     {
-      uuid: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
-      },
-      bedType: DataTypes.STRING,
-      bedCost: DataTypes.STRING,
-      bedDescription: DataTypes.STRING,
+      roomType: DataTypes.STRING,
+      roomCost: DataTypes.STRING,
+      roomDescription: DataTypes.STRING,
       taken: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
