@@ -674,7 +674,6 @@ describe('Get profile information from travel request', () => {
           .set('Cookie', 'passportNumber=123XYZ4;passportName=John Doe')
           .send(request_two)
           .end((err, res) => {
-            console.log(res);
             res.should.have.status(201);
             res.body.should.have.property('data');
             res.body.data.should.have.property('passportName');
