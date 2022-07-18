@@ -291,7 +291,7 @@ export const mostTavelledDestinations = catchAsync(async (req, res, next) => {
       include: [
         [
           Sequelize.fn('COUNT', Sequelize.col('tripRequest.id')),
-          'locationCount',
+          'totalTravels',
         ],
       ],
     },
@@ -311,7 +311,7 @@ export const mostTavelledDestinations = catchAsync(async (req, res, next) => {
       message: 'Sorry, no most recent location found.',
     });
   allLocations.sort((a, b) =>
-    a.dataValues.locationCount < b.dataValues.locationCount ? 1 : -1,
+    a.dataValues.totalTravels < b.dataValues.totalTravels ? 1 : -1,
   );
   return res.status(200).json({ status: 'success', data: allLocations });
 });

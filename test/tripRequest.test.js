@@ -81,7 +81,6 @@ describe('perform CRUD operations on trip request', () => {
       .set('Authorization', `Bearer ${requesterToken}`)
       .send(tripRequest)
       .end((err, res) => {
-        console.log(res.body);
         const { message } = res.body;
         expect(res.status).to.equal(201);
         expect(message);
