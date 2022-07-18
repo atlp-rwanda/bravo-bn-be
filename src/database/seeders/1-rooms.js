@@ -20,6 +20,14 @@ export async function up(queryInterface, Sequelize) {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
+      {
+        roomType: 'twin2',
+        roomCost: '200$',
+        roomDescription: 'lorem ipsum dolor',
+        accomodationId: 2,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
     ],
     {},
   );
