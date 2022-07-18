@@ -11,7 +11,11 @@ export default (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate({ Room, Location }) {
+    static associate({ Room, Location, users, Likes }) {
+      this.belongsToMany(users, {
+        through: Likes,
+        foreignKey: 'accommodationId',
+      });
       this.hasMany(Room, { foreignKey: 'accomodationId', as: 'rooms' });
       this.belongsTo(Location, { foreignKey: 'locationId', as: 'locations' });
     }
