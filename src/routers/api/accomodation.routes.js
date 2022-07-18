@@ -8,6 +8,8 @@ import {
   deleteAccomodation,
   updateAccomodation,
   getSingleAccomodation,
+  updateLike,
+  getLikes,
 } from '../../controllers/accomodation.controller.js';
 import { protect } from '../../controllers/authentication';
 const router = express.Router();
@@ -25,5 +27,8 @@ router.post('/', protect, uploads.single('image'), createAccomodation);
 router.put('/:id', protect, uploads.single('image'), updateAccomodation);
 router.delete('/:id', protect, deleteAccomodation);
 router.get('/:id', getSingleAccomodation);
+
+router.put('/like/:id', protect, updateLike);
+router.get('/like/:id', getLikes);
 
 export default router;

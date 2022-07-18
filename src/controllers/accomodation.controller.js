@@ -1,6 +1,7 @@
 import db from '../database/models/index.js';
 const accomodations = db['accomodation'];
 const Locations = db['Location'];
+const Likes = db['Likes'];
 import { fileUpload } from '../helpers/multer';
 
 export const createAccomodation = async (req, res) => {
@@ -188,5 +189,108 @@ export const deleteAccomodation = async (req, res) => {
     });
   } catch (err) {
     res.send(err);
+  }
+};
+
+export const updateLike = async (req, res) => {
+  if (req.user.dataValues.role !== 'requester') {
+    return res.status(403).json({
+      status: 'fail',
+      message: 'You are not allowed to do this, only requester can do this',
+    });
+  }
+  const userId = req.user.dataValues.id;
+  const accommodationId = req.params.id;
+  try {
+    const accommodation = await accomodations.findOne({
+      where: {
+        id: accommodationId,
+      },
+    });
+    if (!accommodation) {
+      res.status(400).json({ message: 'Accommodation not found' });
+    }
+
+    const like = await Likes.findOne({
+      where: { accommodationId, userId },
+    });
+
+    if (like) {
+      if (like.dataValues.like) {
+        await Likes.update(
+          {
+            like: null,
+          },
+          {
+            where: { accommodationId, userId },
+          },
+        );
+        const unlikes = await Likes.findAndCountAll({
+          where: { accommodationId, like: null },
+        });
+        const likes = await Likes.findAndCountAll({
+          where: { accommodationId, like: true },
+        });
+        res.status(200).json({
+          message: 'accommodation unliked',
+          Unlikes: unlikes.count,
+          Likes: likes.count,
+        });
+      } else {
+        await Likes.update(
+          {
+            like: true,
+          },
+          {
+            where: { accommodationId, userId },
+          },
+        );
+        const likes = await Likes.findAndCountAll({
+          where: { accommodationId, like: true },
+        });
+        const unlikes = await Likes.findAndCountAll({
+          where: { accommodationId, like: null },
+        });
+        res.status(200).json({
+          message: 'accommodation liked',
+          Likes: likes.count,
+          Unlikes: unlikes.count,
+        });
+      }
+    } else {
+      await Likes.create({
+        accommodationId,
+        userId,
+        like: true,
+      });
+      const likes = await Likes.findAndCountAll({
+        where: { accommodationId, like: true },
+      });
+      const unlikes = await Likes.findAndCountAll({
+        where: { accommodationId, like: null },
+      });
+      res.status(200).json({
+        message: 'accommodation liked',
+        Likes: likes.count,
+        Unlikes: unlikes.count,
+      });
+    }
+  } catch (error) {
+    res.status(500).json(error.message);
+  }
+};
+
+export const getLikes = async (req, res) => {
+  const accommodationId = req.params.id;
+  try {
+    const likes = await Likes.findAndCountAll({
+      where: { accommodationId, like: true },
+    });
+    const unlikes = await Likes.findAndCountAll({
+      where: { accommodationId, like: null },
+    });
+    res.status(200).json({ likes: likes.count, Unlikes: unlikes.count });
+  } catch (error) {
+    res.status(500).json(error.message);
   }
 };
