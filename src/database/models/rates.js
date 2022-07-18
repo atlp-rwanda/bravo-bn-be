@@ -20,7 +20,10 @@ module.exports = (sequelize, DataTypes) => {
     {
       rating: DataTypes.INTEGER,
       accomodationId: DataTypes.INTEGER,
-      // ratingID:DataTypes.INTEGER
+      requesterId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
     },
     {
       sequelize,

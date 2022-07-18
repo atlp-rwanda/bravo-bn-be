@@ -41,15 +41,40 @@ export const createRate = catchAsync(async (req, res, next) => {
       ),
     );
   }
-
-  const userRates = await Rates.create({
-    userId: req.user.id,
-    accomodationId: tripRequest.accomodationId,
-    rating: rates,
+  const isItRated = await Rates.findOne({
+    where: {
+      requesterId: req.user.id,
+      accomodationId: tripRequest.accomodationId,
+    },
   });
-
-  return res.status(201).json({
-    message: 'rates added to accomodation!',
-    data: userRates,
-  });
+  console.log(isItRated);
+  if (isItRated) {
+    const updateRate = await Rates.update(
+      {
+        rates,
+      },
+      {
+        where: {
+          accommodationId: tripRequest.accommodationId,
+          requesterId: {
+            [Op.and]: [`${req.user.id}`],
+          },
+        },
+      },
+    );
+    return res.status(201).json({
+      message: 'rates updated',
+      data: updateRate,
+    });
+  } else {
+    const userRates = await Rates.create({
+      requesterId: req.user.id,
+      accomodationId: tripRequest.accomodationId,
+      rating: rates,
+    });
+    return res.status(201).json({
+      message: 'rates added to accomodation!',
+      data: userRates,
+    });
+  }
 });

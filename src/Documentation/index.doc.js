@@ -762,33 +762,33 @@ const options = {
       },
     },
 
-    '/api/v1/rates/createRates': {
-      post: {
-        tags: ['RATES'],
-        description: 'User rating accomodation',
+    // '/api/v1/rates/createRates': {
+    //   post: {
+    //     tags: ['RATES'],
+    //     description: 'User rating accomodation',
 
-        parameters: [],
-        requestBody: {
-          content: {
-            'application/json': {
-              schema: {
-                $ref: '#/components/schemas/RATES',
-              },
-              example: {
-                rates: 3,
-                tripRequestId: 1,
-              },
-            },
-          },
-          required: true,
-        },
-        responses: {
-          201: {
-            description: 'Accomodation rated successfully!',
-          },
-        },
-      },
-    },
+    //     parameters: [],
+    //     requestBody: {
+    //       content: {
+    //         'application/json': {
+    //           schema: {
+    //             $ref: '#/components/schemas/RATES',
+    //           },
+    //           example: {
+    //             rates: 3,
+    //             tripRequestId: 1,
+    //           },
+    //         },
+    //       },
+    //       required: true,
+    //     },
+    //     responses: {
+    //       201: {
+    //         description: 'Accomodation rated successfully!',
+    //       },
+    //     },
+    //   },
+    // },
 
     '/api/v1/user/trip/get': {
       get: {
