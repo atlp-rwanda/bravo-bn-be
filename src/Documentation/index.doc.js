@@ -849,36 +849,6 @@ const options = {
         },
       },
     },
-    '/api/v1/user/trip/status/': {
-      get: {
-        tags: ['Trip Requests status'],
-        description: 'get trip status',
-
-        parameters: [
-          {
-            name: 'year',
-            in: 'query',
-            schema: {
-              type: 'string',
-            },
-          },
-          {
-            name: 'month',
-            in: 'query',
-            schema: {
-              type: 'string',
-            },
-          },
-          {
-            name: 'day',
-            in: 'query',
-            schema: {
-              type: 'string',
-            },
-          },
-        ],
-      },
-    },
     '/api/v1/user/trip/multi': {
       post: {
         tags: ['Multi city trip Request'],
@@ -1004,6 +974,44 @@ const options = {
         },
       },
     },
+    '/api/v1/user/trip/status/': {
+      get: {
+        tags: ['Trip Requests status'],
+        description: 'get trip status',
+
+        parameters: [
+          {
+            name: 'year',
+            in: 'query',
+            schema: {
+              type: 'string',
+            },
+          },
+          {
+            name: 'month',
+            in: 'query',
+            schema: {
+              type: 'string',
+            },
+          },
+          {
+            name: 'day',
+            in: 'query',
+            schema: {
+              type: 'string',
+            },
+          },
+        ],
+        responses: {
+          200: {
+            description: 'success status',
+          },
+          401: {
+            description: 'Unauthorized',
+          },
+        },
+      },
+    },
     '/api/v1//user/trip/approve/{id}': {
       put: {
         tags: ['Manager'],
@@ -1021,10 +1029,6 @@ const options = {
         ],
         responses: {
           200: {
-            description: 'success status',
-          },
-          401: {
-            description: 'Unauthorized',
             description: 'successfully',
           },
           400: {
