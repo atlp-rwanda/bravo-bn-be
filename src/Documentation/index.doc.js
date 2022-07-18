@@ -24,6 +24,8 @@ const options = {
     { name: 'setup swagger', description: 'Testing swagger setup' },
     { name: 'User', description: 'users endpoint' },
     { name: 'Admin', description: 'update user role' },
+    { name: 'Trip Requests', description: 'crud on trip requests' },
+    { name: 'Trip Request Comments', description: 'Comment on Trip requests' },
   ],
   paths: {
     '/api/v1/docs': {
@@ -633,7 +635,7 @@ const options = {
     },
     '/api/v1/user/trip': {
       post: {
-        tags: ['Trip Request'],
+        tags: ['Trip Requests'],
         description: 'Create Trip Request',
 
         parameters: [],
@@ -680,7 +682,7 @@ const options = {
 
     '/api/v1/user/trip/get': {
       get: {
-        tags: ['Trip Request'],
+        tags: ['Trip Requests'],
         description: 'get all trip requests',
         parameters: [],
         responses: {
@@ -695,7 +697,7 @@ const options = {
     },
     '/api/v1/user/trip/get/{id}': {
       get: {
-        tags: ['Trip Request'],
+        tags: ['Trip Requests'],
         description: 'get single trip request',
         parameters: [
           {
@@ -720,7 +722,7 @@ const options = {
     },
     '/api/v1/user/trip/update/{id}': {
       patch: {
-        tags: ['Trip Request'],
+        tags: ['Trip Requests'],
         description: 'update trip request',
         parameters: [
           {
@@ -764,7 +766,7 @@ const options = {
 
     '/api/v1/user/trip/{id}': {
       delete: {
-        tags: ['Trip Request'],
+        tags: ['Trip Requests'],
         description: 'update trip request',
 
         parameters: [
@@ -833,6 +835,82 @@ const options = {
           },
           401: {
             description: 'Unauthorized',
+          },
+        },
+      },
+    },
+    '/api/v1/user/trip/{tripRequestId}/comment': {
+      post: {
+        tags: ['Trip Request Comments'],
+        description: 'comment on trip requests',
+        parameters: [
+          {
+            in: 'path',
+            name: 'tripRequestId',
+            required: true,
+          },
+        ],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/Comment',
+              },
+            },
+          },
+          required: true,
+        },
+        responses: {
+          201: {
+            description: 'success',
+          },
+          500: {
+            description: 'Internal server error',
+          },
+          422: {
+            description: 'Invalid',
+          },
+        },
+      },
+    },
+    '/api/v1/user/trip/{tripRequestId}/comments': {
+      get: {
+        tags: ['Trip Request Comments'],
+        description: 'comment on trip requests',
+        parameters: [
+          {
+            in: 'path',
+            name: 'tripRequestId',
+            required: true,
+          },
+        ],
+        responses: {
+          200: {
+            description: 'success',
+          },
+          500: {
+            description: 'Internal server error',
+          },
+        },
+      },
+    },
+    '/api/v1/user/trip/comments/{id}/delete': {
+      delete: {
+        tags: ['Trip Request Comments'],
+        description: 'delete comment',
+        parameters: [
+          {
+            in: 'path',
+            name: 'id',
+            required: true,
+          },
+        ],
+        responses: {
+          200: {
+            description: 'success',
+          },
+          500: {
+            description: 'Internal server error',
           },
         },
       },
@@ -1128,6 +1206,15 @@ const options = {
           },
           roomId: {
             type: 'integer',
+          },
+        },
+      },
+      Comment: {
+        type: 'object',
+        properties: {
+          comment: {
+            type: 'string',
+            description: 'comment',
           },
         },
       },
