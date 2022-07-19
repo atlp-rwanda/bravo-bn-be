@@ -36,10 +36,8 @@ export const updateRememberInfo = async (req, res, next) => {
     { remember_info: !user.remember_info },
     { where: { email: userEmail } },
   );
-  return res
-    .status(200)
-    .json({
-      message: 'remember info option updated successfully',
-      remember_info: user.remember_info,
-    });
+  return res.status(200).json({
+    message: 'remember info option updated successfully',
+    remember_info: !user.remember_info,
+  });
 };

@@ -631,6 +631,8 @@ describe('Get profile information from travel request', () => {
           .end((err, res) => {
             res.should.have.status(200);
             res.body.should.have.property('message');
+            res.body.should.have.property('remember_info');
+            expect(res.body.remember_info).to.equal(true);
             expect(res.body.message).to.equal(
               'remember info option updated successfully',
             );
@@ -681,6 +683,65 @@ describe('Get profile information from travel request', () => {
             expect(res.body.status).to.equal('success');
             expect(res.body.data.passportName).to.equal('John Doe');
             expect(res.body.data.passportNumber).to.equal('123XYZ4');
+            done();
+          });
+      });
+  });
+
+  it('should not get the information from request', (done) => {
+    const request_one = {
+      leavingFrom: 'kigali',
+      goingTo: 1,
+      travelDate: '2022-6-20',
+      returnDate: '2022-6-26',
+      travelReason: 'CHOGM',
+      accomodationId: 2,
+      roomId: 6,
+      passportName: 'John Doe',
+      passportNumber: '123XYZ4',
+    };
+
+    const request_two = {
+      leavingFrom: 'kigali',
+      goingTo: 1,
+      travelDate: '2024-6-20',
+      returnDate: '2024-6-26',
+      travelReason: 'Something else',
+      accomodationId: 2,
+      roomId: 7,
+      passportName: '',
+      passportNumber: '',
+    };
+    api
+      .put('/api/v1/user/remember-info')
+      .set('Authorization', `Bearer ${token}`)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.have.property('message');
+        res.body.should.have.property('remember_info');
+        expect(res.body.remember_info).to.equal(false);
+        expect(res.body.message).to.equal(
+          'remember info option updated successfully',
+        );
+      });
+    api
+      .post('/api/v1/user/trip')
+      .set('Authorization', `Bearer ${token}`)
+      .send(request_one)
+      .end((err, res) => {
+        api
+          .post('/api/v1/user/trip')
+          .set('Authorization', `Bearer ${token}`)
+          .set('Cookie', 'passportNumber=123XYZ4;passportName=John Doe')
+          .send(request_two)
+          .end((err, res) => {
+            res.should.have.status(201);
+            res.body.should.have.property('data');
+            res.body.data.should.have.property('passportName');
+            res.body.data.should.have.property('passportNumber');
+            expect(res.body.status).to.equal('success');
+            expect(res.body.data.passportName).to.equal('');
+            expect(res.body.data.passportNumber).to.equal('');
             done();
           });
       });

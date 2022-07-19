@@ -68,6 +68,20 @@ describe('POST api/v1/rooms/accomodationId', () => {
       .send(room)
       .end((err, res) => {
         expect(res.status).to.be.equal(201);
+      });
+    api
+      .post('/api/v1/rooms/' + accomodationId)
+      .set('Authorization', `Bearer ${newToken}`)
+      .send(room)
+      .end((err, res) => {
+        expect(res.status).to.be.equal(201);
+      });
+    api
+      .post('/api/v1/rooms/' + accomodationId)
+      .set('Authorization', `Bearer ${newToken}`)
+      .send(room)
+      .end((err, res) => {
+        expect(res.status).to.be.equal(201);
         done();
       });
   });
