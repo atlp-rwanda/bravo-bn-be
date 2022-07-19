@@ -120,18 +120,6 @@ describe('User rating accomodation', () => {
                         done();
                       });
                   });
-
-                  // it('should update rated center', async () => {
-                  //   api
-                  //     .request(app)
-                  //     .post('/api/v1/rate/createRate')
-                  //     .set('Authorization', `Bearer ${token}`)
-                  //     .send({
-                  //       Rating: 3,
-                  //     });
-                  //   expect(res).to.have.status(201);
-                  //   expect(res.body).to.have.property('message', 'rates updated');
-                  // });
                 });
             });
         });
@@ -194,6 +182,62 @@ describe('User rating accomodation', () => {
   });
 
   it("should not rate a center on which you didn't spent at least 24hours ", () => {
+    let token;
+    api
+      .post('/api/v1/user/auth/signup')
+      .send(user2)
+      .end((err, res) => {
+        const id2 = res.body.data.user.id;
+        User.update(
+          {
+            isVerified: true,
+          },
+          { where: { id2 } },
+        ).then((res) => {
+          api
+            .post('/api/v1/user/login')
+            .send({ email: user2.email, password: user2.password })
+            .end((err, res) => {
+              const { token } = res.body;
+              api
+                .post('/api/v1/user/trip')
+                .set('Authorization', `Bearer ${token}`)
+                .send(tripRequest2)
+
+                .end((err, res) => {
+                  const tripId = 5;
+                  TripRequest.update(
+                    {
+                      status: 'approved',
+                      travelDate:
+                        new Date(TripRequest.travelDate).getTime() -
+                        24 * 60 * 60 * 1000,
+                    },
+                    { where: { id: tripId } },
+                  ).then((result) => {
+                    const rate = {
+                      rates: '2',
+                      tripRequestId: tripId,
+                    };
+                    api
+                      .post('/api/v1/rates/createRate')
+                      .set('Authorization', `Bearer ${token}`)
+                      .send(rate)
+                      .end((err, res) => {
+                        expect(res.status).to.equal(401);
+                        expect(res.body).to.have.property('message');
+                        expect(res.body.message).to.equal(
+                          ' Sorry, trip request does not either exist or belong to you',
+                        );
+                      });
+                  });
+                });
+            });
+        });
+      });
+  });
+
+  it('should not rate a center which does not belong to you ', () => {
     let token;
     api
       .post('/api/v1/user/auth/signup')
