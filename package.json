@@ -37,6 +37,7 @@
     "exclude": [
       "node_modules/*",
       "src/database/seeders/*",
+      "src/index.js",
       "coverage/*"
     ]
   },

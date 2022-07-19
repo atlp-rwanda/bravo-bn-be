@@ -269,6 +269,15 @@ describe('perform CRUD operations on trip request', () => {
       });
   });
 
+  it('It should return 404 for most travelled destinations will not be found', (done) => {
+    api
+      .get(`/api/v1/user/trip//most-travelled-destinations`)
+      .set('Authorization', `Bearer ${managerToken}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(404);
+        done();
+      });
+  });
   it('It should not create multi trip request and return 404', (done) => {
     const tripRequest = [
       {
@@ -394,16 +403,6 @@ describe('perform CRUD operations on trip request', () => {
   });
 });
 
-const user2 = {
-  firstName: 'tester',
-  lastName: 'manager',
-  username: 'testerManager2',
-  email: 'testerManager2@gmail.com',
-  password: 'testerma',
-  repeat_password: 'testerma',
-  phoneNumber: '0705058050',
-  role: 'manager',
-};
 describe('Approve Trip Request', () => {
   it('Should return 200 for success ', (done) => {
     const tripRequest = {
@@ -472,6 +471,15 @@ describe('Approve Trip Request', () => {
     api
       .get(`/api/v1/user/trip/status/?year=2022&day=29`)
       .set('Authorization', `Bearer ${requesterToken}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(200);
+        done();
+      });
+  });
+  it('It should return 200 for most travelled destinations', (done) => {
+    api
+      .get(`/api/v1/user/trip//most-travelled-destinations`)
+      .set('Authorization', `Bearer ${managerToken}`)
       .end((err, res) => {
         expect(res.status).to.equal(200);
         done();

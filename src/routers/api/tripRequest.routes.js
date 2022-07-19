@@ -6,6 +6,7 @@ import {
   updateTripRequest,
   deleteTripRequest,
   getTripRequestStat,
+  mostTavelledDestinations,
   createMultiTripRequest,
   approveTripRequest,
   rejectTripRequest,
@@ -20,6 +21,7 @@ import { protect } from '../../controllers/authentication';
 const router = express.Router();
 
 router.post('', protect, createTripRequest);
+router.get('/most-travelled-destinations', protect, mostTavelledDestinations);
 router.post('/multi', protect, createMultiTripRequest);
 router.get('/get', protect, getAllTripRequest);
 router.get('/get/:id', protect, getSingleTripRequest);

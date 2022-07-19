@@ -738,6 +738,17 @@ const options = {
         },
       },
     },
+    '/api/v1/user/trip/most-travelled-destinations': {
+      get: {
+        tags: ['Most travelled destinations'],
+        description: 'Get most travelled locations',
+        responses: {
+          200: {
+            description: 'success status',
+          },
+        },
+      },
+    },
 
     '/api/v1/user/trip/get': {
       get: {

@@ -1,4 +1,5 @@
 import db from '../database/models/index';
+import Sequelize from 'sequelize';
 import {
   tripRequestSchema,
   tripRequestUpdateSchema,
@@ -501,6 +502,37 @@ export const getTripRequestStat = catchAsync(async (req, res, next) => {
   }
 
   return next(new AppError(`Trip Request not found!`, 404));
+});
+
+export const mostTavelledDestinations = catchAsync(async (req, res, next) => {
+  let allLocations = await locations.findAll({
+    attributes: {
+      include: [
+        [
+          Sequelize.fn('COUNT', Sequelize.col('tripRequest.id')),
+          'totalTravels',
+        ],
+      ],
+    },
+    include: [
+      {
+        model: tripRequests,
+        where: { status: 'approved' },
+        attributes: [],
+        as: 'tripRequest',
+      },
+    ],
+    group: ['Location.id'],
+  });
+  if (allLocations.length === 0)
+    return res.status(404).json({
+      status: 'fail',
+      message: 'Sorry, no most recent location found.',
+    });
+  allLocations.sort((a, b) =>
+    a.dataValues.totalTravels < b.dataValues.totalTravels ? 1 : -1,
+  );
+  return res.status(200).json({ status: 'success', data: allLocations });
 });
 
 export const createMultiTripRequest = async (req, res, next) => {

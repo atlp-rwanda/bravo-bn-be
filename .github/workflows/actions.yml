@@ -47,7 +47,7 @@ jobs:
       - name: Start Redis
         uses: supercharge/redis-github-action@1.4.0
         with:
-          redis-version: ${{ matrix.redis-version }}        
+          redis-version: ${{ matrix.redis-version }} 
       - run: npm install
       - run: npm run test
       - run: npm run coverage
