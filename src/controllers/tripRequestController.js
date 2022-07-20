@@ -127,7 +127,7 @@ export const getSingleTripRequest = async (req, res) => {
         ? res.status(200).json({ status: 'success', data: response })
         : res.status(404).json({
             success: false,
-            message: `Trip Request  Not Found!`,
+            message: `Trip Request not found!`,
           });
     } else {
       return res.status(403).json({
@@ -176,7 +176,7 @@ export const getAllTripRequest = async (req, res) => {
         ? res.status(200).json({ status: 'success', data: response })
         : res.status(404).json({
             success: false,
-            message: `Trip Request  Not Found!`,
+            message: `Trip Request not found!`,
           });
     } else {
       return res.status(403).json({
@@ -234,7 +234,7 @@ export const updateTripRequest = async (req, res) => {
             });
           } else {
             res.send({
-              message: `Trip request  Not Updated.`,
+              message: `Trip request not Updated.`,
             });
           }
         });
@@ -284,6 +284,218 @@ export const deleteTripRequest = async (req, res) => {
     return res.status(500).json(error.message);
   }
 };
+
+export const getTripRequestStat = catchAsync(async (req, res, next) => {
+  const userId = req.user.id;
+  let { year, month, day } = req.body;
+  month = month?.replace(month[0], month[0].toUpperCase());
+
+  let response;
+
+  if (year && month && day) {
+    response = await tripRequests.findAll({
+      where: {
+        travelDate: {
+          [Op.like]: `%${month} ${day} ${year}%`,
+        },
+        requesterId: userId,
+        status: 'approved',
+      },
+      include: [
+        {
+          model: accomodations,
+          as: 'accomodation',
+          attributes: { exclude: ['createdAt', 'updatedAt'] },
+        },
+      ],
+      attributes: {
+        exclude: ['createdAt', 'updatedAt', 'accomodationId'],
+      },
+    });
+
+    return response.length > 0
+      ? res.status(200).json({ status: 'success', data: response })
+      : next(
+          new AppError(
+            `Trip Request not found with date ${year} ${day} ${month}`,
+            404,
+          ),
+        );
+  }
+
+  if (year && month) {
+    response = await tripRequests.findAll({
+      where: {
+        travelDate: {
+          [Op.like]: `%${year}%`,
+          [Op.like]: `%${month}%`,
+        },
+        requesterId: userId,
+        status: 'approved',
+      },
+      include: [
+        {
+          model: accomodations,
+          as: 'accomodation',
+          attributes: { exclude: ['createdAt', 'updatedAt'] },
+        },
+      ],
+      attributes: {
+        exclude: ['createdAt', 'updatedAt', 'accomodationId'],
+      },
+    });
+
+    return response.length > 0
+      ? res.status(200).json({ status: 'success', data: response })
+      : next(
+          new AppError(
+            `Trip Request not found with year ${year} and month of ${month} `,
+            404,
+          ),
+        );
+  }
+  if (day && month) {
+    response = await tripRequests.findAll({
+      where: {
+        travelDate: {
+          [Op.like]: `%${day}%`,
+          [Op.like]: `%${month}%`,
+        },
+        requesterId: userId,
+        status: 'approved',
+      },
+      include: [
+        {
+          model: accomodations,
+          as: 'accomodation',
+          attributes: { exclude: ['createdAt', 'updatedAt'] },
+        },
+      ],
+      attributes: {
+        exclude: ['createdAt', 'updatedAt', 'accomodationId'],
+      },
+    });
+
+    return response.length > 0
+      ? res.status(200).json({ status: 'success', data: response })
+      : next(
+          new AppError(
+            `Trip Request not found with day ${day} and month of ${month} `,
+            404,
+          ),
+        );
+  }
+  if (year && day) {
+    response = await tripRequests.findAll({
+      where: {
+        travelDate: {
+          [Op.like]: `%${year}%`,
+          [Op.like]: `%${day}%`,
+        },
+        requesterId: userId,
+        status: 'approved',
+      },
+      include: [
+        {
+          model: accomodations,
+          as: 'accomodation',
+          attributes: { exclude: ['createdAt', 'updatedAt'] },
+        },
+      ],
+      attributes: {
+        exclude: ['createdAt', 'updatedAt', 'accomodationId'],
+      },
+    });
+
+    return response.length > 0
+      ? res.status(200).json({ status: 'success', data: response })
+      : next(
+          new AppError(
+            `Trip Request not found with year ${year} and day ${day} `,
+            404,
+          ),
+        );
+  }
+
+  if (year) {
+    response = await tripRequests.findAll({
+      where: {
+        travelDate: {
+          [Op.like]: `% ${year} %`,
+        },
+        requesterId: userId,
+        status: 'approved',
+      },
+      include: [
+        {
+          model: accomodations,
+          as: 'accomodation',
+          attributes: { exclude: ['createdAt', 'updatedAt'] },
+        },
+      ],
+      attributes: {
+        exclude: ['createdAt', 'updatedAt', 'accomodationId'],
+      },
+    });
+
+    return response.length > 0
+      ? res.status(200).json({ status: 'success', data: response })
+      : next(new AppError(`Trip Request not found with year ${year}`, 404));
+  }
+
+  if (month) {
+    response = await tripRequests.findAll({
+      where: {
+        travelDate: {
+          [Op.like]: `% ${month} %`,
+        },
+        requesterId: userId,
+        status: 'approved',
+      },
+      include: [
+        {
+          model: accomodations,
+          as: 'accomodation',
+          attributes: { exclude: ['createdAt', 'updatedAt'] },
+        },
+      ],
+      attributes: {
+        exclude: ['createdAt', 'updatedAt', 'accomodationId'],
+      },
+    });
+
+    return response.length > 0
+      ? res.status(200).json({ status: 'success', data: response })
+      : next(new AppError(`Trip Request not found with month ${month}`, 404));
+  }
+  if (day) {
+    response = await tripRequests.findAll({
+      where: {
+        travelDate: {
+          [Op.like]: `% ${day} %`,
+        },
+        requesterId: userId,
+        status: 'approved',
+      },
+      include: [
+        {
+          model: accomodations,
+          as: 'accomodation',
+          attributes: { exclude: ['createdAt', 'updatedAt'] },
+        },
+      ],
+      attributes: {
+        exclude: ['createdAt', 'updatedAt', 'accomodationId'],
+      },
+    });
+
+    return response.length > 0
+      ? res.status(200).json({ status: 'success', data: response })
+      : next(new AppError(`Trip Request not found with day ${day}`, 404));
+  }
+
+  return next(new AppError(`Trip Request not found!`, 404));
+});
 
 export const mostTavelledDestinations = catchAsync(async (req, res, next) => {
   let allLocations = await locations.findAll({

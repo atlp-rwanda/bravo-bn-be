@@ -985,6 +985,35 @@ const options = {
         },
       },
     },
+    '/api/v1/user/trip/status/': {
+      post: {
+        tags: ['Trip Requests status'],
+        description: 'get trip status',
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/tripStatus',
+              },
+              example: {
+                year: '2022',
+                month: 'jun',
+                day: '29',
+              },
+            },
+          },
+          required: true,
+        },
+        responses: {
+          200: {
+            description: 'success status',
+          },
+          401: {
+            description: 'Unauthorized',
+          },
+        },
+      },
+    },
     '/api/v1//user/trip/approve/{id}': {
       put: {
         tags: ['Manager'],
@@ -1067,6 +1096,20 @@ const options = {
           role: {
             type: 'string',
             description: 'new role to set to user',
+          },
+        },
+      },
+      tripStatus: {
+        type: 'object',
+        properties: {
+          year: {
+            type: 'string',
+          },
+          month: {
+            type: 'string',
+          },
+          day: {
+            type: 'string',
           },
         },
       },
@@ -1276,6 +1319,20 @@ const options = {
           },
           roomId: {
             type: 'integer',
+          },
+        },
+      },
+      tripStats: {
+        type: 'object',
+        properties: {
+          year: {
+            type: 'string',
+          },
+          month: {
+            type: 'string',
+          },
+          day: {
+            type: 'string',
           },
         },
       },

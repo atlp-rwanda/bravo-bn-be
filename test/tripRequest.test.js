@@ -64,8 +64,8 @@ describe('perform CRUD operations on trip request', () => {
     const tripRequest = {
       leavingFrom: 'musanze',
       goingTo: 1,
-      travelDate: '2022-10-5',
-      returnDate: '2022-11-6',
+      travelDate: 'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
+      returnDate: 'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
       travelReason: 'picnic',
       accomodationId: 2,
       roomId: 3,
@@ -87,8 +87,8 @@ describe('perform CRUD operations on trip request', () => {
     const tripRequest = {
       leavingFrom: 'musanze',
       goingTo: 1,
-      travelDate: '2022-10-5',
-      returnDate: '2022-11-6',
+      travelDate: 'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
+      returnDate: 'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
       travelReason: 'picnic',
       accomodationId: 1,
       roomId: 1,
@@ -164,7 +164,7 @@ describe('perform CRUD operations on trip request', () => {
   it('Requester should update trip request and return 201', (done) => {
     const tripRequest = {
       leavingFrom: 'kgl',
-      travelDate: '2022-10-5',
+      travelDate: 'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
       travelReason: 'leisure',
     };
 
@@ -185,7 +185,7 @@ describe('perform CRUD operations on trip request', () => {
     const tripRequest = {
       leavingFrom: 'kgl',
       goingTo: 1,
-      travelDate: '2022-10-5',
+      travelDate: 'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
       travelReason: 'leisure',
     };
 
@@ -197,6 +197,52 @@ describe('perform CRUD operations on trip request', () => {
         const { message } = res.body;
         expect(res.status).to.equal(403);
         expect(message);
+        done();
+      });
+  });
+
+  it('should not get trips status of year, month and day', (done) => {
+    api
+      .post(`/api/v1/user/trip/status`)
+      .send({ year: 2025, month: 'jun', day: 29 })
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(404);
+
+        done();
+      });
+  });
+
+  it('should not get trips status of year and month', (done) => {
+    api
+      .post(`/api/v1/user/trip/status`)
+      .send({ year: 2025, month: 'jun' })
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(404);
+
+        done();
+      });
+  });
+  it('should not get trips status of  month and day', (done) => {
+    api
+      .post(`/api/v1/user/trip/status`)
+      .send({ month: 'jun', day: 22 })
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(404);
+
+        done();
+      });
+  });
+  it('should not get trips status of year and day', (done) => {
+    api
+      .post(`/api/v1/user/trip/status`)
+      .send({ year: 2025, day: 29 })
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(404);
+
         done();
       });
   });
@@ -241,8 +287,8 @@ describe('perform CRUD operations on trip request', () => {
       {
         leavingFrom: 'musanze',
         goingTo: 20,
-        travelDate: '2022-10-5',
-        returnDate: '2022-11-6',
+        travelDate: 'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
+        returnDate: 'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
         travelReason: 'picnic',
         accomodationId: 2,
         roomId: 3,
@@ -265,8 +311,8 @@ describe('perform CRUD operations on trip request', () => {
       {
         leavingFrom: 'musanze',
         goingTo: 1,
-        travelDate: '2022-10-5',
-        returnDate: '2022-11-6',
+        travelDate: 'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
+        returnDate: 'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
         travelReason: 'picnic',
         accomodationId: 20,
         roomId: 3,
@@ -289,8 +335,8 @@ describe('perform CRUD operations on trip request', () => {
       {
         leavingFrom: 'musanze',
         goingTo: 1,
-        travelDate: '2022-10-5',
-        returnDate: '2022-11-6',
+        travelDate: 'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
+        returnDate: 'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
         travelReason: 'picnic',
         accomodationId: 2,
         roomId: 34,
@@ -314,8 +360,8 @@ describe('perform CRUD operations on trip request', () => {
       {
         leavingFrom: 'musanze',
         goingTo: 1,
-        travelDate: '2022-10-5',
-        returnDate: '2022-11-6',
+        travelDate: 'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
+        returnDate: 'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
         travelReason: 'picnic',
         accomodationId: 2,
         roomId: 3,
@@ -340,8 +386,8 @@ describe('perform CRUD operations on trip request', () => {
       {
         leavingFrom: 'musanze',
         goingTo: 1,
-        travelDate: '2022-10-5',
-        returnDate: '2022-11-6',
+        travelDate: 'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
+        returnDate: 'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
         travelReason: 'picnic',
         accomodationId: 1,
         roomId: 1,
@@ -366,8 +412,8 @@ describe('Approve Trip Request', () => {
     const tripRequest = {
       leavingFrom: 'musanze',
       goingTo: 1,
-      travelDate: '2022-10-5',
-      returnDate: '2022-11-6',
+      travelDate: 'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
+      returnDate: 'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
       travelReason: 'picnic',
       accomodationId: 1,
     };
@@ -392,6 +438,50 @@ describe('Approve Trip Request', () => {
                 done();
               });
           });
+      });
+  });
+  it('should get trips status of year, month and day', (done) => {
+    api
+      .post(`/api/v1/user/trip/status`)
+      .send({ year: 2022, month: 'jun', day: 29 })
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(200);
+
+        done();
+      });
+  });
+
+  it('should get trips status of year and month', (done) => {
+    api
+      .post(`/api/v1/user/trip/status`)
+      .send({ year: 2022, month: 'jun' })
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(200);
+
+        done();
+      });
+  });
+  it('should get trips status of  month and day', (done) => {
+    api
+      .post(`/api/v1/user/trip/status`)
+      .send({ month: 'jun', day: 29 })
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(200);
+
+        done();
+      });
+  });
+  it('should get trips status of year and day', (done) => {
+    api
+      .post(`/api/v1/user/trip/status`)
+      .send({ year: 2022, day: 29 })
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(200);
+        done();
       });
   });
   it('It should return 200 for most travelled destinations', (done) => {
@@ -447,8 +537,8 @@ describe('Reject Trip Request', () => {
     const tripRequest = {
       leavingFrom: 'musanze',
       goingTo: 1,
-      travelDate: '2022-10-5',
-      returnDate: '2022-11-6',
+      travelDate: 'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
+      returnDate: 'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
       travelReason: 'picnic',
       accomodationId: 1,
     };

@@ -5,6 +5,7 @@ import {
   createTripRequest,
   updateTripRequest,
   deleteTripRequest,
+  getTripRequestStat,
   mostTavelledDestinations,
   createMultiTripRequest,
   approveTripRequest,
@@ -26,6 +27,7 @@ router.get('/get', protect, getAllTripRequest);
 router.get('/get/:id', protect, getSingleTripRequest);
 router.patch('/update/:id', protect, updateTripRequest);
 router.delete('/:id', protect, deleteTripRequest);
+router.post('/status', protect, getTripRequestStat);
 
 router.put('/approve/:id', protect, approveTripRequest);
 router.put('/reject/:id', protect, rejectTripRequest);
