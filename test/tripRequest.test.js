@@ -203,7 +203,8 @@ describe('perform CRUD operations on trip request', () => {
 
   it('should not get trips status of year, month and day', (done) => {
     api
-      .get(`/api/v1/user/trip/status/?year=2025&month=jun&day=29`)
+      .post(`/api/v1/user/trip/status`)
+      .send({ year: 2025, month: 'jun', day: 29 })
       .set('Authorization', `Bearer ${requesterToken}`)
       .end((err, res) => {
         expect(res.status).to.equal(404);
@@ -214,7 +215,8 @@ describe('perform CRUD operations on trip request', () => {
 
   it('should not get trips status of year and month', (done) => {
     api
-      .get(`/api/v1/user/trip/status/?year=2025&month=jun`)
+      .post(`/api/v1/user/trip/status`)
+      .send({ year: 2025, month: 'jun' })
       .set('Authorization', `Bearer ${requesterToken}`)
       .end((err, res) => {
         expect(res.status).to.equal(404);
@@ -224,7 +226,8 @@ describe('perform CRUD operations on trip request', () => {
   });
   it('should not get trips status of  month and day', (done) => {
     api
-      .get(`/api/v1/user/trip/status/?month=jun&day=22`)
+      .post(`/api/v1/user/trip/status`)
+      .send({ month: 'jun', day: 22 })
       .set('Authorization', `Bearer ${requesterToken}`)
       .end((err, res) => {
         expect(res.status).to.equal(404);
@@ -234,7 +237,8 @@ describe('perform CRUD operations on trip request', () => {
   });
   it('should not get trips status of year and day', (done) => {
     api
-      .get(`/api/v1/user/trip/status/?year=2025&day=29`)
+      .post(`/api/v1/user/trip/status`)
+      .send({ year: 2025, day: 29 })
       .set('Authorization', `Bearer ${requesterToken}`)
       .end((err, res) => {
         expect(res.status).to.equal(404);
@@ -438,7 +442,8 @@ describe('Approve Trip Request', () => {
   });
   it('should get trips status of year, month and day', (done) => {
     api
-      .get(`/api/v1/user/trip/status/?year=2022&month=jun&day=29`)
+      .post(`/api/v1/user/trip/status`)
+      .send({ year: 2022, month: 'jun', day: 29 })
       .set('Authorization', `Bearer ${requesterToken}`)
       .end((err, res) => {
         expect(res.status).to.equal(200);
@@ -449,7 +454,8 @@ describe('Approve Trip Request', () => {
 
   it('should get trips status of year and month', (done) => {
     api
-      .get(`/api/v1/user/trip/status/?year=2022&month=jun`)
+      .post(`/api/v1/user/trip/status`)
+      .send({ year: 2022, month: 'jun' })
       .set('Authorization', `Bearer ${requesterToken}`)
       .end((err, res) => {
         expect(res.status).to.equal(200);
@@ -459,7 +465,8 @@ describe('Approve Trip Request', () => {
   });
   it('should get trips status of  month and day', (done) => {
     api
-      .get(`/api/v1/user/trip/status/?month=jun&day=29`)
+      .post(`/api/v1/user/trip/status`)
+      .send({ month: 'jun', day: 29 })
       .set('Authorization', `Bearer ${requesterToken}`)
       .end((err, res) => {
         expect(res.status).to.equal(200);
@@ -469,7 +476,8 @@ describe('Approve Trip Request', () => {
   });
   it('should get trips status of year and day', (done) => {
     api
-      .get(`/api/v1/user/trip/status/?year=2022&day=29`)
+      .post(`/api/v1/user/trip/status`)
+      .send({ year: 2022, day: 29 })
       .set('Authorization', `Bearer ${requesterToken}`)
       .end((err, res) => {
         expect(res.status).to.equal(200);

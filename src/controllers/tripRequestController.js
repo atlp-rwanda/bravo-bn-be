@@ -287,7 +287,7 @@ export const deleteTripRequest = async (req, res) => {
 
 export const getTripRequestStat = catchAsync(async (req, res, next) => {
   const userId = req.user.id;
-  let { year, month, day } = req.query;
+  let { year, month, day } = req.body;
   month = month?.replace(month[0], month[0].toUpperCase());
 
   let response;
@@ -313,7 +313,7 @@ export const getTripRequestStat = catchAsync(async (req, res, next) => {
       },
     });
 
-    response.length > 0
+    return response.length > 0
       ? res.status(200).json({ status: 'success', data: response })
       : next(
           new AppError(
@@ -321,7 +321,6 @@ export const getTripRequestStat = catchAsync(async (req, res, next) => {
             404,
           ),
         );
-    return;
   }
 
   if (year && month) {
@@ -346,7 +345,7 @@ export const getTripRequestStat = catchAsync(async (req, res, next) => {
       },
     });
 
-    response.length > 0
+    return response.length > 0
       ? res.status(200).json({ status: 'success', data: response })
       : next(
           new AppError(
@@ -354,7 +353,6 @@ export const getTripRequestStat = catchAsync(async (req, res, next) => {
             404,
           ),
         );
-    return;
   }
   if (day && month) {
     response = await tripRequests.findAll({
@@ -378,7 +376,7 @@ export const getTripRequestStat = catchAsync(async (req, res, next) => {
       },
     });
 
-    response.length > 0
+    return response.length > 0
       ? res.status(200).json({ status: 'success', data: response })
       : next(
           new AppError(
@@ -386,7 +384,6 @@ export const getTripRequestStat = catchAsync(async (req, res, next) => {
             404,
           ),
         );
-    return;
   }
   if (year && day) {
     response = await tripRequests.findAll({
@@ -410,7 +407,7 @@ export const getTripRequestStat = catchAsync(async (req, res, next) => {
       },
     });
 
-    response.length > 0
+    return response.length > 0
       ? res.status(200).json({ status: 'success', data: response })
       : next(
           new AppError(
@@ -418,7 +415,6 @@ export const getTripRequestStat = catchAsync(async (req, res, next) => {
             404,
           ),
         );
-    return;
   }
 
   if (year) {
@@ -442,10 +438,9 @@ export const getTripRequestStat = catchAsync(async (req, res, next) => {
       },
     });
 
-    response.length > 0
+    return response.length > 0
       ? res.status(200).json({ status: 'success', data: response })
       : next(new AppError(`Trip Request not found with year ${year}`, 404));
-    return;
   }
 
   if (month) {
@@ -469,10 +464,9 @@ export const getTripRequestStat = catchAsync(async (req, res, next) => {
       },
     });
 
-    response.length > 0
+    return response.length > 0
       ? res.status(200).json({ status: 'success', data: response })
       : next(new AppError(`Trip Request not found with month ${month}`, 404));
-    return;
   }
   if (day) {
     response = await tripRequests.findAll({
@@ -495,10 +489,9 @@ export const getTripRequestStat = catchAsync(async (req, res, next) => {
       },
     });
 
-    response.length > 0
+    return response.length > 0
       ? res.status(200).json({ status: 'success', data: response })
       : next(new AppError(`Trip Request not found with day ${day}`, 404));
-    return;
   }
 
   return next(new AppError(`Trip Request not found!`, 404));

@@ -986,33 +986,24 @@ const options = {
       },
     },
     '/api/v1/user/trip/status/': {
-      get: {
+      post: {
         tags: ['Trip Requests status'],
         description: 'get trip status',
-
-        parameters: [
-          {
-            name: 'year',
-            in: 'query',
-            schema: {
-              type: 'string',
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/tripStatus',
+              },
+              example: {
+                year: '2022',
+                month: 'jun',
+                day: '29',
+              },
             },
           },
-          {
-            name: 'month',
-            in: 'query',
-            schema: {
-              type: 'string',
-            },
-          },
-          {
-            name: 'day',
-            in: 'query',
-            schema: {
-              type: 'string',
-            },
-          },
-        ],
+          required: true,
+        },
         responses: {
           200: {
             description: 'success status',
@@ -1105,6 +1096,20 @@ const options = {
           role: {
             type: 'string',
             description: 'new role to set to user',
+          },
+        },
+      },
+      tripStatus: {
+        type: 'object',
+        properties: {
+          year: {
+            type: 'string',
+          },
+          month: {
+            type: 'string',
+          },
+          day: {
+            type: 'string',
           },
         },
       },
