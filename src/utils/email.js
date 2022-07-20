@@ -67,6 +67,36 @@ class Email {
   async sendPasswordReset() {
     await this.send('passwordreset', 'Your password reset token');
   }
+  async newReqManagerNotif() {
+    if (process.env.NODE_ENV !== 'test') {
+      await this.send('newRequest-manager', 'Trip request created.');
+    }
+  }
+  async newReqRequesterNotif() {
+    if (process.env.NODE_ENV !== 'test') {
+      await this.send('newRequest-requester', 'Trip request created.');
+    }
+  }
+  async updatedRequest() {
+    if (process.env.NODE_ENV !== 'test') {
+      await this.send('updatedRequest', 'Trip request updated!.');
+    }
+  }
+  async deletedRequest() {
+    if (process.env.NODE_ENV !== 'test') {
+      await this.send('deletedRequest', 'Trip request deleted!.');
+    }
+  }
+  async approvedRequest() {
+    if (process.env.NODE_ENV !== 'test') {
+      await this.send('approvedRequest', 'Trip request Approved.');
+    }
+  }
+  async rejectedRequest() {
+    if (process.env.NODE_ENV !== 'test') {
+      await this.send('rejectedRequest', 'Trip request Rejected!.');
+    }
+  }
 }
 
 export default Email;
