@@ -820,6 +820,7 @@ const options = {
         },
       },
     },
+
     '/api/v1//user/trip/reject/{id}': {
       put: {
         tags: ['Manager'],
@@ -855,6 +856,7 @@ const options = {
       },
     },
   },
+  
 
   components: {
     schemas: {

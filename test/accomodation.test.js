@@ -138,7 +138,7 @@ describe('POST api/v1/accomodations/', () => {
       });
   });
   describe('delete api /api/v1/accomodation', () => {
-    const roomId = 1;
+    const roomId = 67;
     it('Should delete accomodation according to id', (done) => {
       chai
         .request(app)
