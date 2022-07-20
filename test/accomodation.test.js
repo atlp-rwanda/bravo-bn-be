@@ -138,7 +138,7 @@ describe('POST api/v1/accomodations/', () => {
       });
   });
   describe('delete api /api/v1/accomodation', () => {
-    const roomId = 67;
+    const roomId = 1;
     it('Should delete accomodation according to id', (done) => {
       chai
         .request(app)
@@ -146,6 +146,7 @@ describe('POST api/v1/accomodations/', () => {
         .set('Authorization', `Bearer ${newToken}`)
         .send()
         .end((err, res) => {
+          console.log(res.body);
           if (err) return done(err);
           expect(res).to.have.status(200);
           return done();
