@@ -75,12 +75,12 @@ describe('User rating accomodation', () => {
       .post('/api/v1/user/auth/signup')
       .send(user)
       .end((err, res) => {
-        const id = res.body.data.user.id;
+        const id4 = res.body.data.user.id;
         User.update(
           {
             isVerified: true,
           },
-          { where: { id } },
+          { where: { id4 } },
         ).then((res) => {
           api
             .post('/api/v1/user/login')
@@ -105,7 +105,7 @@ describe('User rating accomodation', () => {
                   ).then((result) => {
                     const rate = {
                       rates: '2',
-                      tripRequestId: tripId,
+                      accomodationId: tripId,
                     };
                     api
                       .post('/api/v1/rates/createRate')
@@ -161,7 +161,7 @@ describe('User rating accomodation', () => {
                   ).then((result) => {
                     const rate = {
                       rates: '2',
-                      tripRequestId: tripId,
+                      accomodationId: tripId,
                     };
                     api
                       .post('/api/v1/rates/createRate')
@@ -181,7 +181,7 @@ describe('User rating accomodation', () => {
       });
   });
 
-  it("should not rate a center on which you didn't spent at least 24hours ", () => {
+  it("should not rate a center  which doesn't belongs to you", () => {
     let token;
     api
       .post('/api/v1/user/auth/signup')
@@ -217,7 +217,7 @@ describe('User rating accomodation', () => {
                   ).then((result) => {
                     const rate = {
                       rates: '2',
-                      tripRequestId: tripId,
+                      accomodationId: tripId,
                     };
                     api
                       .post('/api/v1/rates/createRate')
@@ -227,7 +227,7 @@ describe('User rating accomodation', () => {
                         expect(res.status).to.equal(401);
                         expect(res.body).to.have.property('message');
                         expect(res.body.message).to.equal(
-                          ' Sorry, trip request does not either exist or belong to you',
+                          ' Sorry, accomodation does not either exist or belong to you',
                         );
                       });
                   });
@@ -237,7 +237,7 @@ describe('User rating accomodation', () => {
       });
   });
 
-  it('should not rate a center which does not belong to you ', () => {
+  it('should not rate a center which does not spent 24 hrs ', () => {
     let token;
     api
       .post('/api/v1/user/auth/signup')
@@ -270,7 +270,7 @@ describe('User rating accomodation', () => {
                   ).then((result) => {
                     const rate = {
                       rates: '2',
-                      tripRequestId: tripId,
+                      accomodationId: tripId,
                     };
                     api
                       .post('/api/v1/rates/createRate')

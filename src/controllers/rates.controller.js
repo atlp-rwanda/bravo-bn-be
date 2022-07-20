@@ -7,11 +7,11 @@ import { Op } from 'sequelize';
 import catchAsync from '../utils/catchAsync.js';
 
 export const createRate = catchAsync(async (req, res, next) => {
-  const { tripRequestId, rates } = req.body;
+  const { accomodationId, rates } = req.body;
 
   const tripRequest = await tripRequests.findOne({
     where: {
-      id: tripRequestId,
+      accomodationId,
       requesterId: {
         [Op.and]: [`${req.user.id}`],
       },
@@ -20,7 +20,7 @@ export const createRate = catchAsync(async (req, res, next) => {
   if (!tripRequest) {
     return next(
       new AppError(
-        'Sorry, trip request does not either exist or belong to you',
+        'Sorry, accomodation does not either exist or belong to you',
         401,
       ),
     );
@@ -49,7 +49,7 @@ export const createRate = catchAsync(async (req, res, next) => {
   });
   console.log(isItRated);
   if (isItRated) {
-    const updateRate = await Rates.update(
+    const updateRate = await Rates.findOne(
       {
         rates,
       },
@@ -62,6 +62,7 @@ export const createRate = catchAsync(async (req, res, next) => {
         },
       },
     );
+    await updateRate.save();
     return res.status(201).json({
       message: 'rates updated',
       data: updateRate,

@@ -774,7 +774,7 @@ const options = {
               schema: {},
               example: {
                 rates: 3,
-                tripRequestId: 1,
+                accomodationId: 1,
               },
             },
           },

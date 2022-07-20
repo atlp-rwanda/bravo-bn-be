@@ -30,5 +30,10 @@ module.exports = (sequelize, DataTypes) => {
       modelName: 'rates',
     },
   );
+  rates.associate = function (models) {
+    rates.belongsTo(models.users, {
+      foreignKey: 'requesterId',
+    });
+  };
   return rates;
 };
