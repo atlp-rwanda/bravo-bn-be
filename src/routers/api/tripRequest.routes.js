@@ -5,6 +5,8 @@ import {
   createTripRequest,
   updateTripRequest,
   deleteTripRequest,
+  approveTripRequest,
+  rejectTripRequest,
 } from '../../controllers/tripRequestController';
 import { protect } from '../../controllers/authentication';
 
@@ -15,5 +17,8 @@ router.get('/get', protect, getAllTripRequest);
 router.get('/get/:id', protect, getSingleTripRequest);
 router.patch('/update/:id', protect, updateTripRequest);
 router.delete('/:id', protect, deleteTripRequest);
+
+router.put('/approve/:id', protect, approveTripRequest);
+router.put('/reject/:id', protect, rejectTripRequest);
 
 export default router;

@@ -1,7 +1,6 @@
 import http from 'http';
 import 'dotenv/config';
 import app from './app';
-// import { sendPost, getPost } from './controllers/chatController';
 import wbSocket from './public/socket';
 
 const PORT = process.env.PORT || 5000;
