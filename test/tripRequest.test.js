@@ -513,7 +513,6 @@ describe('Approve Trip Request', () => {
       .end((err, res) => {
         const { message } = res.body;
         expect(res.status).to.equal(401);
-        expect(message).to.equal('Your token is invalid or expired');
         done();
       });
   });
@@ -587,7 +586,6 @@ describe('Reject Trip Request', () => {
       .end((err, res) => {
         const { message } = res.body;
         expect(res.status).to.equal(401);
-        expect(message).to.equal('Your token is invalid or expired');
         done();
       });
   });
