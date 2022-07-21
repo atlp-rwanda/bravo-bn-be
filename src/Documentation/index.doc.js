@@ -1026,7 +1026,7 @@ const options = {
         },
       },
     },
-    '/api/v1//user/trip/approve/{id}': {
+    '/api/v1/user/trip/approve/{id}': {
       put: {
         tags: ['Manager'],
         description: 'approve trip request',
@@ -1060,7 +1060,7 @@ const options = {
         },
       },
     },
-    '/api/v1//user/trip/reject/{id}': {
+    '/api/v1/user/trip/reject/{id}': {
       put: {
         tags: ['Manager'],
         description: 'reject trip request',
