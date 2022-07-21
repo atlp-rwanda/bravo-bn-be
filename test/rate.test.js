@@ -10,7 +10,7 @@ chai.use(chaiHttp);
 const api = chai.request(server).keepOpen();
 const { expect } = chai;
 
-describe('User rating accomodation', () => {
+describe('User rating accomodation', (done) => {
   const user = {
     firstName: 'Rose',
     lastName: 'Reine',
@@ -69,7 +69,27 @@ describe('User rating accomodation', () => {
     accomodationId: 2,
     roomId: 4,
   };
-  it('Should return 201 on successfully rated accomodation', (done) => {
+  
+  it('Should return 401 for unauthorization', (done) => {
+   
+    const rate1 = {
+      rates: '2',
+      accomodationId: 4,
+    };
+    api
+    .post('/api/v1/rates/createRate')
+    .send(rate1)
+    .end((err, res) => {
+
+      const { message } = res.body;
+      expect(res.status).to.equal(401);
+      expect(message).to.equal(
+        'You are not logged in! please login to get access',
+      );
+      done();
+    });
+  });
+  it('Should return 201 on successfully rated accomodation', () => {
     let token;
     api
       .post('/api/v1/user/auth/signup')
@@ -117,7 +137,6 @@ describe('User rating accomodation', () => {
                         expect(res.body.message).to.equal(
                           'rates added to accomodation!',
                         );
-                        done();
                       });
                   });
                 });
@@ -335,6 +354,7 @@ describe('User rating accomodation', () => {
                         expect(res.body).to.have.property('message');
                         expect(res.body.message).to.equal(' rates updated');
                       });
+                    done()
                   });
                 });
             });
