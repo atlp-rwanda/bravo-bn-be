@@ -1,11 +1,6 @@
 import chai from 'chai';
 import chaiHTTP from 'chai-http';
 import app from '../src/app.js';
-import db from '../src/database/models/index.js';
-
-const tripRequests = db['tripRequests'];
-const User = db['User'];
-
 chai.should();
 chai.use(chaiHTTP);
 const api = chai.request(app).keepOpen();
@@ -69,10 +64,11 @@ describe('perform CRUD operations on trip request', () => {
     const tripRequest = {
       leavingFrom: 'musanze',
       goingTo: 1,
-      travelDate: '2022-10-5',
-      returnDate: '2022-11-6',
+      travelDate: 'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
+      returnDate: 'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
       travelReason: 'picnic',
-      accomodationId: 1,
+      accomodationId: 2,
+      roomId: 3,
     };
 
     api
@@ -87,15 +83,15 @@ describe('perform CRUD operations on trip request', () => {
       });
   });
 
-  // manager should not create trip request
   it('It should not create trip and  return 403', (done) => {
     const tripRequest = {
       leavingFrom: 'musanze',
       goingTo: 1,
-      travelDate: '2022-10-5',
-      returnDate: '2022-11-6',
+      travelDate: 'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
+      returnDate: 'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
       travelReason: 'picnic',
       accomodationId: 1,
+      roomId: 1,
     };
 
     api
@@ -130,7 +126,7 @@ describe('perform CRUD operations on trip request', () => {
       .get('/api/v1/user/trip/get')
       .set('Authorization', `Bearer ${managerToken}`)
       .end((err, res) => {
-        //requestId = res.body.data[0].id;
+        requestId = res.body.data[0].id;
         const { message } = res.body;
         expect(res.status).to.equal(200);
         expect(message);
@@ -168,7 +164,7 @@ describe('perform CRUD operations on trip request', () => {
   it('Requester should update trip request and return 201', (done) => {
     const tripRequest = {
       leavingFrom: 'kgl',
-      travelDate: '2022-10-5',
+      travelDate: 'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
       travelReason: 'leisure',
     };
 
@@ -189,7 +185,7 @@ describe('perform CRUD operations on trip request', () => {
     const tripRequest = {
       leavingFrom: 'kgl',
       goingTo: 1,
-      travelDate: '2022-10-5',
+      travelDate: 'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
       travelReason: 'leisure',
     };
 
@@ -201,6 +197,52 @@ describe('perform CRUD operations on trip request', () => {
         const { message } = res.body;
         expect(res.status).to.equal(403);
         expect(message);
+        done();
+      });
+  });
+
+  it('should not get trips status of year, month and day', (done) => {
+    api
+      .post(`/api/v1/user/trip/status`)
+      .send({ year: 2025, month: 'jun', day: 29 })
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(404);
+
+        done();
+      });
+  });
+
+  it('should not get trips status of year and month', (done) => {
+    api
+      .post(`/api/v1/user/trip/status`)
+      .send({ year: 2025, month: 'jun' })
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(404);
+
+        done();
+      });
+  });
+  it('should not get trips status of  month and day', (done) => {
+    api
+      .post(`/api/v1/user/trip/status`)
+      .send({ month: 'jun', day: 22 })
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(404);
+
+        done();
+      });
+  });
+  it('should not get trips status of year and day', (done) => {
+    api
+      .post(`/api/v1/user/trip/status`)
+      .send({ year: 2025, day: 29 })
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(404);
+
         done();
       });
   });
@@ -230,25 +272,148 @@ describe('perform CRUD operations on trip request', () => {
         done();
       });
   });
+
+  it('It should return 404 for most travelled destinations will not be found', (done) => {
+    api
+      .get(`/api/v1/user/trip//most-travelled-destinations`)
+      .set('Authorization', `Bearer ${managerToken}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(404);
+        done();
+      });
+  });
+  it('It should not create multi trip request and return 404', (done) => {
+    const tripRequest = [
+      {
+        leavingFrom: 'musanze',
+        goingTo: 20,
+        travelDate: 'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
+        returnDate: 'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
+        travelReason: 'picnic',
+        accomodationId: 2,
+        roomId: 3,
+      },
+    ];
+
+    api
+      .post('/api/v1/user/trip/multi')
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .send(tripRequest)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(404);
+        expect(message);
+        done();
+      });
+  });
+  it('It should not create multi trip request and return 404', (done) => {
+    const tripRequest = [
+      {
+        leavingFrom: 'musanze',
+        goingTo: 1,
+        travelDate: 'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
+        returnDate: 'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
+        travelReason: 'picnic',
+        accomodationId: 20,
+        roomId: 3,
+      },
+    ];
+
+    api
+      .post('/api/v1/user/trip/multi')
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .send(tripRequest)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(404);
+        expect(message);
+        done();
+      });
+  });
+  it('It should not create multi trip request and return 404', (done) => {
+    const tripRequest = [
+      {
+        leavingFrom: 'musanze',
+        goingTo: 1,
+        travelDate: 'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
+        returnDate: 'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
+        travelReason: 'picnic',
+        accomodationId: 2,
+        roomId: 34,
+      },
+    ];
+
+    api
+      .post('/api/v1/user/trip/multi')
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .send(tripRequest)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(404);
+        expect(message);
+        done();
+      });
+  });
+
+  it('It should create multi trip request and return 201', (done) => {
+    const tripRequest = [
+      {
+        leavingFrom: 'musanze',
+        goingTo: 1,
+        travelDate: 'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
+        returnDate: 'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
+        travelReason: 'picnic',
+        accomodationId: 2,
+        roomId: 3,
+      },
+    ];
+
+    api
+      .post('/api/v1/user/trip/multi')
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .send(tripRequest)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(201);
+        expect(message);
+        done();
+      });
+  });
+
+  // manager should not create trip request
+  it('It should not multi create trip and  return 403', (done) => {
+    const tripRequest = [
+      {
+        leavingFrom: 'musanze',
+        goingTo: 1,
+        travelDate: 'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
+        returnDate: 'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
+        travelReason: 'picnic',
+        accomodationId: 1,
+        roomId: 1,
+      },
+    ];
+
+    api
+      .post('/api/v1/user/trip/multi')
+      .set('Authorization', `Bearer ${managerToken}`)
+      .send(tripRequest)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(403);
+        expect(message);
+        done();
+      });
+  });
 });
 
-const user2 = {
-  firstName: 'tester',
-  lastName: 'manager',
-  username: 'testerManager2',
-  email: 'testerManager2@gmail.com',
-  password: 'testerma',
-  repeat_password: 'testerma',
-  phoneNumber: '0705058050',
-  role: 'manager',
-};
 describe('Approve Trip Request', () => {
   it('Should return 200 for success ', (done) => {
     const tripRequest = {
       leavingFrom: 'musanze',
       goingTo: 1,
-      travelDate: '2022-10-5',
-      returnDate: '2022-11-6',
+      travelDate: 'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
+      returnDate: 'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
       travelReason: 'picnic',
       accomodationId: 1,
     };
@@ -275,6 +440,59 @@ describe('Approve Trip Request', () => {
           });
       });
   });
+  it('should get trips status of year, month and day', (done) => {
+    api
+      .post(`/api/v1/user/trip/status`)
+      .send({ year: 2022, month: 'jun', day: 29 })
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(200);
+
+        done();
+      });
+  });
+
+  it('should get trips status of year and month', (done) => {
+    api
+      .post(`/api/v1/user/trip/status`)
+      .send({ year: 2022, month: 'jun' })
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(200);
+
+        done();
+      });
+  });
+  it('should get trips status of  month and day', (done) => {
+    api
+      .post(`/api/v1/user/trip/status`)
+      .send({ month: 'jun', day: 29 })
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(200);
+
+        done();
+      });
+  });
+  it('should get trips status of year and day', (done) => {
+    api
+      .post(`/api/v1/user/trip/status`)
+      .send({ year: 2022, day: 29 })
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(200);
+        done();
+      });
+  });
+  it('It should return 200 for most travelled destinations', (done) => {
+    api
+      .get(`/api/v1/user/trip//most-travelled-destinations`)
+      .set('Authorization', `Bearer ${managerToken}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(200);
+        done();
+      });
+  });
   it('Should return 404 for invalid trip request id', (done) => {
     api
       .put('/api/v1/user/trip/approve/0000')
@@ -287,6 +505,18 @@ describe('Approve Trip Request', () => {
       });
   });
 
+  it('Should return 401 for invalid token', (done) => {
+    const token = 'res.body';
+    api
+      .put(`/api/v1/user/trip/approve/${requestId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(401);
+        expect(message).to.equal('Your token is invalid or expired');
+        done();
+      });
+  });
   it('should return 400 for Trip request is already approved or rejected ', (done) => {
     api
       .put(`/api/v1/user/trip/approve/${requestId}`)
@@ -307,8 +537,8 @@ describe('Reject Trip Request', () => {
     const tripRequest = {
       leavingFrom: 'musanze',
       goingTo: 1,
-      travelDate: '2022-10-5',
-      returnDate: '2022-11-6',
+      travelDate: 'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
+      returnDate: 'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
       travelReason: 'picnic',
       accomodationId: 1,
     };
@@ -346,6 +576,18 @@ describe('Reject Trip Request', () => {
         const { message } = res.body;
         expect(res.status).to.equal(404);
         expect(message).to.equal('Trip request not found');
+        done();
+      });
+  });
+  it('Should return 401 for invalid token', (done) => {
+    const token = 'res.body';
+    api
+      .put(`/api/v1/user/trip/reject/${requestId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(401);
+        expect(message).to.equal('Your token is invalid or expired');
         done();
       });
   });
