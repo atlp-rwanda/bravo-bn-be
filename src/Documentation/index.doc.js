@@ -43,6 +43,68 @@ const options = {
         },
       },
     },
+    '/api/v1/user/forgotpassword': {
+      post: {
+        summary: 'Forgotten password',
+        tags: ['User'],
+        parameters: [
+          {
+            in: 'body',
+            name: 'forgot',
+            schema: {
+              example: {
+                email: 'email',
+              },
+            },
+            required: true,
+          },
+        ],
+        consumes: ['application/json'],
+        responses: {
+          200: {
+            description: 'success status',
+          },
+          500: {
+            description: 'Something went very wrong!',
+          },
+        },
+      },
+    },
+    '/api/v1/user/resetpassword/{token}': {
+      patch: {
+        summary: 'Reset password',
+        tags: ['User'],
+        parameters: [
+          {
+            in: 'path',
+            name: 'token',
+            required: true,
+            schema: {
+              example: 'dsagbfghdfhgdfgfdgdjhdfsjfh',
+            },
+          },
+          {
+            in: 'body',
+            name: 'name',
+            required: true,
+            schema: {
+              example: {
+                password: 'password',
+              },
+            },
+          },
+        ],
+        consumes: ['application/json'],
+        responses: {
+          200: {
+            description: 'success status',
+          },
+          500: {
+            description: 'Error',
+          },
+        },
+      },
+    },
 
     '/api/v1/user/': {
       get: {
@@ -856,7 +918,6 @@ const options = {
       },
     },
   },
-  
 
   components: {
     schemas: {
