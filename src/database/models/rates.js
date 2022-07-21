@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   rates.init(
     {
-      rating: DataTypes.INTEGER,
+      rating: DataTypes.FLOAT,
       accomodationId: DataTypes.INTEGER,
       requesterId: {
         type: DataTypes.INTEGER,
