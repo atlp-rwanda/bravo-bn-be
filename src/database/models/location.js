@@ -7,10 +7,14 @@ export default (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate({ accomodation }) {
+    static associate({ accomodation, tripRequest }) {
       this.hasMany(accomodation, {
         foreignKey: 'locationId',
         as: 'accomodation',
+      });
+      this.hasMany(tripRequest, {
+        foreignKey: 'goingTo',
+        as: 'tripRequest',
       });
     }
   }

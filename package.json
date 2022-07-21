@@ -36,6 +36,9 @@
     ],
     "exclude": [
       "node_modules/*",
+      "src/database/seeders/*",
+      "src/index.js",
+      "src/public/*",
       "coverage/*"
     ]
   },
@@ -94,7 +97,8 @@
     "socket.io": "^4.5.1",
     "socket.io-client": "^4.5.1",
     "swagger-ui-express": "^4.4.0",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "ws": "^8.8.1"
   },
   "devDependencies": {
     "@babel/core": "^7.18.5",

@@ -1,4 +1,3 @@
-import jsonwebtoken from 'jsonwebtoken';
 import catchAsync from '../utils/catchAsync';
 import AppError from '../utils/appError';
 import db from '../database/models/index.js';

@@ -1,63 +1,84 @@
-import { createServer } from 'http';
-import { io as Client } from 'socket.io-client';
-import { Server } from 'socket.io';
-import { assert, expect } from 'chai';
+import chai from 'chai';
+import chaiHTTP from 'chai-http';
+import app from '../src/app.js';
+chai.should();
+chai.use(chaiHTTP);
+const api = chai.request(app).keepOpen();
+let sampleToken1, sampleToken2, requestId;
 
-describe('testing chat end points', () => {
-  let io, serverSocket, clientSocket;
+const { expect } = chai;
 
-  before((done) => {
-    const httpServer = createServer();
-    io = new Server(httpServer);
-    httpServer.listen(() => {
-      const port = httpServer.address().port;
-      clientSocket = new Client(`http://localhost:${port}`);
-      io.on('connection', (socket) => {
-        serverSocket = socket;
+const user1 = {
+  firstName: 'sano',
+  lastName: 'thierry',
+  username: 'sano',
+  email: 'sano@gmail.com',
+  password: 'thierry',
+  repeat_password: 'thierry',
+  phoneNumber: '0785058050',
+  role: 'requester',
+};
+const user2 = {
+  firstName: 'Samuel',
+  lastName: 'Tuyisenge',
+  username: 'Samy',
+  email: 'tuyisengesamy6@gmail.com',
+  password: 'samuel',
+  repeat_password: 'samuel',
+  phoneNumber: '0785058050',
+  role: 'manager',
+};
+
+// sign up to get token
+describe('User signUp ', () => {
+  it('Should signup as manager and return 201', (done) => {
+    api
+      .post('/api/v1/user/auth/signup')
+      .send(user1)
+      .end((err, res) => {
+        const { message } = res.body;
+        sampleToken1 = res.body.token;
+        expect(res.status).to.equal(201);
+        expect(message);
+        done();
       });
-      clientSocket.on('connect', done);
-    });
   });
 
-  after(() => {
-    io.close();
-    clientSocket.close();
-  });
-
-  let name, message;
-  name = 'samuel';
-  message = { message: 'Hello', userName: name, date: '2022-07-20' };
-
-  it("should server client receive 'samuel'", (done) => {
-    clientSocket.emit('user name', name);
-    serverSocket.on('user name', (name) => {
-      expect(name).equal('samuel');
-      done();
-    });
-  });
-  it('server should receive message from client', (done) => {
-    clientSocket.emit('chat message', message);
-    serverSocket.on('chat message', (message) => {
-      expect(message).to.eql({
-        message: 'Hello',
-        userName: name,
-        date: '2022-07-20',
+  it('Should signup as requester and return 201', (done) => {
+    api
+      .post('/api/v1/user/auth/signup')
+      .send(user2)
+      .end((err, res) => {
+        const { message } = res.body;
+        sampleToken2 = res.body.token;
+        expect(res.status).to.equal(201);
+        expect(message);
+        done();
       });
-      done();
-    });
   });
-  it('client should receive notification from server', (done) => {
-    serverSocket.emit('notification', {
-      title: 'new message',
-      message: `${name} has posted new message`,
-    });
+});
 
-    clientSocket.on('notification', (notification) => {
-      expect(notification).to.eql({
-        title: 'new message',
-        message: `${name} has posted new message`,
+describe('Get and Post chat message', () => {
+  it('should save chat message and return 201', (done) => {
+    const message = { message: 'This is Barefoot chat bot' };
+
+    api
+      .post('/api/v1/chat/message')
+      .set('Authorization', `Bearer ${sampleToken1}`)
+      .send(message)
+      .end((err, res) => {
+        expect(res.status).to.equal(201);
+        done();
       });
-      done();
-    });
+  });
+
+  it('should get all chat messages', (done) => {
+    api
+      .get('/api/v1/chat/messages')
+      .set('Authorization', `Bearer ${sampleToken2}`)
+      .end((err, res) => {
+        expect(res.status).to.equal(200);
+        done();
+      });
   });
 });

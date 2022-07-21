@@ -5,16 +5,16 @@ export async function up(queryInterface, Sequelize) {
     'rooms',
     [
       {
-        bedType: 'twin',
-        bedCost: '100$',
-        bedDescription: 'lorem ipsum dolor',
+        roomType: 'twin',
+        roomCost: '100$',
+        roomDescription: 'lorem ipsum dolor',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        bedType: 'twin1',
-        bedCost: '200$',
-        bedDescription: 'lorem ipsum dolor',
+        roomType: 'twin1',
+        roomCost: '200$',
+        roomDescription: 'lorem ipsum dolor',
         createdAt: new Date(),
         updatedAt: new Date(),
       },

@@ -35,7 +35,7 @@ describe('POST api/v1/location/create', () => {
       .end((err, res) => {
         const { token } = res.body;
         newToken = token;
-        done();
+        return done();
       });
   });
 
@@ -46,7 +46,7 @@ describe('POST api/v1/location/create', () => {
       .send(location)
       .end((err, res) => {
         expect(res.status).to.be.equal(201);
-        done();
+        return done();
       });
   });
 

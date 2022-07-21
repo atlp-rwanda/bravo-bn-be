@@ -24,6 +24,8 @@ const options = {
     { name: 'setup swagger', description: 'Testing swagger setup' },
     { name: 'User', description: 'users endpoint' },
     { name: 'Admin', description: 'update user role' },
+    { name: 'Trip Requests', description: 'crud on trip requests' },
+    { name: 'Trip Request Comments', description: 'Comment on Trip requests' },
   ],
   paths: {
     '/api/v1/docs': {
@@ -340,6 +342,7 @@ const options = {
             name: 'id',
             in: 'path',
             type: 'string',
+            taken: 'string',
             description: 'Accomodation Id',
             required: true,
           },
@@ -386,7 +389,66 @@ const options = {
         },
       },
     },
+    '/api/v1/accomodation/like/{id}': {
+      put: {
+        tags: ['Accomodation'],
+        summary: 'like or unlike an Accommodation',
+        description: 'like or unlike an Accommodation',
+        OperationId: 'like or unlike an Accommodation',
 
+        produces: ['application/json'],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            type: 'string',
+            description: 'Accommodation Id',
+            required: true,
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Successful',
+          },
+          404: {
+            description: 'Not Found',
+          },
+          500: {
+            description: 'Internal server error',
+          },
+        },
+      },
+    },
+    '/api/v1/accomodation/like/{accommodationId}': {
+      get: {
+        tags: ['Accomodation'],
+        summary: 'Get likes for an Accommodation',
+        description: 'Get likes for an Accommodation',
+        OperationId: 'Get likes for an Accommodation',
+        security: [],
+        produces: ['application/json'],
+        parameters: [
+          {
+            name: 'accommodationId',
+            in: 'path',
+            type: 'string',
+            description: 'Accommodation Id',
+            required: true,
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Successful',
+          },
+          404: {
+            description: 'Not Found',
+          },
+          500: {
+            description: 'Internal server error',
+          },
+        },
+      },
+    },
     '/api/v1/rooms/{accomodationId}': {
       post: {
         tags: ['room'],
@@ -632,7 +694,7 @@ const options = {
     },
     '/api/v1/user/trip': {
       post: {
-        tags: ['Trip Request'],
+        tags: ['Trip Requests'],
         description: 'Create Trip Request',
 
         parameters: [],
@@ -651,6 +713,7 @@ const options = {
                   'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
                 travelReason: 'marketing',
                 accomodationId: 1,
+                roomId: 1,
               },
             },
           },
@@ -675,10 +738,21 @@ const options = {
         },
       },
     },
+    '/api/v1/user/trip/most-travelled-destinations': {
+      get: {
+        tags: ['Most travelled destinations'],
+        description: 'Get most travelled locations',
+        responses: {
+          200: {
+            description: 'success status',
+          },
+        },
+      },
+    },
 
     '/api/v1/user/trip/get': {
       get: {
-        tags: ['Trip Request'],
+        tags: ['Trip Requests'],
         description: 'get all trip requests',
         parameters: [],
         responses: {
@@ -693,7 +767,7 @@ const options = {
     },
     '/api/v1/user/trip/get/{id}': {
       get: {
-        tags: ['Trip Request'],
+        tags: ['Trip Requests'],
         description: 'get single trip request',
         parameters: [
           {
@@ -718,7 +792,7 @@ const options = {
     },
     '/api/v1/user/trip/update/{id}': {
       patch: {
-        tags: ['Trip Request'],
+        tags: ['Trip Requests'],
         description: 'update trip request',
         parameters: [
           {
@@ -762,7 +836,7 @@ const options = {
 
     '/api/v1/user/trip/{id}': {
       delete: {
-        tags: ['Trip Request'],
+        tags: ['Trip Requests'],
         description: 'update trip request',
 
         parameters: [
@@ -778,6 +852,160 @@ const options = {
         ],
         responses: {
           202: {
+            description: 'success status',
+          },
+          401: {
+            description: 'Unauthorized',
+          },
+        },
+      },
+    },
+    '/api/v1/user/trip/multi': {
+      post: {
+        tags: ['Multi city trip Request'],
+        description: 'Create multi city trip request',
+        consumes: ['application/json'],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/multiTripRequest',
+              },
+              example: [
+                {
+                  leavingFrom: 'kigali',
+                  goingTo: 1,
+                  travelDate:
+                    'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
+                  returnDate:
+                    'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
+                  travelReason: 'marketing',
+                  accomodationId: 1,
+                  roomId: 3,
+                },
+                {
+                  leavingFrom: 'kigali',
+                  goingTo: 3,
+                  travelDate:
+                    'Wed Jun 29 2022 04:44:15 GMT+0200 (Central Africa Time)',
+                  returnDate:
+                    'Fri Jul 1 2022 04:44:15 GMT+0200 (Central Africa Time)',
+                  travelReason: 'marketing',
+                  accomodationId: 2,
+                  roomId: 4,
+                },
+              ],
+            },
+          },
+          required: true,
+        },
+        responses: {
+          201: {
+            description: 'success status',
+          },
+          401: {
+            description: 'Unauthorized',
+          },
+        },
+      },
+    },
+    '/api/v1/user/trip/{tripRequestId}/comment': {
+      post: {
+        tags: ['Trip Request Comments'],
+        description: 'comment on trip requests',
+        parameters: [
+          {
+            in: 'path',
+            name: 'tripRequestId',
+            required: true,
+          },
+        ],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/Comment',
+              },
+            },
+          },
+          required: true,
+        },
+        responses: {
+          201: {
+            description: 'success',
+          },
+          500: {
+            description: 'Internal server error',
+          },
+          422: {
+            description: 'Invalid',
+          },
+        },
+      },
+    },
+    '/api/v1/user/trip/{tripRequestId}/comments': {
+      get: {
+        tags: ['Trip Request Comments'],
+        description: 'comment on trip requests',
+        parameters: [
+          {
+            in: 'path',
+            name: 'tripRequestId',
+            required: true,
+          },
+        ],
+        responses: {
+          200: {
+            description: 'success',
+          },
+          500: {
+            description: 'Internal server error',
+          },
+        },
+      },
+    },
+    '/api/v1/user/trip/comments/{id}/delete': {
+      delete: {
+        tags: ['Trip Request Comments'],
+        description: 'delete comment',
+        parameters: [
+          {
+            in: 'path',
+            name: 'id',
+            required: true,
+          },
+        ],
+        responses: {
+          200: {
+            description: 'success',
+          },
+          500: {
+            description: 'Internal server error',
+          },
+        },
+      },
+    },
+    '/api/v1/user/trip/status/': {
+      post: {
+        tags: ['Trip Requests status'],
+        description: 'get trip status',
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/tripStatus',
+              },
+              example: {
+                year: '2022',
+                month: 'jun',
+                day: '29',
+              },
+            },
+          },
+          required: true,
+        },
+        responses: {
+          200: {
             description: 'success status',
           },
           401: {
@@ -854,6 +1082,57 @@ const options = {
         },
       },
     },
+
+    '/api/v1/chat/message': {
+      post: {
+        tags: ['Chat bot'],
+        description: 'post chat message',
+
+        parameters: [],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/chat',
+              },
+              example: {
+                message: 'Welcome to barefoot chat bot',
+              },
+            },
+          },
+          required: true,
+        },
+        responses: {
+          201: {
+            description: 'success status',
+          },
+          401: {
+            description: 'Unauthorized',
+          },
+          403: {
+            description: 'Unauthorized',
+          },
+          500: {
+            description: 'Server Error',
+          },
+        },
+      },
+    },
+    '/api/v1/chat/messages': {
+      get: {
+        tags: ['Chat bot'],
+        description: 'get all chat messages',
+        parameters: [],
+        responses: {
+          200: {
+            description: 'successfully',
+          },
+          500: {
+            description: 'Internal Server Error',
+          },
+        },
+      },
+    },
   },
 
   components: {
@@ -868,6 +1147,20 @@ const options = {
           role: {
             type: 'string',
             description: 'new role to set to user',
+          },
+        },
+      },
+      tripStatus: {
+        type: 'object',
+        properties: {
+          year: {
+            type: 'string',
+          },
+          month: {
+            type: 'string',
+          },
+          day: {
+            type: 'string',
           },
         },
       },
@@ -894,6 +1187,36 @@ const options = {
           },
           email: {
             type: 'string',
+          },
+        },
+      },
+      multiTripRequest: {
+        type: 'object',
+        properties: {
+          leavingFrom: {
+            type: 'string',
+            description: 'current location',
+          },
+          goingTo: {
+            type: 'string',
+            description: 'destination',
+          },
+          travelDate: {
+            type: 'string',
+            description: 'start date of trip',
+          },
+          returnDate: {
+            type: 'string',
+            description: 'end date of trip',
+          },
+          travelReason: {
+            type: 'string',
+          },
+          accomodationId: {
+            type: 'integer',
+          },
+          roomId: {
+            type: 'integer',
           },
         },
       },
@@ -951,13 +1274,16 @@ const options = {
       rooms: {
         type: 'object',
         properties: {
-          bedType: {
+          roomType: {
             type: 'string',
           },
-          bedCost: {
+          roomCost: {
             type: 'string',
           },
-          bedDescription: {
+          roomDescription: {
+            type: 'string',
+          },
+          taken: {
             type: 'string',
           },
         },
@@ -1041,6 +1367,42 @@ const options = {
           },
           accomodationId: {
             type: 'integer',
+          },
+          roomId: {
+            type: 'integer',
+          },
+        },
+      },
+      tripStats: {
+        type: 'object',
+        properties: {
+          year: {
+            type: 'string',
+          },
+          month: {
+            type: 'string',
+          },
+          day: {
+            type: 'string',
+          },
+        },
+      },
+      Comment: {
+        type: 'object',
+        properties: {
+          comment: {
+            type: 'string',
+            description: 'comment',
+          },
+        },
+      },
+
+      Chat: {
+        type: 'object',
+        properties: {
+          message: {
+            type: 'string',
+            description: 'chat message',
           },
         },
       },
