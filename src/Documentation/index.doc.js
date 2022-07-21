@@ -73,7 +73,15 @@ const options = {
       patch: {
         summary: 'Reset password',
         tags: ['reset'],
-        parameters: [],
+        parameters: [
+          {
+            name: 'token',
+            in: 'path',
+            type: 'string',
+            description: 'reset token',
+            required: true,
+          },
+        ],
         requestBody: {
           content: {
             'application/json': {
@@ -1080,13 +1088,8 @@ const options = {
       reset: {
         type: 'object',
         properties: {
-          token: {
-            type: 'string',
-            in: 'path',
-            name: 'token',
-            required: true,
-          },
           password: {
+            type: 'string',
             in: 'body',
             name: 'name',
             required: true,
