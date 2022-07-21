@@ -46,19 +46,18 @@ const options = {
     '/api/v1/user/forgotpassword': {
       post: {
         summary: 'Forgotten password',
-        tags: ['User'],
-        parameters: [
-          {
-            in: 'body',
-            name: 'forgot',
-            schema: {
-              example: {
-                email: 'email',
+        tags: ['forgot'],
+        parameters: [],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/forgot',
               },
             },
-            required: true,
           },
-        ],
+          required: true,
+        },
         consumes: ['application/json'],
         responses: {
           200: {
@@ -73,27 +72,18 @@ const options = {
     '/api/v1/user/resetpassword/{token}': {
       patch: {
         summary: 'Reset password',
-        tags: ['User'],
-        parameters: [
-          {
-            in: 'path',
-            name: 'token',
-            required: true,
-            schema: {
-              example: 'dsagbfghdfhgdfgfdgdjhdfsjfh',
-            },
-          },
-          {
-            in: 'body',
-            name: 'name',
-            required: true,
-            schema: {
-              example: {
-                password: 'password',
+        tags: ['reset'],
+        parameters: [],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/reset',
               },
             },
           },
-        ],
+          required: true,
+        },
         consumes: ['application/json'],
         responses: {
           200: {
@@ -1079,6 +1069,32 @@ const options = {
           },
         },
       },
+      forgot: {
+        type: 'object',
+        properties: {
+          email: {
+            type: 'string',
+          },
+        },
+      },
+      reset: {
+        type: 'object',
+        properties: {
+          token: {
+            type: 'string',
+            in: 'path',
+            name: 'token',
+            required: true,
+          },
+          password: {
+            in: 'body',
+            name: 'name',
+            required: true,
+
+          },
+        },
+      },
+         
       tripRequest: {
         type: 'object',
 
