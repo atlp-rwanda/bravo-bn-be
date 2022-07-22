@@ -97,6 +97,11 @@ class Email {
       await this.send('rejectedRequest', 'Trip request Rejected!.');
     }
   }
+  async commentOnRequest() {
+    if (process.env.NODE_ENV !== 'test') {
+      await this.send('commentOnRequest', 'Commented on trip request.');
+    }
+  }
 }
 
 export default Email;

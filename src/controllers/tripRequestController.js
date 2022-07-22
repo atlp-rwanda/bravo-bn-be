@@ -6,13 +6,16 @@ import {
 } from '../helpers/validation_schema';
 import catchAsync from '../utils/catchAsync';
 import AppError from '../utils/appError';
+import { Op } from 'sequelize';
+import Email from '../utils/email';
+import emitter from '../utils/eventEmitter';
+import createNotification from '../services/notification.service';
+
 const tripRequests = db['tripRequest'];
 const accomodations = db['accomodation'];
 const locations = db['Location'];
 const Room = db['Room'];
 const users = db['users'];
-import { Op } from 'sequelize';
-import Email from '../utils/email';
 
 // create a 'Trip Request' as requester
 export const createTripRequest = catchAsync(async (req, res) => {
@@ -96,6 +99,19 @@ export const createTripRequest = catchAsync(async (req, res) => {
   const requester = await users.findOne({ where: { id: req.user.id } });
   await new Email(manager, url).newReqManagerNotif();
   await new Email(requester, url).newReqRequesterNotif();
+  createNotification(
+    requester.id,
+    'Trip request created.',
+    'Your request have been created!',
+    url,
+  );
+  createNotification(
+    manager.id,
+    'Trip request created.',
+    `${requester.firstName} Have just created a trip request`,
+    url,
+  );
+  emitter.emit('notification', '');
   return res.status(201).json({ status: 'success', data: trip });
 });
 // retrieve single trip request as requester
@@ -240,6 +256,16 @@ export const updateTripRequest = async (req, res) => {
         .update(updatedTrip, { where: { id: requestId, requesterId: userId } })
         .then((num) => {
           if (num == 1) {
+            const url = `${req.protocol}://${req.get(
+              'host',
+            )}/api/v1/user/trip/get/${tripRequest.id}`;
+            createNotification(
+              userId,
+              'Trip request updated.',
+              'trip request have been updated!',
+              url,
+            );
+            emitter.emit('notification', '');
             res.status(201).send({
               message: `Trip request  Updated Successfully`,
             });
@@ -290,10 +316,21 @@ export const deleteTripRequest = async (req, res) => {
         where: { id: requestId, requesterId: userId },
       });
 
+      const url = `${req.protocol}://${req.get(
+        'host',
+      )}/api/v1/user/trip/get/${requestId}`;
+
       const manager = await users.findOne({ where: { role: 'manager' } });
       const requester = await users.findOne({ where: { id: userId } });
       await new Email(manager).deletedRequest();
       await new Email(requester).deletedRequest();
+      createNotification(
+        userId,
+        'Trip request deleted.',
+        'trip request have been deleted!',
+        url,
+      );
+      emitter.emit('notification', '');
       res.status(200).json({ message: 'Trip Request Deleted successfully' });
     }
   } catch (error) {
@@ -652,8 +689,16 @@ export const approveTripRequest = catchAsync(async (req, res, next) => {
       const requester = await users.findOne({
         where: { id: tripRequest.requesterId },
       });
+
       await new Email(manager, url).approvedRequest();
       await new Email(requester, url).approvedRequest();
+      createNotification(
+        requester.id,
+        'Trip request Approved.',
+        'Request have been approved!',
+        url,
+      );
+      emitter.emit('notification', '');
       return res.status(200).json({
         status: true,
         message: 'Trip request approved successfully',
@@ -695,8 +740,16 @@ export const rejectTripRequest = catchAsync(async (req, res, next) => {
       const requester = await users.findOne({
         where: { id: tripRequest.requesterId },
       });
+
       await new Email(manager, url).rejectedRequest();
       await new Email(requester, url).rejectedRequest();
+      createNotification(
+        requester.id,
+        'Trip request Rejected.',
+        'Request have been rejected!',
+        url,
+      );
+      emitter.emit('notification', '');
       return res.status(200).json({
         status: true,
         message: 'Trip request rejected successfully',
