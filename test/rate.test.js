@@ -69,25 +69,23 @@ describe('User rating accomodation', (done) => {
     accomodationId: 2,
     roomId: 4,
   };
-  
+
   it('Should return 401 for unauthorization', (done) => {
-   
     const rate1 = {
       rates: '2',
       accomodationId: 4,
     };
     api
-    .post('/api/v1/rates/createRate')
-    .send(rate1)
-    .end((err, res) => {
-
-      const { message } = res.body;
-      expect(res.status).to.equal(401);
-      expect(message).to.equal(
-        'You are not logged in! please login to get access',
-      );
-      done();
-    });
+      .post('/api/v1/rates/createRate')
+      .send(rate1)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(401);
+        expect(message).to.equal(
+          'You are not logged in! please login to get access',
+        );
+        done();
+      });
   });
   it('Should return 201 on successfully rated accomodation', () => {
     let token;
@@ -354,7 +352,7 @@ describe('User rating accomodation', (done) => {
                         expect(res.body).to.have.property('message');
                         expect(res.body.message).to.equal(' rates updated');
                       });
-                    done()
+                    done();
                   });
                 });
             });
