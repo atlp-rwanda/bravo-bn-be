@@ -9,6 +9,8 @@ module.exports = (sequelize, DataTypes) => {
       travelReason: DataTypes.STRING,
       tripType: DataTypes.STRING,
       status: DataTypes.ENUM('pending', 'approved', 'rejected'),
+      passportName: DataTypes.STRING,
+      passportNumber: DataTypes.STRING,
     },
     {},
   );

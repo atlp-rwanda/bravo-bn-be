@@ -68,6 +68,8 @@ export const createTripRequest = async (req, res) => {
       requesterId: req.user.id,
       accomodationId: req.body.accomodationId,
       roomId: req.body.roomId,
+      passportName: req.body.passportName,
+      passportNumber: req.body.passportNumber
     };
     await Room.update(
       {
@@ -81,6 +83,16 @@ export const createTripRequest = async (req, res) => {
     trip.accomodation = accomodation;
     trip.roomId = undefined;
     trip.room = room;
+    res.cookie('passportName', req.body.passportName, {
+      secure: true,
+      httpOnly: true,
+      sameSite: 'lax',
+    });
+    res.cookie('passportNumber', req.body.passportNumber, {
+      secure: true,
+      httpOnly: true,
+      sameSite: 'lax',
+    });
     return res.status(201).json({ status: 'success', data: trip });
   } catch (error) {
     return res.status(500).json({ error: error.message });
@@ -582,6 +594,8 @@ export const createMultiTripRequest = async (req, res, next) => {
         requesterId: req.user.id,
         accomodationId: trip_.accomodationId,
         roomId: trip_.roomId,
+        passportName: req.body.passportName,
+        passportNumber: req.body.passportNumber,
       };
       await Room.update(
         {
