@@ -787,7 +787,29 @@ const options = {
         },
       },
     },
-
+    '/api/v1/rates/getAll/{id}': {
+      get: {
+        tags: ['RATES'],
+        description: 'rates on accomodation',
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            type: 'string',
+            description: 'accomodation id',
+            required: true,
+          },
+        ],
+        responses: {
+          200: {
+            description: 'rates fetched successfully',
+          },
+          500: {
+            description: 'Internal server error',
+          },
+        },
+      },
+    },
     '/api/v1/user/trip/get': {
       get: {
         tags: ['Trip Requests'],

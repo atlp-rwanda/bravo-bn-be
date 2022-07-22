@@ -67,7 +67,7 @@ describe('Setting users roles', () => {
           });
       });
   });
-  it('It should return User not found', (done) => {
+  it('It should return User not found', () => {
     const requestBody = {
       email: 'janedoeee@email.com',
       role: 'requester',
@@ -86,9 +86,7 @@ describe('Setting users roles', () => {
           .send(requestBody)
           .end((err, res) => {
             res.should.have.status(404);
-            done();
           });
-        done();
       });
   });
   it('It should return invalid token', (done) => {

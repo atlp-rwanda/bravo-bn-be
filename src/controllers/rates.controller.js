@@ -6,6 +6,33 @@ import AppError from '../utils/appError';
 import { Op } from 'sequelize';
 import catchAsync from '../utils/catchAsync.js';
 
+export const getRates = async (req, res) => {
+  try {
+    const accomodationId = req.params.id;
+    const accomodation = await Accomodation.findByPk(accomodationId);
+    if (!accomodation) {
+      return res
+        .status(400)
+        .json({ error: 'This accomodation does not exist!' });
+    }
+
+    const rates = await Rates.findAll({
+      where: { accomodationId: accomodationId },
+    });
+    if (rates) {
+      return res.status(200).json({
+        message: 'rates fetched successfully',
+        rates: rates,
+        accomodationInfo: accomodation,
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+    });
+  }
+};
+
 export const createRate = catchAsync(async (req, res, next) => {
   const { accomodationId, rates } = req.body;
 
@@ -47,7 +74,6 @@ export const createRate = catchAsync(async (req, res, next) => {
       accomodationId: tripRequest.accomodationId,
     },
   });
-  console.log(isItRated);
   if (isItRated) {
     const updateRate = await Rates.findOne(
       {
