@@ -46,6 +46,67 @@ const options = {
       },
     },
 
+    '/api/v1/user/forgotpassword': {
+      post: {
+        summary: 'Forgotten password',
+        tags: ['forgot'],
+        parameters: [],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/forgot',
+              },
+            },
+          },
+          required: true,
+        },
+        consumes: ['application/json'],
+        responses: {
+          200: {
+            description: 'success status',
+          },
+          500: {
+            description: 'Something went very wrong!',
+          },
+        },
+      },
+    },
+    '/api/v1/user/resetpassword/{token}': {
+      patch: {
+        summary: 'Reset password',
+        tags: ['reset'],
+        parameters: [
+          {
+            name: 'token',
+            in: 'path',
+            type: 'string',
+            description: 'reset token',
+            required: true,
+          },
+        ],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/reset',
+              },
+            },
+          },
+          required: true,
+        },
+        consumes: ['application/json'],
+        responses: {
+          200: {
+            description: 'success status',
+          },
+          500: {
+            description: 'Error',
+          },
+        },
+      },
+    },
+
     '/api/v1/user/': {
       get: {
         tags: ['User'],
@@ -1337,6 +1398,27 @@ const options = {
           },
         },
       },
+
+      forgot: {
+        type: 'object',
+        properties: {
+          email: {
+            type: 'string',
+          },
+        },
+      },
+      reset: {
+        type: 'object',
+        properties: {
+          password: {
+            type: 'string',
+            in: 'body',
+            name: 'name',
+            required: true,
+          },
+        },
+      },
+
       tripStats: {
         type: 'object',
         properties: {

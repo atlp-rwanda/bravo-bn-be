@@ -270,3 +270,74 @@ export const logout = async (req, res) => {
     });
   }
 };
+
+export const forgotPassword = catchAsync(async (req, res, next) => {
+  const verifiedUser = await User.findOne({ where: { email: req.body.email } });
+  if (!verifiedUser) {
+    return next(new AppError('There is no user with email address.', 404));
+  }
+  console.log(verifiedUser.id, signToken);
+  const token = signToken(verifiedUser.id);
+  const resetToken = token;
+  const passwordResetExpires = Date.now() + 10 * 60 * 1000;
+  await verifiedUser.update({
+    passwordResetToken: token,
+    passwordResetExpires,
+  });
+  await verifiedUser.save();
+  const resetURL = `${req.protocol}://${req.get(
+    'host',
+  )}/api/v1/user/resetpassword/${resetToken}`;
+
+  try {
+    await new Email(verifiedUser, resetURL).sendPasswordReset();
+    res.status(200).json({
+      status: 'success',
+      message: 'Password Reset sent to your Email',
+    });
+  } catch (err) {
+    (error) => throwFailed(error, '');
+    await verifiedUser.update({
+      passwordResetToken: '',
+      passwordResetExpires: '',
+    });
+    await verifiedUser.save();
+
+    return next(
+      new AppError('There was an error sending email. Try again later.', 500),
+    );
+  }
+});
+
+export const resetPassword = catchAsync(async (req, res, next) => {
+  try {
+    const decoded = await promisify(verify)(
+      req.params.token,
+      process.env.JWT_SECRET,
+    );
+
+    if (!decoded) {
+      return next(
+        new AppError(
+          'The user belonging to this token does no longer exist',
+          401,
+        ),
+      );
+    }
+    let userExist = await User.findOne({
+      where: {
+        passwordResetToken: req.params.token,
+      },
+    });
+    if (!userExist)
+      return next(new AppError('Token is invalid or has expired', 409));
+    else {
+      await userExist.update({
+        password: await hash(req.body.password, 12),
+        passwordResetToken: '',
+        passwordResetExpires: '',
+      });
+    }
+    createSendToken(userExist, 200, res);
+  } catch (error) {}
+});
