@@ -1,4 +1,4 @@
-import db from '../database/models/index.js';
+import db from '../src/database/models/index.js';
 const Rates = db['rates'];
 const Accomodation = db['accomodation'];
 const tripRequests = db['tripRequest'];
