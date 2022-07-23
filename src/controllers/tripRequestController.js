@@ -93,7 +93,7 @@ export const createTripRequest = catchAsync(async (req, res) => {
     sameSite: 'lax',
   });
   const url = `${req.protocol}://${req.get('host')}/api/v1/user/trip/get/${
-    newTrip.id
+    trip.id
   }`;
   const manager = await users.findOne({ where: { role: 'manager' } });
   const requester = await users.findOne({ where: { id: req.user.id } });
