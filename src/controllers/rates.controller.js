@@ -1,10 +1,10 @@
+import AppError from '../utils/appError';
+import catchAsync from '../utils/catchAsync.js';
+import { Op } from 'sequelize';
 import db from '../database/models/index.js';
 const Rates = db['rates'];
 const Accomodation = db['accomodation'];
 const tripRequests = db['tripRequest'];
-import AppError from '../utils/appError';
-import { Op } from 'sequelize';
-import catchAsync from '../utils/catchAsync.js';
 
 export const getRates = async (req, res) => {
   try {
