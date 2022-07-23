@@ -1,4 +1,4 @@
-import AppError from '../utils/appError';
+import AppError from '../utils/ppError.js';
 import catchAsync from '../utils/catchAsync.js';
 import { Op } from 'sequelize';
 import db from '../database/models/index.js';
