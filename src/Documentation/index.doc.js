@@ -1087,14 +1087,25 @@ const options = {
       },
     },
 
-    '/api/v1/feedback/getAll': {
+    '/api/v1/feedback/getAll/{id}': {
       get: {
         tags: ['feedback'],
-        summary: 'Get all feedbacks',
-        description: 'list of all feedback',
+        description: 'feedback on accomodation',
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            type: 'string',
+            description: 'accomodation id',
+            required: true,
+          },
+        ],
         responses: {
-          201: {
-            description: 'Feedback retrieved successfully',
+          200: {
+            description: 'feedback fetched successfully',
+          },
+          500: {
+            description: 'Internal server error',
           },
         },
       },

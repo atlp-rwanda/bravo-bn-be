@@ -71,17 +71,14 @@ describe('User giving feedback to accomodation', (done) => {
   };
 
   it('Should return 401 for unauthorization', (done) => {
-    api
-      .get('/api/v1/feedback/getAll')
-
-      .end((err, res) => {
-        const { message } = res.body;
-        expect(res.status).to.equal(401);
-        expect(message).to.equal(
-          'You are not logged in! please login to get access',
-        );
-        done();
-      });
+    api.get('/api/v1/feedback/getAll/:id').end((err, res) => {
+      const { message } = res.body;
+      expect(res.status).to.equal(401);
+      expect(message).to.equal(
+        'You are not logged in! please login to get access',
+      );
+      done();
+    });
   });
   it('Should return 201 on successfully sent feedback', () => {
     let token;

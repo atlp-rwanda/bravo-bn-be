@@ -6,10 +6,31 @@ import AppError from '../utils/appError';
 import { Op } from 'sequelize';
 import catchAsync from '../utils/catchAsync.js';
 
-export const getFeedback = async (req, res) => {
-  const feedback = await Feedback.findAll();
+export const getFeedbacks = async (req, res) => {
+  try {
+    const accomodationId = req.params.id;
+    const accomodation = await Accomodation.findByPk(accomodationId);
+    if (!accomodation) {
+      return res
+        .status(400)
+        .json({ error: 'This accomodation does not exist!' });
+    }
 
-  return res.send({ message: 'Feedback retrieved successfully', feedback });
+    const feedback = await Feedback.findAll({
+      where: { accomodationId: accomodationId },
+    });
+    if (feedback) {
+      return res.status(200).json({
+        message: 'feedbacks fetched successfully',
+        feedback: feedback,
+        accomodationInfo: accomodation,
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+    });
+  }
 };
 
 export const sendFeedback = catchAsync(async (req, res, next) => {
