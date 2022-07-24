@@ -10,7 +10,7 @@ chai.use(chaiHttp);
 const api = chai.request(server).keepOpen();
 const { expect } = chai;
 
-describe('User giving rates to accomodation', (done) => {
+describe('User giving feedback to accomodation', (done) => {
   const user = {
     firstName: 'Rose',
     lastName: 'Reine',
@@ -71,23 +71,16 @@ describe('User giving rates to accomodation', (done) => {
   };
 
   it('Should return 401 for unauthorization', (done) => {
-    const rate1 = {
-      rates: '2',
-      accomodationId: 4,
-    };
-    api
-      .post('/api/v1/rates/createRate')
-      .send(rate1)
-      .end((err, res) => {
-        const { message } = res.body;
-        expect(res.status).to.equal(401);
-        expect(message).to.equal(
-          'You are not logged in! please login to get access',
-        );
-        done();
-      });
+    api.get('/api/v1/feedback/getAll/:id').end((err, res) => {
+      const { message } = res.body;
+      expect(res.status).to.equal(401);
+      expect(message).to.equal(
+        'You are not logged in! please login to get access',
+      );
+      done();
+    });
   });
-  it('Should return 201 on successfully sent rates', () => {
+  it('Should return 201 on successfully sent feedback', () => {
     let token;
     api
       .post('/api/v1/user/auth/signup')
@@ -121,19 +114,19 @@ describe('User giving rates to accomodation', (done) => {
                     },
                     { where: { id: tripId } },
                   ).then((result) => {
-                    const rates = {
-                      rates: '2',
+                    const feedback = {
+                      feedback: 'very good',
                       accomodationId: tripId,
                     };
                     api
-                      .post('/api/v1/rates/sendrates')
+                      .post('/api/v1/feedback/sendFeedback')
                       .set('Authorization', `Bearer ${token}`)
-                      .send(rates)
+                      .send(feedback)
                       .end((err, res) => {
                         expect(res.status).to.equal(201);
                         expect(res.body).to.have.property('message');
                         expect(res.body.message).to.equal(
-                          'rates created successfully ✔',
+                          'Feedback created successfully ✔',
                         );
                       });
                   });
@@ -143,7 +136,7 @@ describe('User giving rates to accomodation', (done) => {
       });
   });
 
-  it('should not give rates on unapproved request', () => {
+  it('should not give feedback on unapproved request', () => {
     let token;
     api
       .post('/api/v1/user/auth/signup')
@@ -176,14 +169,14 @@ describe('User giving rates to accomodation', (done) => {
                     },
                     { where: { id: tripId } },
                   ).then((result) => {
-                    const rates1 = {
-                      rates: '2',
+                    const feedback1 = {
+                      feedback: 'good',
                       accomodationId: tripId,
                     };
                     api
-                      .post('/api/v1/rates/sendrates')
+                      .post('/api/v1/feedback/sendFeedback')
                       .set('Authorization', `Bearer ${token}`)
-                      .send(rates1)
+                      .send(feedback1)
                       .end((err, res) => {
                         expect(res.status).to.equal(401);
                         expect(res.body).to.have.property('message');
@@ -198,7 +191,7 @@ describe('User giving rates to accomodation', (done) => {
       });
   });
 
-  it('should retrieve all rates ', () => {
+  it('should retrieve all feedback ', () => {
     let token;
     api
       .post('/api/v1/user/auth/signup')
@@ -217,13 +210,14 @@ describe('User giving rates to accomodation', (done) => {
             .end((err, res) => {
               const { token } = res.body;
               api
-                .get('/api/v1/rates/getAll')
+                .get('/api/v1/feedback/getAll')
                 .set('Authorization', `Bearer ${token}`)
+                .send(feedback)
                 .end((err, res) => {
                   expect(res.status).to.equal(201);
                   expect(res.body).to.have.property('message');
                   expect(res.body.message).to.equal(
-                    ' rates retrieved successfully',
+                    ' Feedback retrieved successfully',
                   );
                 });
             });
@@ -231,7 +225,7 @@ describe('User giving rates to accomodation', (done) => {
       });
   });
 
-  it("should not send rates on accomodation  which you didn't stay in", () => {
+  it("should not send feedback on accomodation  which you didn't stay in", () => {
     let token;
     api
       .post('/api/v1/user/auth/signup')
@@ -265,14 +259,14 @@ describe('User giving rates to accomodation', (done) => {
                     },
                     { where: { id: tripId } },
                   ).then((result) => {
-                    const rates = {
-                      rates: '2',
+                    const feedback = {
+                      feedback: 'fantastic',
                       accomodationId: tripId,
                     };
                     api
-                      .post('/api/v1/rates/sendrates')
+                      .post('/api/v1/feedback/sendFeedback')
                       .set('Authorization', `Bearer ${token}`)
-                      .send(rates)
+                      .send(feedback)
                       .end((err, res) => {
                         expect(res.status).to.equal(401);
                         expect(res.body).to.have.property('message');
@@ -287,7 +281,7 @@ describe('User giving rates to accomodation', (done) => {
       });
   });
 
-  it('should not give rates on a tripRequest which does not spent 24 hrs ', () => {
+  it('should not give feedback on a tripRequest which does not spent 24 hrs ', () => {
     let token;
     api
       .post('/api/v1/user/auth/signup')
@@ -318,14 +312,14 @@ describe('User giving rates to accomodation', (done) => {
                     },
                     { where: { id: tripId } },
                   ).then((result) => {
-                    const rates = {
-                      rates: '3',
+                    const feedback = {
+                      feedback: 'awesome',
                       accomodationId: tripId,
                     };
                     api
-                      .post('/api/v1/rates/sendrates')
+                      .post('/api/v1/feedback/sendFeedback')
                       .set('Authorization', `Bearer ${token}`)
-                      .send(rates)
+                      .send(feedback)
                       .end((err, res) => {
                         expect(res.status).to.equal(401);
                         expect(res.body).to.have.property('message');
