@@ -49,7 +49,7 @@ const options = {
     '/api/v1/user/forgotpassword': {
       post: {
         summary: 'Forgotten password',
-        tags: ['forgot'],
+        tags: ['resetPassword'],
         parameters: [],
         requestBody: {
           content: {
@@ -75,7 +75,7 @@ const options = {
     '/api/v1/user/resetpassword/{token}': {
       patch: {
         summary: 'Reset password',
-        tags: ['reset'],
+        tags: ['resetPassword'],
         parameters: [
           {
             name: 'token',
