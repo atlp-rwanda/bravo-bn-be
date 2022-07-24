@@ -1,107 +1,342 @@
+import chai from 'chai';
+import chaiHttp from 'chai-http';
+import server from '../src/app.js';
 import db from '../src/database/models/index.js';
-const Rates = db['rates'];
-const Accomodation = db['accomodation'];
-const tripRequests = db['tripRequest'];
-import AppError from '../utils/appError';
-import { Op } from 'sequelize';
-import catchAsync from '../utils/catchAsync.js';
 
-export const getRates = async (req, res) => {
-  try {
-    const accomodationId = req.params.id;
-    const accomodation = await Accomodation.findByPk(accomodationId);
-    if (!accomodation) {
-      return res
-        .status(400)
-        .json({ error: 'This accomodation does not exist!' });
-    }
+const User = db['users'];
+const TripRequest = db['tripRequest'];
 
-    const rates = await Rates.findAll({
-      where: { accomodationId: accomodationId },
-    });
-    if (rates) {
-      return res.status(200).json({
-        message: 'rates fetched successfully',
-        rates: rates,
-        accomodationInfo: accomodation,
+chai.use(chaiHttp);
+const api = chai.request(server).keepOpen();
+const { expect } = chai;
+
+describe('User giving rates to accomodation', (done) => {
+  const user = {
+    firstName: 'Rose',
+    lastName: 'Reine',
+    username: 'Rose56',
+    email: 'gajunadeg@gmail.com',
+    password: 'mwisenez',
+    repeat_password: 'mwisenez',
+    phoneNumber: '0780850683',
+    role: 'requester',
+  };
+  const user1 = {
+    firstName: 'Rose',
+    lastName: 'Reine',
+    username: 'Rose5',
+    email: 'gajunade@gmail.com',
+    password: 'mwisenez',
+    repeat_password: 'mwisenez',
+    phoneNumber: '0780850683',
+    role: 'requester',
+  };
+  const user2 = {
+    firstName: 'Rose',
+    lastName: 'Reine',
+    username: 'Rose',
+    email: 'gajunad@gmail.com',
+    password: 'mwisenez',
+    repeat_password: 'mwisenez',
+    phoneNumber: '0780850683',
+    role: 'requester',
+  };
+
+  const tripRequest = {
+    leavingFrom: 'musanze',
+    goingTo: 1,
+    travelDate: '2022-10-5',
+    returnDate: '2022-11-6',
+    travelReason: 'picnic',
+    accomodationId: 1,
+    roomId: 2,
+  };
+  const tripRequest1 = {
+    leavingFrom: 'musanze',
+    goingTo: 1,
+    travelDate: '2022-10-5',
+    returnDate: '2022-11-6',
+    travelReason: 'picnic',
+    accomodationId: 1,
+    roomId: 1,
+  };
+  const tripRequest2 = {
+    leavingFrom: 'musanze',
+    goingTo: 1,
+    travelDate: '2022-10-5',
+    returnDate: '2022-11-6',
+    travelReason: 'picnic',
+    accomodationId: 1,
+    roomId: 3,
+  };
+
+  it('Should return 401 for unauthorization', (done) => {
+    const rate1 = {
+      rates: '2',
+      accomodationId: 4,
+    };
+    api
+      .post('/api/v1/rates/createRate')
+      .send(rate1)
+      .end((err, res) => {
+        const { message } = res.body;
+        expect(res.status).to.equal(401);
+        expect(message).to.equal(
+          'You are not logged in! please login to get access',
+        );
+        done();
       });
-    }
-  } catch (error) {
-    return res.status(500).json({
-      error: error.message,
-    });
-  }
-};
-
-export const createRate = catchAsync(async (req, res, next) => {
-  const { accomodationId, rates } = req.body;
-
-  const tripRequest = await tripRequests.findOne({
-    where: {
-      accomodationId,
-      requesterId: {
-        [Op.and]: [`${req.user.id}`],
-      },
-    },
   });
-  if (!tripRequest) {
-    return next(
-      new AppError(
-        'Sorry, accomodation does not either exist or belong to you',
-        401,
-      ),
-    );
-  }
-  if (tripRequest.status != 'approved') {
-    return next(
-      new AppError('Sorry, trip request must be approved to proceed ', 401),
-    );
-  }
-  if (
-    new Date(tripRequest.travelDate).getTime() + 24 * 60 * 60 * 1000 >=
-    Date.now()
-  ) {
-    return next(
-      new AppError(
-        'Sorry,you must wait 24hrs to gain permission of rating ',
-        401,
-      ),
-    );
-  }
-  const isItRated = await Rates.findOne({
-    where: {
-      requesterId: req.user.id,
-      accomodationId: tripRequest.accomodationId,
-    },
-  });
-  if (isItRated) {
-    const updateRate = await Rates.findOne(
-      {
-        rates,
-      },
-      {
-        where: {
-          accommodationId: tripRequest.accommodationId,
-          requesterId: {
-            [Op.and]: [`${req.user.id}`],
+  it('Should return 201 on successfully sent rates', () => {
+    let token;
+    api
+      .post('/api/v1/user/auth/signup')
+      .send(user)
+      .end((err, res) => {
+        const id4 = res.body.data.user.id;
+        User.update(
+          {
+            isVerified: true,
           },
-        },
-      },
-    );
-    await updateRate.save();
-    return res.status(201).json({
-      message: 'rates updated',
-      data: updateRate,
-    });
-  } else {
-    const userRates = await Rates.create({
-      requesterId: req.user.id,
-      accomodationId: tripRequest.accomodationId,
-      rating: rates,
-    });
-    return res.status(201).json({
-      message: 'rates added to accomodation!',
-      data: userRates,
-    });
-  }
+          { where: { id4 } },
+        ).then((res) => {
+          api
+            .post('/api/v1/user/login')
+            .send({ email: user.email, password: user.password })
+            .end((err, res) => {
+              const { token } = res.body;
+              api
+                .post('/api/v1/user/trip')
+                .set('Authorization', `Bearer ${token}`)
+                .send(tripRequest)
+
+                .end((err, res) => {
+                  const tripId = 5;
+                  TripRequest.update(
+                    {
+                      status: 'approved',
+                      travelDate:
+                        new Date(TripRequest.travelDate).getTime() -
+                        24 * 60 * 60 * 1000,
+                    },
+                    { where: { id: tripId } },
+                  ).then((result) => {
+                    const rates = {
+                      rates: '2',
+                      accomodationId: tripId,
+                    };
+                    api
+                      .post('/api/v1/rates/sendrates')
+                      .set('Authorization', `Bearer ${token}`)
+                      .send(rates)
+                      .end((err, res) => {
+                        expect(res.status).to.equal(201);
+                        expect(res.body).to.have.property('message');
+                        expect(res.body.message).to.equal(
+                          'rates created successfully ✔',
+                        );
+                      });
+                  });
+                });
+            });
+        });
+      });
+  });
+
+  it('should not give rates on unapproved request', () => {
+    let token;
+    api
+      .post('/api/v1/user/auth/signup')
+      .send(user1)
+      .end((err, res) => {
+        const id1 = res.body.data.user.id;
+        User.update(
+          {
+            isVerified: true,
+          },
+          { where: { id1 } },
+        ).then((res) => {
+          api
+            .post('/api/v1/user/login')
+            .send({ email: user1.email, password: user1.password })
+            .end((err, res) => {
+              const { token } = res.body;
+              api
+                .post('/api/v1/user/trip')
+                .set('Authorization', `Bearer ${token}`)
+                .send(tripRequest1)
+
+                .end((err, res) => {
+                  const tripId = 5;
+                  TripRequest.update(
+                    {
+                      travelDate:
+                        new Date(TripRequest.travelDate).getTime() -
+                        24 * 60 * 60 * 1000,
+                    },
+                    { where: { id: tripId } },
+                  ).then((result) => {
+                    const rates1 = {
+                      rates: '2',
+                      accomodationId: tripId,
+                    };
+                    api
+                      .post('/api/v1/rates/sendrates')
+                      .set('Authorization', `Bearer ${token}`)
+                      .send(rates1)
+                      .end((err, res) => {
+                        expect(res.status).to.equal(401);
+                        expect(res.body).to.have.property('message');
+                        expect(res.body.message).to.equal(
+                          ' Sorry, trip request must be approved to proceed',
+                        );
+                      });
+                  });
+                });
+            });
+        });
+      });
+  });
+
+  it('should retrieve all rates ', () => {
+    let token;
+    api
+      .post('/api/v1/user/auth/signup')
+      .send(user1)
+      .end((err, res) => {
+        const id1 = res.body.data.user.id;
+        User.update(
+          {
+            isVerified: true,
+          },
+          { where: { id1 } },
+        ).then((res) => {
+          api
+            .post('/api/v1/user/login')
+            .send({ email: user1.email, password: user1.password })
+            .end((err, res) => {
+              const { token } = res.body;
+              api
+                .get('/api/v1/rates/getAll')
+                .set('Authorization', `Bearer ${token}`)
+                .end((err, res) => {
+                  expect(res.status).to.equal(201);
+                  expect(res.body).to.have.property('message');
+                  expect(res.body.message).to.equal(
+                    ' rates retrieved successfully',
+                  );
+                });
+            });
+        });
+      });
+  });
+
+  it("should not send rates on accomodation  which you didn't stay in", () => {
+    let token;
+    api
+      .post('/api/v1/user/auth/signup')
+      .send(user2)
+      .end((err, res) => {
+        const id2 = res.body.data.user.id;
+        User.update(
+          {
+            isVerified: true,
+          },
+          { where: { id2 } },
+        ).then((res) => {
+          api
+            .post('/api/v1/user/login')
+            .send({ email: user2.email, password: user2.password })
+            .end((err, res) => {
+              const { token } = res.body;
+              api
+                .post('/api/v1/user/trip')
+                .set('Authorization', `Bearer ${token}`)
+                .send(tripRequest2)
+
+                .end((err, res) => {
+                  const tripId = 5;
+                  TripRequest.update(
+                    {
+                      status: 'approved',
+                      travelDate:
+                        new Date(TripRequest.travelDate).getTime() -
+                        24 * 60 * 60 * 1000,
+                    },
+                    { where: { id: tripId } },
+                  ).then((result) => {
+                    const rates = {
+                      rates: '2',
+                      accomodationId: tripId,
+                    };
+                    api
+                      .post('/api/v1/rates/sendrates')
+                      .set('Authorization', `Bearer ${token}`)
+                      .send(rates)
+                      .end((err, res) => {
+                        expect(res.status).to.equal(401);
+                        expect(res.body).to.have.property('message');
+                        expect(res.body.message).to.equal(
+                          ' Sorry, accomodation does not either exist or belong to you',
+                        );
+                      });
+                  });
+                });
+            });
+        });
+      });
+  });
+
+  it('should not give rates on a tripRequest which does not spent 24 hrs ', () => {
+    let token;
+    api
+      .post('/api/v1/user/auth/signup')
+      .send(user2)
+      .end((err, res) => {
+        const id2 = res.body.data.user.id;
+        User.update(
+          {
+            isVerified: true,
+          },
+          { where: { id2 } },
+        ).then((res) => {
+          api
+            .post('/api/v1/user/login')
+            .send({ email: user2.email, password: user2.password })
+            .end((err, res) => {
+              const { token } = res.body;
+              api
+                .post('/api/v1/user/trip')
+                .set('Authorization', `Bearer ${token}`)
+                .send(tripRequest2)
+
+                .end((err, res) => {
+                  const tripId = 5;
+                  TripRequest.update(
+                    {
+                      status: 'approved',
+                    },
+                    { where: { id: tripId } },
+                  ).then((result) => {
+                    const rates = {
+                      rates: '3',
+                      accomodationId: tripId,
+                    };
+                    api
+                      .post('/api/v1/rates/sendrates')
+                      .set('Authorization', `Bearer ${token}`)
+                      .send(rates)
+                      .end((err, res) => {
+                        expect(res.status).to.equal(401);
+                        expect(res.body).to.have.property('message');
+                        expect(res.body.message).to.equal(
+                          ' Sorry,you must wait 24hrs to gain permission of rating',
+                        );
+                      });
+                  });
+                });
+            });
+        });
+      });
+  });
 });
