@@ -75,20 +75,17 @@ export const createRate = catchAsync(async (req, res, next) => {
     },
   });
   if (isItRated) {
-    const updateRate = await Rates.findOne(
+    const updateRate = await Rates.update(
       {
-        rates,
+        rating: rates,
       },
       {
         where: {
-          accommodationId: tripRequest.accommodationId,
-          requesterId: {
-            [Op.and]: [`${req.user.id}`],
-          },
+          requesterId: req.user.id,
+          accomodationId: tripRequest.accomodationId,
         },
       },
     );
-    await updateRate.save();
     return res.status(201).json({
       message: 'rates updated',
       data: updateRate,
