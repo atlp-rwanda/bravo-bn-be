@@ -1060,7 +1060,57 @@ const options = {
         },
       },
     },
-    '/api/v1/user/trip/reject/{id}': {
+
+    '/api/v1/feedback/feedback': {
+      post: {
+        tags: ['feedback'],
+        description: 'User provides feedback to accomodation',
+
+        parameters: [],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {},
+              example: {
+                feedback: 'awesome',
+                accomodationId: 1,
+              },
+            },
+          },
+          required: true,
+        },
+        responses: {
+          201: {
+            description: 'Feedback created successfully ✔',
+          },
+        },
+      },
+    },
+
+    '/api/v1/feedback/getAll/{id}': {
+      get: {
+        tags: ['feedback'],
+        description: 'feedback on accomodation',
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            type: 'string',
+            description: 'accomodation id',
+            required: true,
+          },
+        ],
+        responses: {
+          200: {
+            description: 'feedback fetched successfully',
+          },
+          500: {
+            description: 'Internal server error',
+          },
+        },
+      },
+    },
+    '/api/v1//user/trip/reject/{id}': {
       put: {
         tags: ['Manager'],
         description: 'reject trip request',
@@ -1300,6 +1350,17 @@ const options = {
         properties: {
           locationName: {
             type: 'string',
+          },
+        },
+      },
+      feedback: {
+        type: 'object',
+        properties: {
+          feedback: {
+            type: 'string',
+          },
+          accomodationId: {
+            type: 'integer',
           },
         },
       },
