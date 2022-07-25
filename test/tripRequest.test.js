@@ -746,4 +746,19 @@ describe('Get profile information from travel request', () => {
           });
       });
   });
+  describe('GET API /api/v1/search/searchTerm', () => {
+    it('should return all information according to the search term', (done) => {
+      chai
+        .request(app)
+        .get('/api/v1/search/pro')
+        .set('Authorization', `Bearer ${token}`)
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          expect(res.body).to.be.a('object');
+          expect(res.body).to.have.property('status');
+          expect(res.body).to.have.property('data');
+          done();
+        });
+    });
+  });
 });
