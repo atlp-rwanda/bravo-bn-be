@@ -178,7 +178,7 @@ describe('User giving feedback to accomodation', (done) => {
                       .set('Authorization', `Bearer ${token}`)
                       .send(feedback1)
                       .end((err, res) => {
-                        expect(res.status).to.equal(401);
+                        expect(res.status).to.equal(400);
                         expect(res.body).to.have.property('message');
                         expect(res.body.message).to.equal(
                           ' Sorry, trip request must be approved to proceed',
@@ -268,7 +268,7 @@ describe('User giving feedback to accomodation', (done) => {
                       .set('Authorization', `Bearer ${token}`)
                       .send(feedback)
                       .end((err, res) => {
-                        expect(res.status).to.equal(401);
+                        expect(res.status).to.equal(400);
                         expect(res.body).to.have.property('message');
                         expect(res.body.message).to.equal(
                           ' Sorry, accomodation does not either exist or belong to you',
@@ -321,7 +321,7 @@ describe('User giving feedback to accomodation', (done) => {
                       .set('Authorization', `Bearer ${token}`)
                       .send(feedback)
                       .end((err, res) => {
-                        expect(res.status).to.equal(401);
+                        expect(res.status).to.equal(400);
                         expect(res.body).to.have.property('message');
                         expect(res.body.message).to.equal(
                           ' Sorry,you must wait 24hrs to gain permission of rating',

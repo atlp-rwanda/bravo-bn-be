@@ -48,13 +48,13 @@ export const sendFeedback = catchAsync(async (req, res, next) => {
     return next(
       new AppError(
         'Sorry, accomodation does not either exist or belong to you',
-        401,
+        400,
       ),
     );
   }
   if (tripRequest.status != 'approved') {
     return next(
-      new AppError('Sorry, trip request must be approved to proceed ', 401),
+      new AppError('Sorry, trip request must be approved to proceed ', 400),
     );
   }
   if (
@@ -63,8 +63,8 @@ export const sendFeedback = catchAsync(async (req, res, next) => {
   ) {
     return next(
       new AppError(
-        'Sorry,you must wait 24hrs to gain permission of rating ',
-        401,
+        'Sorry,you must wait 24hrs to gain permission of giving accomodation ',
+        400,
       ),
     );
   }
