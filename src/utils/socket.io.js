@@ -23,8 +23,7 @@ socketFunction.socketStarter = (server) => {
     },
   });
   io.on('connection', async (socket) => {
-    // console.log('connection occured?!');
-    console.log('HHH', socket.handshake.auth.token);
+    console.log('connected! with token ', socket.handshake.auth.token);
     emitter.on('notification', async () => {
       const token = socket.handshake.auth.token;
       const userData = verifyToken(token);
