@@ -293,7 +293,7 @@ export const forgotPassword = catchAsync(async (req, res, next) => {
     await new Email(verifiedUser, resetURL).sendPasswordReset();
     res.status(200).json({
       status: 'success',
-      message: 'Password Reset sent to your Email',
+      message: 'Password Reset token sent to your Email',
     });
   } catch (err) {
     (error) => throwFailed(error, '');
