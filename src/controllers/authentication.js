@@ -335,7 +335,7 @@ export const resetPassword = catchAsync(async (req, res, next) => {
       await userExist.update({
         password: await hash(req.body.password, 12),
         passwordResetToken: '',
-        passwordResetExpires: '',
+        passwordResetExpires: null,
       });
     }
     createSendToken(userExist, 200, res);
