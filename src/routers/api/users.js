@@ -2,6 +2,8 @@ import express from 'express';
 import {
   login,
   logout,
+  forgotPassword,
+  resetPassword,
   protect,
   signup,
 } from '../../controllers/authentication';
@@ -56,6 +58,8 @@ userRouter.patch(
   updateUserProfile,
 );
 userRouter.get('/', getAllUsers);
+userRouter.post('/forgotpassword', forgotPassword);
+userRouter.patch('/resetpassword/:token', resetPassword);
 userRouter.get('/:id', protect, getUserData);
 userRouter.put('/roles', isAdmin, isValidRole, updateRole);
 userRouter.put('/remember-info', protect, updateRememberInfo);
