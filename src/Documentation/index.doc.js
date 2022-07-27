@@ -46,6 +46,67 @@ const options = {
       },
     },
 
+    '/api/v1/user/forgotpassword': {
+      post: {
+        summary: 'Forgotten password',
+        tags: ['resetPassword'],
+        parameters: [],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/forgot',
+              },
+            },
+          },
+          required: true,
+        },
+        consumes: ['application/json'],
+        responses: {
+          200: {
+            description: 'success status',
+          },
+          500: {
+            description: 'Something went very wrong!',
+          },
+        },
+      },
+    },
+    '/api/v1/user/resetpassword/{token}': {
+      patch: {
+        summary: 'Reset password',
+        tags: ['resetPassword'],
+        parameters: [
+          {
+            name: 'token',
+            in: 'path',
+            type: 'string',
+            description: 'reset token',
+            required: true,
+          },
+        ],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/reset',
+              },
+            },
+          },
+          required: true,
+        },
+        consumes: ['application/json'],
+        responses: {
+          200: {
+            description: 'success status',
+          },
+          500: {
+            description: 'Error',
+          },
+        },
+      },
+    },
+
     '/api/v1/user/': {
       get: {
         tags: ['User'],
@@ -1060,7 +1121,57 @@ const options = {
         },
       },
     },
-    '/api/v1/user/trip/reject/{id}': {
+
+    '/api/v1/feedback/feedback': {
+      post: {
+        tags: ['feedback'],
+        description: 'User provides feedback to accomodation',
+
+        parameters: [],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {},
+              example: {
+                feedback: 'awesome',
+                accomodationId: 1,
+              },
+            },
+          },
+          required: true,
+        },
+        responses: {
+          201: {
+            description: 'Feedback created successfully ✔',
+          },
+        },
+      },
+    },
+
+    '/api/v1/feedback/getAll/{id}': {
+      get: {
+        tags: ['feedback'],
+        description: 'feedback on accomodation',
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            type: 'string',
+            description: 'accomodation id',
+            required: true,
+          },
+        ],
+        responses: {
+          200: {
+            description: 'feedback fetched successfully',
+          },
+          500: {
+            description: 'Internal server error',
+          },
+        },
+      },
+    },
+    '/api/v1//user/trip/reject/{id}': {
       put: {
         tags: ['Manager'],
         description: 'reject trip request',
@@ -1331,6 +1442,17 @@ const options = {
           },
         },
       },
+      feedback: {
+        type: 'object',
+        properties: {
+          feedback: {
+            type: 'string',
+          },
+          accomodationId: {
+            type: 'integer',
+          },
+        },
+      },
       tripRequest: {
         type: 'object',
 
@@ -1365,6 +1487,27 @@ const options = {
           },
         },
       },
+
+      forgot: {
+        type: 'object',
+        properties: {
+          email: {
+            type: 'string',
+          },
+        },
+      },
+      reset: {
+        type: 'object',
+        properties: {
+          password: {
+            type: 'string',
+            in: 'body',
+            name: 'name',
+            required: true,
+          },
+        },
+      },
+
       tripStats: {
         type: 'object',
         properties: {
