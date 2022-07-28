@@ -1,5 +1,4 @@
 const socket = io();
-
 const token = prompt('Insert token');
 const messageContainer = document.getElementById('message-container');
 const messageForm = document.getElementById('send-container');
@@ -32,7 +31,6 @@ messageForm.addEventListener('submit', async (e) => {
     .then((data) => {
       if (data.status === 'fail') return;
       messageInput.value = '';
-      message = '';
     })
     .catch((err) => {
       console.log(err);

@@ -1,4 +1,4 @@
-import io from '../index';
+import { io } from '../utils/socket.io';
 import db from '../database/models/index';
 import catchAsync from '../utils/catchAsync';
 const Chat = db['chat'];
