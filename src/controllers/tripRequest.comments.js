@@ -1,5 +1,8 @@
 import db from '../database/models/index';
 import jwt from 'jsonwebtoken';
+import Email from '../utils/email';
+import emitter from '../utils/eventEmitter';
+import createNotification from '../services/notification.service';
 const Comment = db['Comment'];
 const users = db['users'];
 const tripRequests = db['tripRequest'];
@@ -43,6 +46,20 @@ export const commentOnRequests = async (req, res, next) => {
     });
 
     if (createComment) {
+      const url = `${req.protocol}://${req.get('host')}/api/v1/user/trip/${
+        tripRequest.id
+      }/comments`;
+
+      const manager = await users.findOne({ where: { role: 'manager' } });
+      await new Email(manager, url).commentOnRequest();
+      await new Email(user, url).commentOnRequest();
+      createNotification(
+        user.id,
+        'Commented on request.',
+        'A comment have been added!',
+        url,
+      );
+      emitter.emit('notification', '');
       return res.status(201).json({
         message: 'comment successfully added',
         comment: comment,

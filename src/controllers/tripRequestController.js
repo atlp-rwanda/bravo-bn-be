@@ -6,99 +6,114 @@ import {
 } from '../helpers/validation_schema';
 import catchAsync from '../utils/catchAsync';
 import AppError from '../utils/appError';
+import { Op } from 'sequelize';
+import Email from '../utils/email';
+import emitter from '../utils/eventEmitter';
+import createNotification from '../services/notification.service';
+
 const tripRequests = db['tripRequest'];
 const accomodations = db['accomodation'];
 const locations = db['Location'];
 const Room = db['Room'];
-import { Op } from 'sequelize';
+const users = db['users'];
 
 // create a 'Trip Request' as requester
-export const createTripRequest = async (req, res) => {
-  try {
-    if (req.user.role !== 'requester') {
-      return res
-        .status(403)
-        .json({ message: 'Unauthorized to create trip request' });
-    }
-    await tripRequestSchema.validateAsync(req.body);
-
-    //check if location and accomodation chosen are available
-    const accomodation = await accomodations.findOne({
-      where: { id: req.body.accomodationId },
-    });
-
-    const location = await locations.findOne({
-      where: { id: req.body.goingTo },
-    });
-    const room = await Room.findOne({
-      where: {
-        id: req.body.roomId,
-        taken: {
-          [Op.and]: [false],
-        },
-        accomodationId: {
-          [Op.and]: [`${req.body.accomodationId}`],
-        },
-      },
-    });
-    if (!location) {
-      return res.status(404).json({ message: `Sorry, Location Not Found` });
-    }
-    if (!accomodation) {
-      return res
-        .status(404)
-        .json({ message: ` Sorry, Accomodation Not Found` });
-    }
-    if (!room) {
-      return res
-        .status(404)
-        .json({ message: `Sorry, room is taken or not found` });
-    }
-
-    const type = req.body.returnDate == null ? 'One way trip' : 'Round trip';
-    const status = 'pending';
-    const trip = {
-      leavingFrom: req.body.leavingFrom,
-      goingTo: req.body.goingTo,
-      travelDate: req.body.travelDate,
-      returnDate: req.body.returnDate,
-      travelReason: req.body.travelReason,
-      tripType: type,
-      status: status,
-      requesterId: req.user.id,
-      accomodationId: req.body.accomodationId,
-      roomId: req.body.roomId,
-      passportName: req.body.passportName,
-      passportNumber: req.body.passportNumber
-    };
-    await Room.update(
-      {
-        taken: true,
-        userId: req.user.id,
-      },
-      { where: { id: req.body.roomId } },
-    );
-    await tripRequests.create(trip);
-    trip.accomodationId = undefined;
-    trip.accomodation = accomodation;
-    trip.roomId = undefined;
-    trip.room = room;
-    res.cookie('passportName', req.body.passportName, {
-      secure: true,
-      httpOnly: true,
-      sameSite: 'lax',
-    });
-    res.cookie('passportNumber', req.body.passportNumber, {
-      secure: true,
-      httpOnly: true,
-      sameSite: 'lax',
-    });
-    return res.status(201).json({ status: 'success', data: trip });
-  } catch (error) {
-    return res.status(500).json({ error: error.message });
+export const createTripRequest = catchAsync(async (req, res) => {
+  if (req.user.role !== 'requester') {
+    return res
+      .status(403)
+      .json({ message: 'Unauthorized to create trip request' });
   }
-};
+  await tripRequestSchema.validateAsync(req.body);
 
+  //check if location and accomodation chosen are available
+  const accomodation = await accomodations.findOne({
+    where: { id: req.body.accomodationId },
+  });
+
+  const location = await locations.findOne({
+    where: { id: req.body.goingTo },
+  });
+  const room = await Room.findOne({
+    where: {
+      id: req.body.roomId,
+      taken: {
+        [Op.and]: [false],
+      },
+    },
+  });
+  if (!location) {
+    return res.status(404).json({ message: `Sorry, Location Not Found` });
+  }
+  if (!accomodation) {
+    return res.status(404).json({ message: ` Sorry, Accomodation Not Found` });
+  }
+  if (!room) {
+    return res
+      .status(404)
+      .json({ message: `Sorry, room is taken or not found` });
+  }
+
+  const type = req.body.returnDate == null ? 'One way trip' : 'Round trip';
+  const status = 'pending';
+  const trip = {
+    leavingFrom: req.body.leavingFrom,
+    goingTo: req.body.goingTo,
+    travelDate: req.body.travelDate,
+    returnDate: req.body.returnDate,
+    travelReason: req.body.travelReason,
+    tripType: type,
+    status: status,
+    requesterId: req.user.id,
+    accomodationId: req.body.accomodationId,
+    roomId: req.body.roomId,
+    passportName: req.body.passportName,
+    passportNumber: req.body.passportNumber,
+  };
+  await Room.update(
+    {
+      taken: true,
+      userId: req.user.id,
+    },
+    { where: { id: req.body.roomId } },
+  );
+  await tripRequests.create(trip);
+  trip.accomodationId = undefined;
+  trip.accomodation = accomodation;
+  trip.roomId = undefined;
+  trip.room = room;
+  res.cookie('passportName', req.body.passportName, {
+    secure: true,
+    httpOnly: true,
+    sameSite: 'lax',
+  });
+  res.cookie('passportNumber', req.body.passportNumber, {
+    secure: true,
+    httpOnly: true,
+    sameSite: 'lax',
+  });
+  const url = `${req.protocol}://${req.get('host')}/api/v1/user/trip/get/${
+    trip.id
+  }`;
+  const manager = await users.findOne({ where: { role: 'manager' } });
+  const requester = await users.findOne({ where: { id: req.user.id } });
+  await new Email(manager, url).newReqManagerNotif();
+  await new Email(requester, url).newReqRequesterNotif();
+  createNotification(
+    requester.id,
+    'Trip request created.',
+    'Your request have been created!',
+    url,
+  );
+  createNotification(
+    manager.id,
+    'Trip request created.',
+    `${requester.firstName} Have just created a trip request`,
+    url,
+  );
+  emitter.emit('notification', '');
+  return res.status(201).json({ status: 'success', data: trip });
+});
 // retrieve single trip request as requester
 export const getSingleTripRequest = async (req, res) => {
   try {
@@ -241,6 +256,16 @@ export const updateTripRequest = async (req, res) => {
         .update(updatedTrip, { where: { id: requestId, requesterId: userId } })
         .then((num) => {
           if (num == 1) {
+            const url = `${req.protocol}://${req.get(
+              'host',
+            )}/api/v1/user/trip/get/${tripRequest.id}`;
+            createNotification(
+              userId,
+              'Trip request updated.',
+              'trip request have been updated!',
+              url,
+            );
+            emitter.emit('notification', '');
             res.status(201).send({
               message: `Trip request  Updated Successfully`,
             });
@@ -290,6 +315,22 @@ export const deleteTripRequest = async (req, res) => {
       await tripRequests.destroy({
         where: { id: requestId, requesterId: userId },
       });
+
+      const url = `${req.protocol}://${req.get(
+        'host',
+      )}/api/v1/user/trip/get/${requestId}`;
+
+      const manager = await users.findOne({ where: { role: 'manager' } });
+      const requester = await users.findOne({ where: { id: userId } });
+      await new Email(manager).deletedRequest();
+      await new Email(requester).deletedRequest();
+      createNotification(
+        userId,
+        'Trip request deleted.',
+        'trip request have been deleted!',
+        url,
+      );
+      emitter.emit('notification', '');
       res.status(200).json({ message: 'Trip Request Deleted successfully' });
     }
   } catch (error) {
@@ -640,6 +681,24 @@ export const approveTripRequest = catchAsync(async (req, res, next) => {
       },
     );
     if (updatedTripRequest) {
+      const url = `${req.protocol}://${req.get('host')}/api/v1/user/trip/get/${
+        tripRequest.id
+      }`;
+
+      const manager = await users.findOne({ where: { role: 'manager' } });
+      const requester = await users.findOne({
+        where: { id: tripRequest.requesterId },
+      });
+
+      await new Email(manager, url).approvedRequest();
+      await new Email(requester, url).approvedRequest();
+      createNotification(
+        requester.id,
+        'Trip request Approved.',
+        'Request have been approved!',
+        url,
+      );
+      emitter.emit('notification', '');
       return res.status(200).json({
         status: true,
         message: 'Trip request approved successfully',
@@ -674,6 +733,23 @@ export const rejectTripRequest = catchAsync(async (req, res, next) => {
       },
     );
     if (updatedTripRequest) {
+      const url = `${req.protocol}://${req.get('host')}/api/v1/user/trip/get/${
+        tripRequest.id
+      }`;
+      const manager = await users.findOne({ where: { role: 'manager' } });
+      const requester = await users.findOne({
+        where: { id: tripRequest.requesterId },
+      });
+
+      await new Email(manager, url).rejectedRequest();
+      await new Email(requester, url).rejectedRequest();
+      createNotification(
+        requester.id,
+        'Trip request Rejected.',
+        'Request have been rejected!',
+        url,
+      );
+      emitter.emit('notification', '');
       return res.status(200).json({
         status: true,
         message: 'Trip request rejected successfully',
