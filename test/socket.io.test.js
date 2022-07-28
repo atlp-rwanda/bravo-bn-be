@@ -3,13 +3,7 @@ import { io as Client } from 'socket.io-client';
 import { Server } from 'socket.io';
 import { assert } from 'chai';
 
-// with { "type": "commonjs" } in your package.json
-// const { createServer } = require("http");
-// const { Server } = require("socket.io");
-// const Client = require("socket.io-client");
-// const assert = require("chai").assert;
-
-describe('my awesome project', () => {
+describe('testing socket.io', () => {
   let io, serverSocket, clientSocket;
 
   before((done) => {
