@@ -122,7 +122,6 @@ describe('comment on trip requests', () => {
       .delete('/api/v1/user/trip/comments/24/delete')
       .set('authorization', `Bearer ${token}`)
       .end((err, res) => {
-        console.log(res.body);
         expect(res.status).to.equal(200);
         expect(res.body)
           .to.have.property('message')

@@ -69,6 +69,7 @@
     "chai-http": "^4.3.0",
     "cloudinary": "^1.30.0",
     "cloudinary-multer": "^1.0.2",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "crypto": "^1.0.1",
