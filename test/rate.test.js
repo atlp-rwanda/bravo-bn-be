@@ -182,7 +182,7 @@ describe('User giving rate to accomodation', (done) => {
                         expect(res.status).to.equal(401);
                         expect(res.body).to.have.property('message');
                         expect(res.body.message).to.equal(
-                          ' Sorry, trip request must be approved to proceed',
+                          ' Sorry, accomodation does not either exist or belong to you',
                         );
                       });
                   });

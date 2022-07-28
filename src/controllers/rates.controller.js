@@ -42,6 +42,9 @@ export const createRate = catchAsync(async (req, res, next) => {
       requesterId: {
         [Op.and]: [`${req.user.id}`],
       },
+      status: {
+        [Op.and]: ['approved'],
+      },
     },
   });
   if (!tripRequest) {
@@ -54,7 +57,10 @@ export const createRate = catchAsync(async (req, res, next) => {
   }
   if (tripRequest.status != 'approved') {
     return next(
-      new AppError('Sorry, trip request must be approved to proceed ', 401),
+      new AppError(
+        'Sorry, you must have at least one trip request approved to proceed ',
+        401,
+      ),
     );
   }
   if (
