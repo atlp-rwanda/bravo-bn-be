@@ -94,7 +94,7 @@ export const createRate = catchAsync(async (req, res, next) => {
     );
     return res.status(201).json({
       message: 'rates updated',
-      data: updateRate,
+      data: rates,
     });
   } else {
     const userRates = await Rates.create({
