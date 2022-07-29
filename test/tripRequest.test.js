@@ -747,4 +747,66 @@ describe('Get profile information from travel request', () => {
           });
       });
   });
+  describe('GET API /api/v1/search/searchTerm', () => {
+    let travelToken;
+    const traveladmin = {
+      firstName: 'Samuel',
+      lastName: 'Tuyisenge',
+      username: 'Sam',
+      email: 'tuyisengesa@gmail.com',
+      password: 'samuel',
+      repeat_password: 'samuel',
+      phoneNumber: '0785058050',
+      role: 'travel admin',
+    };
+    it('Should signup as travel admin and return 201', (done) => {
+      api
+        .post('/api/v1/user/auth/signup')
+        .send(traveladmin)
+        .end((err, res) => {
+          const { message } = res.body;
+          travelToken = res.body.token;
+          expect(res.status).to.equal(201);
+          expect(message);
+          done();
+        });
+    });
+
+    it('should return all information according to the search term', (done) => {
+      chai
+        .request(app)
+        .get('/api/v1/search/pro')
+        .set('Authorization', `Bearer ${token}`)
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          expect(res.body).to.be.a('object');
+          expect(res.body).to.have.property('status');
+          expect(res.body).to.have.property('data');
+          done();
+        });
+    });
+
+    it('should return 404 error for ', (done) => {
+      chai
+        .request(app)
+        .get('/api/v1/search/')
+        .set('Authorization', `Bearer ${token}`)
+        .end((err, res) => {
+          expect(res).to.have.status(404);
+          expect(res.body).to.be.a('object');
+          done();
+        });
+    });
+    it('should return 403 error for other request who is not authorized make search ', (done) => {
+      chai
+        .request(app)
+        .get('/api/v1/search/pro')
+        .set('Authorization', `Bearer ${travelToken}`)
+        .end((err, res) => {
+          expect(res).to.have.status(403);
+          expect(res.body).to.be.a('object');
+          done();
+        });
+    });
+  });
 });

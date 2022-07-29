@@ -1216,7 +1216,7 @@ const options = {
           content: {
             'application/json': {
               schema: {
-                $ref: '#/components/schemas/chat',
+                $ref: '#/components/schemas/Chat',
               },
               example: {
                 message: 'Welcome to barefoot chat bot',
@@ -1256,6 +1256,26 @@ const options = {
         },
       },
     },
+    '/api/v1/search/{searchTerm}': {
+      get: {
+        tags: ['search in Trip Requests'],
+        description: 'get all search trip requests',
+        produces: ['application/json'],
+        parameters: [
+          {
+            in: 'path',
+            name: 'searchTerm',
+            description: 'searchTerm',
+          },
+        ],
+
+        responses: {
+          200: {
+            description: 'successfully',
+          },
+        },
+      },
+    },
   },
 
   components: {
@@ -1270,6 +1290,14 @@ const options = {
           role: {
             type: 'string',
             description: 'new role to set to user',
+          },
+        },
+      },
+      tripSearch: {
+        type: 'object',
+        properties: {
+          searchTerm: {
+            type: 'string',
           },
         },
       },
