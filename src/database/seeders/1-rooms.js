@@ -22,7 +22,7 @@ export async function up(queryInterface, Sequelize) {
       },
       {
         roomType: 'twin2',
-        roomCost: '400$',
+        roomCost: '200$',
         roomDescription: 'lorem ipsum dolor',
         accomodationId: 2,
         createdAt: new Date(),
