@@ -33,7 +33,7 @@ messageForm.addEventListener('submit', async (e) => {
       messageInput.value = '';
     })
     .catch((err) => {
-      console.log(err);
+      console.error(err);
     });
 });
 
@@ -60,6 +60,6 @@ fetch('http://localhost:5000/api/v1/chat/messages', {
 })
   .then((res) => res.json())
   .then((data) => {
-    if (data.status === 'fail') return console.log(data.message);
+    if (data.status === 'fail') return data.message;
     return appendAllMessages(data.data.messages);
   });
