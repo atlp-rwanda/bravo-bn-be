@@ -92,10 +92,18 @@ export const createRate = catchAsync(async (req, res, next) => {
         },
       },
     );
-    return res.status(200).json({
-      message: 'rates updated',
-      data: rates,
-    });
+    if (updateRate) {
+      const rate = await Rates.findOne({
+        where: {
+          requesterId: req.user.id,
+          accomodationId: tripRequest.accomodationId,
+        },
+      });
+      return res.status(200).json({
+        message: 'rates updated',
+        data: rate,
+      });
+    }
   } else {
     const userRates = await Rates.create({
       requesterId: req.user.id,
