@@ -823,6 +823,54 @@ const options = {
       },
     },
 
+    '/api/v1/rates/createRate': {
+      post: {
+        tags: ['RATES'],
+        description: 'User rating accomodation',
+
+        parameters: [],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {},
+              example: {
+                rates: 3,
+                accomodationId: 1,
+              },
+            },
+          },
+          required: true,
+        },
+        responses: {
+          201: {
+            description: 'Accomodation rated successfully!',
+          },
+        },
+      },
+    },
+    '/api/v1/rates/getAll/{id}': {
+      get: {
+        tags: ['RATES'],
+        description: 'rates on accomodation',
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            type: 'string',
+            description: 'accomodation id',
+            required: true,
+          },
+        ],
+        responses: {
+          200: {
+            description: 'rates fetched successfully',
+          },
+          500: {
+            description: 'Internal server error',
+          },
+        },
+      },
+    },
     '/api/v1/user/trip/get': {
       get: {
         tags: ['Trip Requests'],
@@ -1277,7 +1325,6 @@ const options = {
       },
     },
   },
-
   components: {
     schemas: {
       userRole: {
@@ -1436,6 +1483,17 @@ const options = {
           },
           taken: {
             type: 'string',
+          },
+        },
+      },
+      Rates: {
+        type: 'object',
+        properties: {
+          rates: {
+            type: 'integer',
+          },
+          tripRequestId: {
+            type: 'integer',
           },
         },
       },
