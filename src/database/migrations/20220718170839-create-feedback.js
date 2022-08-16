@@ -1,21 +1,22 @@
 'use strict';
 module.exports = {
-  up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Comments', {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable('feedbacks', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      tripRequestId: {
-        type: Sequelize.INTEGER,
-      },
-      userId: {
-        type: Sequelize.INTEGER,
-      },
-      comment: {
+      feedback: {
         type: Sequelize.STRING,
+      },
+      accomodationId: {
+        type: Sequelize.INTEGER,
+      },
+      requesterId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
       },
       createdAt: {
         allowNull: false,
@@ -27,7 +28,7 @@ module.exports = {
       },
     });
   },
-  down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Comments');
+  async down(queryInterface, Sequelize) {
+    await queryInterface.dropTable('feedbacks');
   },
 };

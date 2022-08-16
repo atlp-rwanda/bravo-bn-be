@@ -36,6 +36,8 @@
     ],
     "exclude": [
       "node_modules/*",
+      "src/database/seeders/*",
+      "src/index.js",
       "coverage/*"
     ]
   },
@@ -66,6 +68,7 @@
     "chai-http": "^4.3.0",
     "cloudinary": "^1.30.0",
     "cloudinary-multer": "^1.0.2",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "crypto": "^1.0.1",
@@ -91,6 +94,8 @@
     "redis": "^4.2.0",
     "redis-connection": "^5.4.0",
     "sequelize": "^5.22.5",
+    "socket.io": "^4.5.0",
+    "socket.io-client": "^4.5.1",
     "swagger-ui-express": "^4.4.0",
     "uuid": "^8.3.2"
   },

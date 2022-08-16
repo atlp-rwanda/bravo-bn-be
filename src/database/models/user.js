@@ -54,6 +54,10 @@ export default (sequelize, DataTypes) => {
         'travel team member',
         'accommodation supplier',
       ),
+      remember_info: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
     },
     {
       sequelize,

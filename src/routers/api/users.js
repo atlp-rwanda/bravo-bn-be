@@ -2,6 +2,8 @@ import express from 'express';
 import {
   login,
   logout,
+  forgotPassword,
+  resetPassword,
   protect,
   signup,
 } from '../../controllers/authentication';
@@ -10,7 +12,7 @@ import {
   updateUserProfile,
   getAllUsers,
 } from '../../controllers/userController';
-import { updateRole } from '../../controllers/users';
+import { updateRole, updateRememberInfo } from '../../controllers/users';
 import isValidRole from '../../middlewares/isValidRole';
 import isAdmin from '../../middlewares/isAdmin';
 import multer from 'multer';
@@ -56,7 +58,10 @@ userRouter.patch(
   updateUserProfile,
 );
 userRouter.get('/', getAllUsers);
+userRouter.post('/forgotpassword', forgotPassword);
+userRouter.patch('/resetpassword/:token', resetPassword);
 userRouter.get('/:id', protect, getUserData);
 userRouter.put('/roles', isAdmin, isValidRole, updateRole);
+userRouter.put('/remember-info', protect, updateRememberInfo);
 
 export default userRouter;
