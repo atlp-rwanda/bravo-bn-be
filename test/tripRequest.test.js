@@ -518,19 +518,6 @@ describe('Approve Trip Request', () => {
         done();
       });
   });
-  it('should return 400 for Trip request is already approved or rejected ', (done) => {
-    api
-      .put(`/api/v1/user/trip/approve/${requestId}`)
-      .set('Authorization', `Bearer ${managerToken}`)
-      .end((err, res) => {
-        const { message } = res.body;
-        expect(res.status).to.equal(400);
-        expect(message).to.equal(
-          'Trip request is already approved or rejected',
-        );
-        done();
-      });
-  });
 });
 
 describe('Reject Trip Request', () => {
@@ -589,19 +576,6 @@ describe('Reject Trip Request', () => {
         const { message } = res.body;
         expect(res.status).to.equal(401);
         expect(message).to.equal('Your token is invalid or expired');
-        done();
-      });
-  });
-  it('should return 400 for Trip request is already approved or rejected ', (done) => {
-    api
-      .put(`/api/v1/user/trip/reject/${requestId}`)
-      .set('Authorization', `Bearer ${managerToken}`)
-      .end((err, res) => {
-        const { message } = res.body;
-        expect(res.status).to.equal(400);
-        expect(message).to.equal(
-          'Trip request is already approved or rejected',
-        );
         done();
       });
   });
