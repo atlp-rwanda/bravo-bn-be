@@ -48,10 +48,11 @@ export const createRoom = async (req, res) => {
 export const getAllRooms = async (req, res) => {
   try {
     const rooms = await Room.findAndCountAll();
+    const finalRooms = rooms.rows.map((room) => room.dataValues);
     res.status(200).json({
       status: 'success',
       data: {
-        rooms,
+        rooms: finalRooms,
       },
     });
   } catch (error) {
