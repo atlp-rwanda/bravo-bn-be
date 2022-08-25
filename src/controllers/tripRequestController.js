@@ -665,6 +665,11 @@ export const approveTripRequest = catchAsync(async (req, res, next) => {
     if (!tripRequest) {
       return next(new AppError('Trip request not found', 404));
     }
+    if (tripRequest.status !== 'pending') {
+      return next(
+        new AppError('Trip request is already approved or rejected', 400),
+      );
+    }
     const updatedTripRequest = await tripRequests.update(
       {
         status: 'approved',
@@ -711,6 +716,11 @@ export const rejectTripRequest = catchAsync(async (req, res, next) => {
     const tripRequest = await tripRequests.findByPk(req.params.id);
     if (!tripRequest) {
       return next(new AppError('Trip request not found', 404));
+    }
+    if (tripRequest.status !== 'pending') {
+      return next(
+        new AppError('Trip request is already approved or rejected', 400),
+      );
     }
     const updatedTripRequest = await tripRequests.update(
       {
