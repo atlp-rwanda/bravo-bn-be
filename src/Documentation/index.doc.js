@@ -1253,6 +1253,57 @@ const options = {
         },
       },
     },
+
+    '/api/v1/chat/message': {
+      post: {
+        tags: ['Chat bot'],
+        description: 'post chat message',
+
+        parameters: [],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/Chat',
+              },
+              example: {
+                message: 'Welcome to barefoot chat bot',
+              },
+            },
+          },
+          required: true,
+        },
+        responses: {
+          201: {
+            description: 'success status',
+          },
+          401: {
+            description: 'Unauthorized',
+          },
+          403: {
+            description: 'Unauthorized',
+          },
+          500: {
+            description: 'Server Error',
+          },
+        },
+      },
+    },
+    '/api/v1/chat/messages': {
+      get: {
+        tags: ['Chat bot'],
+        description: 'get all chat messages',
+        parameters: [],
+        responses: {
+          200: {
+            description: 'successfully',
+          },
+          500: {
+            description: 'Internal Server Error',
+          },
+        },
+      },
+    },
     '/api/v1/search/{searchTerm}': {
       get: {
         tags: ['search in Trip Requests'],
@@ -1586,6 +1637,16 @@ const options = {
           comment: {
             type: 'string',
             description: 'comment',
+          },
+        },
+      },
+
+      Chat: {
+        type: 'object',
+        properties: {
+          message: {
+            type: 'string',
+            description: 'chat message',
           },
         },
       },
